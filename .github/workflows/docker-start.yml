@@ -40,4 +40,4 @@ jobs:
           GEOSERVER_PORT: ${{secrets.GEOSERVER_PORT}}
           NGINX_PORT: ${{secrets.NGINX_PORT}}
         run: |
-          docker-compose --env-file .env -f docker-compose/docker-compose.yml -p angularspringbootapp up --build -d
+          docker-compose -f docker-compose/docker-compose.yml -p angularspringbootapp up --build -d
