@@ -44,6 +44,7 @@ jobs:
         with:
           path: frontend/dist/frontend/browser
 
+
   deploy:
     environment:
       name: github-pages
