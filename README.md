@@ -1,30 +1,50 @@
 # Angular + Spring Boot
 
-Monorepo z dwoma projektami:
+To jest mój projekt fullstack, w którym połączyłem frontend w Angularze z backendem w Spring Boot.
 
-- `frontend` - aplikacja Angular
-- `backend/demo` - aplikacja Spring Boot
+Całość trzymam w jednym repozytorium, aby wszystko było spójne.
 
-## Uruchamianie
+## Co jest w projekcie
 
-Frontend:
+Projekt składa się z dwóch części:
 
-```bash
-cd frontend
-npm install
-npm start
-```
+- `frontend` – warstwa wizualna, czyli to, co widzi użytkownik
+- `backend/demo` – serwer, API i logika działania aplikacji
 
-Backend na Windows:
+## Cel projektu
 
-```powershell
-cd backend/demo
-.\mvnw.cmd spring-boot:run
-```
+Ten projekt zrobiłem, żeby przećwiczyć połączenie Angulara z backendem w Javie i mieć gotową bazę pod dalszy rozwój.
 
-Backend na macOS / Linux:
+To punkt wyjścia do dodawania kolejnych rzeczy, np.:
+- logowanie użytkowników
+- baza danych
+- role i uprawnienia
+- wdrożenie
 
-```bash
-cd backend/demo
-./mvnw spring-boot:run
-```
+## O czym pamiętać przy odpalaniu
+
+Żeby aplikacja działała poprawnie:
+
+- frontend i backend muszą być uruchomione jednocześnie
+- frontend musi mieć poprawnie ustawiony adres API backendu
+- przy problemach z połączeniem może być potrzebna konfiguracja CORS po stronie backendu
+
+
+## Struktura folderów
+
+- `frontend/` – aplikacja Angular
+- `backend/demo/` – aplikacja Spring Boot
+
+## Co można dorobić dalej
+
+W kolejnych krokach planuję dodać:
+
+- podłączenie bazy danych
+- autoryzację i uwierzytelnianie
+- lepszą obsługę błędów
+- Docker
+- automatyzację builda i wdrożenia
+
+## Autor
+
+Projekt stworzony przeze mnie do nauki i rozwijania umiejętności fullstack.
