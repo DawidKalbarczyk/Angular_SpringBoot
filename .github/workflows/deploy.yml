@@ -30,6 +30,7 @@ jobs:
           mkdir -p /tmp/angular-build
           cp -R frontend /tmp/angular-build/
 
+
       - name: Install dependencies
         working-directory: /tmp/angular-build/frontend
         run: npm install
