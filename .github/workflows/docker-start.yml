@@ -29,6 +29,7 @@ jobs:
           echo "GEOSERVER_PORT=${{secrets.GEOSERVER_PORT}}" >> .env
           echo "NGINX_PORT=${{secrets.NGINX_PORT}}" >> .env
 
+
       - name: Launch Docker Environment
         env: 
           ENV_NAME: ${{github.ref_name}}
