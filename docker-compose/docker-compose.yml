@@ -1,0 +1,62 @@
+x-environment:
+ - &env-postgres-db POSTGRES_DB=${POSTGRES_DB}
+ - &env-postgres-user POSTGRES_USER=${POSTGRES_USER}
+ - &env-postgres-password POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+
+services:
+  postgres:
+    build:
+      context: ..
+      dockerfile: docker/postgres/Dockerfile
+    image: 'angular-springbootapp-postgres'
+    container_name: Angular-SpringBootApp-${ENV_NAME}-postgres
+    environment:
+      - *env-postgres-db
+      - *env-postgres-user
+      - *env-postgres-password
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      default:
+        aliases:
+          - postgres
+
+  geoserver:
+    build:
+      context: ..
+      dockerfile: docker/geoserver/Dockerfile
+    image: 'angular-springbootapp-geoserver'
+    container_name: Angular-SpringBootApp-${ENV_NAME}-geoserver
+    ports:
+      - "${GEOSERVER_PORT}:8080"
+    volumes:
+      - geoserver-data:/opt/geoserver-data
+
+  springboot:
+    build:
+      context: ..
+      dockerfile: docker/springboot/Dockerfile
+    image: 'angular-springbootapp-springboot'
+    container_name: Angular-SpringBootApp-${ENV_NAME}-springboot
+    environment:
+      - *env-postgres-db
+      - *env-postgres-user
+      - *env-postgres-password
+    ports:
+      - "${SPRINGBOOT_PORT}:10000"
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: docker/nginx/Dockerfile
+    image: 'angular-springbootapp-nginx'
+    container_name: Angular-SpringBootApp-${ENV_NAME}-nginx
+    ports:
+      - "${NGINX_PORT}:80"
+
+volumes:
+  geoserver-data:
+  postgres-data:
