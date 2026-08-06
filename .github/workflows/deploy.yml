@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -30,16 +30,6 @@ jobs:
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-
-      - name: Clear previous Pages deployments
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-        run: |
-          deployment_ids=$(gh api "repos/$REPO/deployments?per_page=100" --paginate --jq '.[] | select(.environment=="github-pages") | .id')
-          for deployment_id in $deployment_ids; do
-            gh api -X POST "repos/$REPO/deployments/$deployment_id/statuses" -f state=inactive -f description="Superseded by a newer GitHub Pages deployment"
-          done
 
       - name: Install dependencies
         run: npm install --prefix frontend
@@ -60,7 +50,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deploy-pages.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
     steps:
       - name: Deploy to GitHub Pages
