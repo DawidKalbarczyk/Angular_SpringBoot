@@ -13,7 +13,6 @@ jobs:
     name: Build and Push Docker Image
     runs-on: self-hosted
 
-
     environment: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v3
