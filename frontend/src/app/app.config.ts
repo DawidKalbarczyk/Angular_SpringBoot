@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { ngrokInterceptor } from '../../ngrok-interceptor';
+import { ngrokInterceptor } from './ngrok-interceptor';
 
 import { routes } from './app.routes';
 

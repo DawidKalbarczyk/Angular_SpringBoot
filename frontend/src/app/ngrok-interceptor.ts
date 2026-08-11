@@ -6,5 +6,6 @@ export const ngrokInterceptor: HttpInterceptorFn = (req, next) => {
       'ngrok-skip-browser-warning': 'true'
     }
   });
+
   return next(modifiedReq);
 };
