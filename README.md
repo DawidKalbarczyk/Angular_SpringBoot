@@ -20,4 +20,4 @@ To punkt wyjścia do dodawania kolejnych rzeczy, np.:
 
 Cały projekt stoi na kontenerach Docker'a. Udostępniam swój komputer jako serwer przez ngrok aby za darmo wyhostować aplikację w internecie.
 
-https://wasting-livable-enclosure.ngrok-free.dev - Projekt dostępny jest pod tym linkiem
+https://wasting-livable-enclosure.ngrok-free.dev - Projekt dostępny jest pod tym linkiem (tylko wtedy gdy mój komputer działa)
