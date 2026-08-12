@@ -33,7 +33,7 @@ services:
     ports:
       - "${GEOSERVER_PORT}:8080"
     volumes:
-      - geoserver-data:/opt/geoserver-data
+      - geoserver-data:/opt/geoserver_data
 
   springboot:
     build:
