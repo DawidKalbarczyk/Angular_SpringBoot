@@ -2,14 +2,9 @@
 
 To jest mój projekt fullstack, w którym połączyłem frontend w Angularze z backendem w Spring Boot.
 
+Tematyka projektu to geoportal miejscowości.
+
 Całość trzymam w jednym repozytorium, aby wszystko było spójne.
-
-## Co jest w projekcie
-
-Projekt składa się z dwóch części:
-
-- `frontend` – warstwa wizualna, czyli to, co widzi użytkownik
-- `backend/demo` – serwer, API i logika działania aplikacji
 
 ## Cel projektu
 
@@ -21,30 +16,8 @@ To punkt wyjścia do dodawania kolejnych rzeczy, np.:
 - role i uprawnienia
 - wdrożenie
 
-## O czym pamiętać przy odpalaniu
+## Dostępność projektu
 
-Żeby aplikacja działała poprawnie:
+Cały projekt stoi na kontenerach Docker'a. Udostępniam swój komputer jako serwer przez ngrok aby za darmo wyhostować aplikację w internecie.
 
-- frontend i backend muszą być uruchomione jednocześnie
-- frontend musi mieć poprawnie ustawiony adres API backendu
-- przy problemach z połączeniem może być potrzebna konfiguracja CORS po stronie backendu
-
-
-## Struktura folderów
-
-- `frontend/` – aplikacja Angular
-- `backend/demo/` – aplikacja Spring Boot
-
-## Co można dorobić dalej
-
-W kolejnych krokach planuję dodać:
-
-- podłączenie bazy danych
-- autoryzację i uwierzytelnianie
-- lepszą obsługę błędów
-- Docker
-- automatyzację builda i wdrożenia
-
-## Autor
-
-Projekt stworzony przeze mnie do nauki i rozwijania umiejętności fullstack.
+https://wasting-livable-enclosure.ngrok-free.dev - Projekt dostępny jest pod tym linkiem (tylko wtedy gdy mój komputer działa)
