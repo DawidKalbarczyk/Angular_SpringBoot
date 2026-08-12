@@ -1,0 +1,19 @@
+@use '../../../variables' as *;
+
+:host {
+    position: fixed;
+    bottom: 0;
+    left: 0; 
+    right: 0;
+}
+
+div {
+    background-color: $author-bar-color-light;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 10rem;
+    
+}
