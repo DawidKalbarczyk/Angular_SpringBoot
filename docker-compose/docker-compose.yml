@@ -60,3 +60,4 @@ services:
 volumes:
   geoserver-data:
   postgres-data:
+  
