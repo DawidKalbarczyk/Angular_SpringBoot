@@ -31,7 +31,8 @@ jobs:
           echo "SPRINGBOOT_PORT=${{secrets.SPRINGBOOT_PORT}}" >> .env
           echo "GEOSERVER_PORT=${{secrets.GEOSERVER_PORT}}" >> .env
           echo "NGINX_PORT=${{secrets.NGINX_PORT}}" >> .env
-          echo "GEOSERVER_PASSWORD=${{secrets.GEOSERVER_PASSWORD}}" >> .env
+          echo "GEOSERVER_ADMIN_PASSWORD=${{secrets.GEOSERVER_ADMIN_PASSWORD}}" >> .env
+          echo "GEOSERVER_ADMIN_USER=${{secrets.GEOSERVER_ADMIN_USER}}" >> .env
 
       - name: Launch Docker Environment
         env: 
@@ -44,5 +45,6 @@ jobs:
           GEOSERVER_PORT: ${{secrets.GEOSERVER_PORT}}
           NGINX_PORT: ${{secrets.NGINX_PORT}}
           GEOSERVER_ADMIN_PASSWORD: ${{secrets.GEOSERVER_PASSWORD}}
+          GEOSERVER_ADMIN_USER: ${{secrets.GEOSERVER_ADMIN_USER}}
         run: |
           docker-compose -f docker-compose/docker-compose.yml -p angularspringbootapp up --build -d

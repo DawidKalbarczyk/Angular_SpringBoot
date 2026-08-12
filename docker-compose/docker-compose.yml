@@ -2,7 +2,8 @@ x-environment:
  - &env-postgres-db POSTGRES_DB=${POSTGRES_DB}
  - &env-postgres-user POSTGRES_USER=${POSTGRES_USER}
  - &env-postgres-password POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
- - &env-geoserver-password GEOSERVER_ADMIN_PASSWORD=${GEOSERVER_PASSWORD}
+ - &env-geoserver-password GEOSERVER_ADMIN_PASSWORD=${GEOSERVER_ADMIN_PASSWORD}
+ - &env-geoserver-user GEOSERVER_ADMIN_USER=${GEOSERVER_ADMIN_USER}
 
 
 services:
@@ -33,6 +34,7 @@ services:
     container_name: Angular-SpringBootApp-${ENV_NAME}-geoserver
     environment:
       - *env-geoserver-password
+      - *env-geoserver-user
     ports:
       - "${GEOSERVER_PORT}:8080"
     volumes:
