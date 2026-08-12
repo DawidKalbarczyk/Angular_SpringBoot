@@ -31,6 +31,7 @@ jobs:
           echo "SPRINGBOOT_PORT=${{secrets.SPRINGBOOT_PORT}}" >> .env
           echo "GEOSERVER_PORT=${{secrets.GEOSERVER_PORT}}" >> .env
           echo "NGINX_PORT=${{secrets.NGINX_PORT}}" >> .env
+          echo "GEOSERVER_PASSWORD=${{secrets.GEOSERVER_PASSWORD}}" >> .env
 
       - name: Launch Docker Environment
         env: 
