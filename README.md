@@ -17,6 +17,7 @@ To punkt wyjścia do dodawania kolejnych rzeczy, np.:
 - wdrożenie
 
 ## Dostępność projektu
+
 Cały projekt stoi na kontenerach Docker'a. Udostępniam swój komputer jako serwer przez ngrok aby za darmo wyhostować aplikację w internecie.
 
 https://wasting-livable-enclosure.ngrok-free.dev - Projekt dostępny jest pod tym linkiem
