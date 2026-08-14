@@ -1,4 +1,4 @@
-import { Component, inject} from '@angular/core';
+import { Component, inject, signal} from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,13 +13,23 @@ export class ReturnCorner {
 
   constructor() {
     console.log('Current URL:', this.url);
+    if (this.url != '/user') {
+      localStorage.setItem('lastUrl', this.url);
+    }
   }
 
+  
+
   goBack(): void {
+    const lastUrl = localStorage.getItem('lastUrl') || this.router.url;
+    localStorage.setItem('lastUrl', lastUrl);
     if (this.url === '/search' || this.url === '/history') {
       this.router.navigate(['/']);
     } else if (this.url === '/history-inner') {
       this.router.navigate(['/history']);
+    } else if (this.url === '/user' && lastUrl === '/') {
+      this.router.navigate(['/']);
     }
+    
   }
 }
