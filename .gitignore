@@ -24,4 +24,4 @@ yarn-error.log*
 data/Przygotowanie
 docker-compose/docker
 .env
-notatki
+notatki.txt
