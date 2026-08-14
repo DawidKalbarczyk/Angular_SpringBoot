@@ -6,6 +6,10 @@ export const routes: Routes = [
         loadComponent: () => import('./home/home').then(m => m.Home),
     },
     {
+        path: 'user',
+        loadComponent: () => import('./user/user').then(m => m.User),
+    },
+    {
         path: 'geoportal',
         loadComponent: () => import('./home/geoportal/geoportal').then(m => m.Geoportal)
     },
