@@ -1,0 +1,37 @@
+@use '../../../_variables.scss' as *;
+
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 1.15rem 2rem 1.15rem 2rem;
+    display: flex;
+    flex-direction: row;
+    column-gap: 1.5rem;
+
+    div {
+        width: 40px;
+        height: 40px;
+        border: 1px solid black;
+        border-radius: 50%;
+        padding: 0.35rem;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            cursor: pointer;
+            background-color: $secondary-color-light;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+        }
+        
+        .return-button {
+            transform: scale(0.8);
+        }
+
+        
+    }
+    
+}
