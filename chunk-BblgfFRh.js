@@ -1,0 +1,1 @@
+import{a as Jh,c as ns,l as ts,u as yg}from"./main-6KJX5HMO.js";var r=class t{static ɵfac=function(e){return new(e||t)};static ɵcmp=Jh({type:t,selectors:[[`app-geoportal`]],decls:2,vars:0,template:function(e,i){e&1&&(ts(0,`p`),yg(1,`geoportal works!`),ns())},encapsulation:2})};export{r as Geoportal};
