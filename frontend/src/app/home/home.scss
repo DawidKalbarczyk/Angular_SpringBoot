@@ -18,11 +18,18 @@
 
     .selection-history, .selection-search, .selection-geoportal {
         background-color: $secondary-color-light;
+        border-radius: 1rem;
         width: 100%;
         height: 100%;
         display: grid;
         grid-template-rows: 1fr 1fr;
         transition: filter 0.3s ease-in-out;
+
+        div {
+            img {
+                border-radius: 0rem 0rem 1rem 1rem;;
+            }
+        }
 
         &:hover {
             cursor: pointer;
