@@ -7,4 +7,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './login-corner.html',
   styleUrl: './login-corner.scss',
 })
-export class LoginCorner {}
+export class LoginCorner {
+  public isLoggedIn: boolean = true;
+}
