@@ -1,4 +1,5 @@
 @use '../../variables' as *;
+@use '@angular/material' as mat;
 
 .user-container {
     box-sizing: border-box;
@@ -11,31 +12,70 @@
         5rem
         15rem;
 
+    .redirect-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: $secondary-color-light;
+        width: 100%;
+
+        mat-spinner {
+            margin-top: 5rem;
+            @include mat.progress-spinner-overrides((
+                active-indicator-color: $background-color-light,
+            ));
+        }
+
+        p {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+    }
     .user-ui {
         display: grid;
         grid-template-columns: 2fr 1fr;
-        background-color: pink;
+        background-color: $secondary-color-light;
         width: 100%;
         padding: 4rem 5rem;
         column-gap: 3rem;
 
         .user-settings {
-            background-color: lightblue;
+            background-color: $background-color-light;
             display: flex;
             flex-direction: column;
 
-            div {
+            > div {
                 flex: 1;
+                border-bottom: 1px solid rgba(0,0,0,0.50);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                div {
+                    padding: 0.5rem 2rem;
+                    font-size: 1.25rem;
+                    border-radius: 0.5rem;
+                    transition: background-color 0.3s ease;
+                    
+                    &:hover {
+                        cursor: pointer;
+                        background-color: $secondary-color-light;
+                    }
+                }
+
+
+            }
+            > div:last-child {
+                border: none;
             }
         }
         .user-info {
-            background-color: lightgreen;
             display: grid;
             grid-template-rows: 2.5fr 1fr auto;
             row-gap: 1rem;
 
             .user-pic-container {
-                background-color: lightgray;
                 display: flex;
                 justify-content: center;
                 align-items: center;

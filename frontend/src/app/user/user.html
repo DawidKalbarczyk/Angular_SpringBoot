@@ -2,33 +2,39 @@
 <app-login-corner></app-login-corner>
 <app-return-corner></app-return-corner>
 <div class="user-container">
-    <div class="user-ui">
-        <div class="user-settings">
-            <div>Setting1</div>
-            <div>Setting2</div>
-            <div>Setting2</div>
-            <div>Setting2</div>
-            <div>Setting2</div>
-            <div>Setting2</div>
-            <div>Setting2</div>
-            <div>Setting2</div>
+    @if (redirectUrl === true) {
+        <div class="redirect-container">
+            <p>Nie jesteś zalogowany. Przekierowuję...</p>
+            <mat-spinner></mat-spinner>
         </div>
-        <div class="user-info">
-            <div class="user-pic-container">
-                <div class="user-pic-wrapper">
-                    <img src="./images/icons/user.png"/>
+    } @else {
+        <div class="user-ui">
+            <div class="user-settings">
+                <div><div>Zmień nazwę użytkownika</div></div>
+                <div><div>Zmień e-mail</div></div>
+                <div><div>Zmień hasło</div></div>
+                <div><div>Zmień zdjęcie profilowe</div></div>
+                <div><div>Zapamiętaj wybrany motyw</div></div>
+                <div><div>Usuń zdjęcie profilowe</div></div>
+                <div><div>Usuń na stałe swoje konto</div></div>
+            </div>
+            <div class="user-info">
+                <div class="user-pic-container">
+                    <div class="user-pic-wrapper">
+                        <img src="./images/icons/user.png"/>
+                    </div>
                 </div>
+                <div class="user-details">
+                    <p>Username</p>
+                    <p>Email</p>
+                </div>
+                <div class="user-button-container">
+                    <button>
+                        Log Out
+                    </button>
+                </div>
+                
             </div>
-            <div class="user-details">
-                <p>Username</p>
-                <p>Email</p>
-            </div>
-            <div class="user-button-container">
-                <button>
-                    Log Out
-                </button>
-            </div>
-            
         </div>
-    </div>
+    }  
 </div>
