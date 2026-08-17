@@ -1,0 +1,6 @@
+@use '../../../../variables' as *;
+
+#map {
+    width: 100%;
+    height: calc(100vh - $basic-padding-top);
+}
