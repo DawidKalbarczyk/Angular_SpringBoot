@@ -1,0 +1,18 @@
+@use '../../../variables' as *;
+
+:host {
+    display: block;
+    min-height: 100vh;
+    background-color: white;
+}
+
+app-map-component {
+    display: block;
+    padding-top: $basic-padding-top;
+}       
+
+app-return-corner {
+    .container {
+        z-index: 1000;
+    }
+}
