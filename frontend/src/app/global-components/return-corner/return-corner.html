@@ -4,7 +4,10 @@
             <img class="return-button" src="./images/icons/return.png"/>
         </div>
     }
-    <div>
-        <img class="night-mode-button" src="./images/icons/night-mode.png"/>
-    </div>
+    @if(url !== '/geoportal') {
+        <div>
+            <img class="night-mode-button" src="./images/icons/night-mode.png"/>
+        </div>
+    }
+    
 </div>
