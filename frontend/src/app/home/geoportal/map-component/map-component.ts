@@ -211,3 +211,4 @@ export class MapComponent implements AfterViewInit {
     return 1; 
   }
 }
+
