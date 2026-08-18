@@ -25,3 +25,4 @@ data/Przygotowanie
 docker-compose/docker
 .env
 notatki.txt
+data
