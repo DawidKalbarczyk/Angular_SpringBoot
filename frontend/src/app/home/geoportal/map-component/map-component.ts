@@ -53,9 +53,9 @@ export class MapComponent implements AfterViewInit {
 
     this.boundsLayerPanstwo = new TileLayer({
       source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
         params: {
-          'LAYERS': 'AngularLocal:boundspanstwo',
+          'LAYERS': 'AngularAppSpring:boundspanstwo',
           'TILED': true,
           'VERSION': '1.1.1',
         },
@@ -70,9 +70,9 @@ export class MapComponent implements AfterViewInit {
 
     this.boundsLayerCities = new TileLayer({
       source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
         params: {
-          'LAYERS': 'AngularLocal:boundscities',
+          'LAYERS': 'AngularAppSpring:boundscities',
           'TILED': true,
           'VERSION': '1.1.1',
         },
@@ -85,9 +85,9 @@ export class MapComponent implements AfterViewInit {
 
     this.boundsLayerGminy = new TileLayer({
       source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
         params: {
-          'LAYERS': 'AngularLocal:boundsgminy',
+          'LAYERS': 'AngularAppSpring:boundsgminy',
           'TILED': true,
           'VERSION': '1.1.1',
         },
@@ -100,9 +100,9 @@ export class MapComponent implements AfterViewInit {
 
      this.boundsLayerPowiaty = new TileLayer({
       source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
         params: {
-          'LAYERS': 'AngularLocal:boundspowiaty',
+          'LAYERS': 'AngularAppSpring:boundspowiaty',
           'TILED': true,
           'VERSION': '1.1.1',
         },
@@ -115,9 +115,9 @@ export class MapComponent implements AfterViewInit {
 
      this.boundsLayerWojewodz = new TileLayer({
       source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
         params: {
-          'LAYERS': 'AngularLocal:boundswojewodz',
+          'LAYERS': 'AngularAppSpring:boundswojewodz',
           'TILED': true,
           'VERSION': '1.1.1',
         },
@@ -148,9 +148,9 @@ export class MapComponent implements AfterViewInit {
 
   private buildVectorLayer(): VectorLayer {
     const wfsUrl =
-      `${window.location.origin}/geoserver/AngularLocal/ows?` +
+      `${window.location.origin}/geoserver/AngularAppSpring/ows?` +
       `service=WFS&version=1.0.0&request=GetFeature` +
-      `&typeName=AngularLocal:sql_data` +
+      `&typeName=AngularAppSpring:sql_data` +
       `&outputFormat=application/json&srsname=EPSG:3857`;
 
     this.vectorSource = new VectorSource({
