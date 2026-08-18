@@ -34,7 +34,6 @@ jobs:
           echo "GEOSERVER_ADMIN_PASSWORD=${{secrets.GEOSERVER_ADMIN_PASSWORD}}" >> .env
           echo "GEOSERVER_ADMIN_USER=${{secrets.GEOSERVER_ADMIN_USER}}" >> .env
 
-
       - name: Launch Docker Environment
         env: 
           ENV_NAME: ${{github.ref_name}}
