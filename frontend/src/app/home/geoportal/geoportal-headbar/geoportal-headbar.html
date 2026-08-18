@@ -18,8 +18,36 @@
     <div>
         Info
     </div>
-    <div>
-        Opcja X
+    <div (click)="layersOut()" class="layers">
+        @if(isLayersOut){
+            <div class="layers-container" (click)="$event.stopPropagation()">
+                <div>
+                    <p>Miejscowości</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('vectorLayer')" (change)="mapLayerService.setLayerVisibility('vectorLayer', $event.checked)"></mat-slide-toggle>
+                </div>
+                <div>
+                    <p>Granice miast</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('boundsLayerCities')" (change)="mapLayerService.setLayerVisibility('boundsLayerCities', $event.checked)"></mat-slide-toggle>
+                </div>
+                <div>
+                    <p>Granice gmin</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('boundsLayerGminy')" (change)="mapLayerService.setLayerVisibility('boundsLayerGminy', $event.checked)"></mat-slide-toggle>
+                </div>
+                <div>
+                    <p>Granice powiatów</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('boundsLayerPowiaty')" (change)="mapLayerService.setLayerVisibility('boundsLayerPowiaty', $event.checked)"></mat-slide-toggle>
+                </div>
+                <div>
+                    <p>Granice województw</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('boundsLayerWojewodz')" (change)="mapLayerService.setLayerVisibility('boundsLayerWojewodz', $event.checked)"></mat-slide-toggle>
+                </div>
+                <div>
+                    <p>Granice państwa</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('boundsLayerPanstwo')" (change)="mapLayerService.setLayerVisibility('boundsLayerPanstwo', $event.checked)"></mat-slide-toggle>
+                </div>
+            </div>
+        }
+        Warstwy
     </div>
     
 </div>

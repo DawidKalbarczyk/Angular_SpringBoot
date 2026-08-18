@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, effect, inject } from '@angular/core';
 import Map from 'ol/Map';
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
@@ -8,6 +8,9 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Style, Text, Fill, Stroke, Circle as CircleStyle } from 'ol/style';
+import { FeatureLike } from 'ol/Feature';
+import TileWMS from 'ol/source/TileWMS';
+import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/layer-visibility';
 
 @Component({
   selector: 'app-map-component',
@@ -16,22 +19,124 @@ import { Style, Text, Fill, Stroke, Circle as CircleStyle } from 'ol/style';
   styleUrl: './map-component.scss',
 })
 export class MapComponent implements AfterViewInit {
+  private mapLayersVisibility = inject(LayerVisibility);
+
   private osmLayer!: TileLayer;
+  private boundsLayerCities!: TileLayer;
+  private boundsLayerGminy!: TileLayer;
+  private boundsLayerPowiaty!: TileLayer;
+  private boundsLayerWojewodz!: TileLayer;
+  private boundsLayerPanstwo!: TileLayer;
   private map!: Map;
   private vectorLayer!: VectorLayer;
-  private baseGeoserverUrl: string = `${window.location.origin}/geoserver/AngularAppSpring/wms?`;
+  private vectorSource!: VectorSource;
+
+  constructor() {
+    effect(() => {
+      const visibility = this.mapLayersVisibility.layersVisibility();
+      this.vectorLayer?.setVisible(visibility.vectorLayer);
+      this.boundsLayerCities?.setVisible(visibility.boundsLayerCities);
+      this.boundsLayerGminy?.setVisible(visibility.boundsLayerGminy);
+      this.boundsLayerPowiaty?.setVisible(visibility.boundsLayerPowiaty);
+      this.boundsLayerWojewodz?.setVisible(visibility.boundsLayerWojewodz);
+      this.boundsLayerPanstwo?.setVisible(visibility.boundsLayerPanstwo);
+    })
+  }
+
 
   ngAfterViewInit(): void {
+    const visibility = this.mapLayersVisibility.layersVisibility();
+
     this.osmLayer = new TileLayer({
       source: new OSM(),
     });
 
+    this.boundsLayerPanstwo = new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        params: {
+          'LAYERS': 'AngularLocal:boundspanstwo',
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous'
+      }),
+      visible: visibility.boundsLayerPanstwo,
+     });
+
     this.vectorLayer = this.buildVectorLayer();
 
+    this.boundsLayerCities = new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        params: {
+          'LAYERS': 'AngularLocal:boundscities',
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous'
+      }),
+      visible: visibility.boundsLayerCities,
+     });
+
+    this.boundsLayerGminy = new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        params: {
+          'LAYERS': 'AngularLocal:boundsgminy',
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous'
+      }),
+      visible: visibility.boundsLayerGminy,
+     });
+
+     this.boundsLayerPowiaty = new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        params: {
+          'LAYERS': 'AngularLocal:boundspowiaty',
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous'
+      }),
+      visible: visibility.boundsLayerPowiaty,
+     });
+
+     this.boundsLayerWojewodz = new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
+        params: {
+          'LAYERS': 'AngularLocal:boundswojewodz',
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous'
+      }),
+      visible: visibility.boundsLayerWojewodz,
+    });
+    
     this.map = new Map({
       target: 'map',
       layers: [
         this.osmLayer,
+        this.boundsLayerPanstwo,
+        this.boundsLayerWojewodz,
+        this.boundsLayerPowiaty,
+        this.boundsLayerGminy,
+        this.boundsLayerCities,
         this.vectorLayer,
       ],
       view: new View({
@@ -43,33 +148,66 @@ export class MapComponent implements AfterViewInit {
 
   private buildVectorLayer(): VectorLayer {
     const wfsUrl =
-      `${window.location.origin}/geoserver/AngularAppSpring/ows?` +
+      `${window.location.origin}/geoserver/AngularLocal/ows?` +
       `service=WFS&version=1.0.0&request=GetFeature` +
-      `&typeName=AngularAppSpring:sql_data` +
+      `&typeName=AngularLocal:sql_data` +
       `&outputFormat=application/json&srsname=EPSG:3857`;
 
-    const vectorSource = new VectorSource({
+    this.vectorSource = new VectorSource({
       format: new GeoJSON(),
       url: wfsUrl,
     });
 
+    // Po załadowaniu danych nadaj każdemu obiektowi stabilny indeks
+    this.vectorSource.once('featuresloadend', () => {
+      const features = this.vectorSource.getFeatures();
+      features.forEach((f, i) => f.set('__idx', i));
+    });
+
     return new VectorLayer({
-      source: vectorSource,
-      style: (feature) =>
-        new Style({
-          image: new CircleStyle({
-            radius: 5,
-            fill: new Fill({ color: '#3399CC' }),
-            stroke: new Stroke({ color: '#fff', width: 1.5 }),
-          }),
-          text: new Text({
+      source: this.vectorSource,
+      visible: this.mapLayersVisibility.isVisible('vectorLayer'),
+      style: (feature, resolution) => this.decimatedStyle(feature, resolution),
+      updateWhileAnimating: false,
+      updateWhileInteracting: false,
+    });
+  }
+
+  private decimatedStyle(feature: FeatureLike, resolution: number): Style | undefined {
+    const idx = feature.get('__idx') ?? 0;
+    const skip = this.getSkipFactor(resolution);
+
+    // pokaż tylko co "skip"-ty punkt
+    if (idx % skip !== 0) {
+      return undefined; // nie renderuj tego obiektu w ogóle
+    }
+
+    const showLabel = resolution < 350; // próg dobierz eksperymentalnie
+
+    return new Style({
+      image: new CircleStyle({
+        radius: 5,
+        fill: new Fill({ color: '#3399CC' }),
+        stroke: new Stroke({ color: '#fff', width: 1.5 }),
+      }),
+      text: showLabel
+        ? new Text({
             text: feature.get('nazwa'),
             offsetY: -12,
             font: '15px Arial',
             fill: new Fill({ color: '#000' }),
             stroke: new Stroke({ color: '#fff', width: 3 }),
-          }),
-        }),
+          })
+        : undefined,
     });
+  }
+
+  private getSkipFactor(resolution: number): number {
+    if (resolution > 2000) return 50;   // bardzo daleko -> co 50. punkt
+    if (resolution > 1000) return 25;
+    if (resolution > 500) return 10;
+    if (resolution > 200) return 5;
+    if (resolution > 50) return 2;
+    return 1; 
   }
 }
