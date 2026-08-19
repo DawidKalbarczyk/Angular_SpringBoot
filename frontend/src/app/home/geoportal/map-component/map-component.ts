@@ -22,11 +22,11 @@ export class MapComponent implements AfterViewInit {
   private mapLayersVisibility = inject(LayerVisibility);
 
   private osmLayer!: TileLayer;
-  private boundsLayerCities!: VectorLayer;
-  private boundsLayerGminy!: VectorLayer;
-  private boundsLayerPowiaty!: VectorLayer;
-  private boundsLayerWojewodz!: VectorLayer;
-  private boundsLayerPanstwo!: VectorLayer;
+  private boundsLayerCities!: TileLayer;
+  private boundsLayerGminy!: TileLayer;
+  private boundsLayerPowiaty!: TileLayer;
+  private boundsLayerWojewodz!: TileLayer;
+  private boundsLayerPanstwo!: TileLayer;
   private map!: Map;
   private vectorLayer!: VectorLayer;
   private vectorSource!: VectorSource;
@@ -40,24 +40,21 @@ export class MapComponent implements AfterViewInit {
       this.boundsLayerPowiaty?.setVisible(visibility.boundsLayerPowiaty);
       this.boundsLayerWojewodz?.setVisible(visibility.boundsLayerWojewodz);
       this.boundsLayerPanstwo?.setVisible(visibility.boundsLayerPanstwo);
-    })
+    });
   }
 
-
   ngAfterViewInit(): void {
-    const visibility = this.mapLayersVisibility.layersVisibility();
-
     this.osmLayer = new TileLayer({
       source: new OSM(),
     });
 
+    this.boundsLayerPanstwo = this.tileLayer('boundsLayerPanstwo', 'boundspanstwo');
+    this.boundsLayerWojewodz = this.tileLayer('boundsLayerWojewodz', 'boundswojewodz');
+    this.boundsLayerPowiaty = this.tileLayer('boundsLayerPowiaty', 'boundspowiaty');
+    this.boundsLayerGminy = this.tileLayer('boundsLayerGminy', 'boundsgminy');
+    this.boundsLayerCities = this.tileLayer('boundsLayerCities', 'boundscities');
 
-    this.vectorLayer = this.buildVectorLayer('sql_data', 'nazwa');
-    this.boundsLayerCities = this.buildVectorLayer('boundscities', 'jpt_nazwa_');
-    this.boundsLayerGminy = this.buildVectorLayer('boundsgminy', 'jpt_nazwa_');
-    this.boundsLayerPowiaty = this.buildVectorLayer('boundspowiaty', 'jpt_nazwa_');
-    this.boundsLayerWojewodz = this.buildVectorLayer('boundswojewodz', 'jpt_nazwa_');
-    this.boundsLayerPanstwo = this.buildVectorLayer('boundspanstwo', 'jpt_nazwa_');
+    this.vectorLayer = this.buildVectorLayer();
 
     this.map = new Map({
       target: 'map',
@@ -75,13 +72,60 @@ export class MapComponent implements AfterViewInit {
         zoom: 7,
       }),
     });
+
+    this.map.on('singleclick', (event) => {
+      const viewResolution = this.map.getView().getResolution();
+      if (!viewResolution) return;
+
+      this.map.getLayers().forEach((layer) => {
+        if (layer instanceof TileLayer && layer.getVisible()) {
+          const source = layer.getSource();
+          if (source instanceof TileWMS) {
+            const url = source.getFeatureInfoUrl(
+              event.coordinate,
+              viewResolution,
+              'EPSG:3857',
+              { INFO_FORMAT: 'application/json' }
+            );
+            if (url) {
+              fetch(url)
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log('WMS Feature Info:', data);
+                })
+                .catch((error) => {
+                  console.error('Error fetching WMS Feature Info:', error);
+                });
+            }
+          }
+        }
+      });
+    });
   }
 
-  private buildVectorLayer(url: string, atrybut: string): VectorLayer {
+  private tileLayer(visibleLayer: LayerKey, layerName: string): TileLayer {
+    const visibility = this.mapLayersVisibility.layersVisibility();
+    return new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
+        params: {
+          'LAYERS': `AngularAppSpring:${layerName}`,
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous',
+      }),
+      visible: visibility[visibleLayer],
+    });
+  }
+
+  private buildVectorLayer(): VectorLayer {
     const wfsUrl =
       `${window.location.origin}/geoserver/AngularAppSpring/ows?` +
       `service=WFS&version=1.0.0&request=GetFeature` +
-      `&typeName=AngularAppSpring:${url}` +
+      `&typeName=AngularAppSpring:sql_data` +
       `&outputFormat=application/json&srsname=EPSG:3857`;
 
     this.vectorSource = new VectorSource({
@@ -95,86 +139,16 @@ export class MapComponent implements AfterViewInit {
       features.forEach((f, i) => f.set('__idx', i));
     });
 
-    if (url === 'sql_data') {
-      return new VectorLayer({
-        source: this.vectorSource,
-        visible: this.mapLayersVisibility.isVisible('vectorLayer'),
-        style: (feature, resolution) => this.decimatedStyle(feature, resolution, atrybut),
-        updateWhileAnimating: false,
-        updateWhileInteracting: false,
-      });
-    }
-    else if(url === 'boundscities') {
-      return new VectorLayer({
-        source: this.vectorSource,
-        visible: this.mapLayersVisibility.isVisible(`boundsLayerCities`),
-        style: (feature) => this.stylingFunc(feature, atrybut, '#fc6d74'),
-        updateWhileAnimating: false,
-        updateWhileInteracting: false,
-      });
-    }
-    else if(url === 'boundsgminy') {
-      return new VectorLayer({
-        source: this.vectorSource,
-        visible: this.mapLayersVisibility.isVisible(`boundsLayerGminy`),
-        style: (feature) => this.stylingFunc(feature, atrybut, '#a3ffd4'),
-        updateWhileAnimating: false,
-        updateWhileInteracting: false,
-      });
-    }
-    else if(url === 'boundspowiaty') {
-      return new VectorLayer({
-        source: this.vectorSource,
-        visible: this.mapLayersVisibility.isVisible(`boundsLayerPowiaty`),
-        style: (feature) => this.stylingFunc(feature, atrybut, '#fcb56d'),
-        updateWhileAnimating: false,
-        updateWhileInteracting: false,
-      });
-    }
-    else if(url === 'boundswojewodz') {
-      return new VectorLayer({
-        source: this.vectorSource,
-        visible: this.mapLayersVisibility.isVisible(`boundsLayerWojewodz`),
-        style: (feature) => this.stylingFunc(feature, atrybut, '#9adeed'),
-        updateWhileAnimating: false,
-        updateWhileInteracting: false,
-      });
-    }
-    else if(url === 'boundspanstwo') {
-      return new VectorLayer({
-        source: this.vectorSource,
-        visible: this.mapLayersVisibility.isVisible(`boundsLayerPanstwo`),
-        style: (feature) => this.stylingFunc(feature, atrybut, '#babebf'),
-        updateWhileAnimating: false,
-        updateWhileInteracting: false,
-      });
-    }
-    else {
-      return null as unknown as VectorLayer; 
-    }
-  }
-
-  private stylingFunc(feature: FeatureLike, atrybut: string, color: string): Style {
-    const idx = feature.get('__idx') ?? 0;
-    return new Style({
-      stroke: new Stroke({
-        color: '#000',
-        width: 0.5,
-      }),
-      fill: new Fill({
-        color: color,
-      }),
-      text: new Text({
-        text: feature.get(atrybut) ?? '',
-        offsetY: -30,
-        font: '30px Arial',
-        fill: new Fill({ color: '#000' }),
-        stroke: new Stroke({ color: '#fff', width: 3 }),
-      }),
+    return new VectorLayer({
+      source: this.vectorSource,
+      visible: this.mapLayersVisibility.isVisible('vectorLayer'),
+      style: (feature, resolution) => this.decimatedStyle(feature, resolution),
+      updateWhileAnimating: false,
+      updateWhileInteracting: false,
     });
   }
 
-  private decimatedStyle(feature: FeatureLike, resolution: number, atrybut: string): Style | undefined {
+  private decimatedStyle(feature: FeatureLike, resolution: number): Style | undefined {
     const idx = feature.get('__idx') ?? 0;
     const skip = this.getSkipFactor(resolution);
 
@@ -193,8 +167,8 @@ export class MapComponent implements AfterViewInit {
       }),
       text: showLabel
         ? new Text({
-            text: feature.get(atrybut) ?? '',
-            offsetY: -15,
+            text: feature.get('nazwa'),
+            offsetY: -12,
             font: '15px Arial',
             fill: new Fill({ color: '#000' }),
             stroke: new Stroke({ color: '#fff', width: 3 }),
@@ -209,7 +183,6 @@ export class MapComponent implements AfterViewInit {
     if (resolution > 500) return 10;
     if (resolution > 200) return 5;
     if (resolution > 50) return 2;
-    return 1; 
+    return 1;
   }
 }
-
