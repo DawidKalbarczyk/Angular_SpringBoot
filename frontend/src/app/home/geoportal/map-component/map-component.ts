@@ -158,18 +158,22 @@ export class MapComponent implements AfterViewInit {
     const idx = feature.get('__idx') ?? 0;
     return new Style({
       stroke: new Stroke({
-        color: color,
+        color: '#000',
         width: 0.5,
+      }),
+      fill: new Fill({
+        color: color,
       }),
       text: new Text({
         text: feature.get(atrybut) ?? '',
         offsetY: -12,
-        font: '15px Arial',
+        font: '30px Arial',
         fill: new Fill({ color: '#000' }),
         stroke: new Stroke({ color: '#fff', width: 3 }),
       }),
     });
   }
+
   private decimatedStyle(feature: FeatureLike, resolution: number, atrybut: string): Style | undefined {
     const idx = feature.get('__idx') ?? 0;
     const skip = this.getSkipFactor(resolution);
