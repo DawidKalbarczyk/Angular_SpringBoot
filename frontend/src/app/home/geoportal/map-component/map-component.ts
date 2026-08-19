@@ -53,12 +53,12 @@ export class MapComponent implements AfterViewInit {
 
 
     this.vectorLayer = this.buildVectorLayer('sql_data', 'nazwa');
-    this.boundsLayerCities = this.buildVectorLayer('boundscities', 'nazwa');
-    this.boundsLayerGminy = this.buildVectorLayer('boundsgminy', 'nazwa');
-    this.boundsLayerPowiaty = this.buildVectorLayer('boundspowiaty', 'nazwa');
-    this.boundsLayerWojewodz = this.buildVectorLayer('boundswojewodz', 'nazwa');
-    this.boundsLayerPanstwo = this.buildVectorLayer('boundspanstwo', 'nazwa');
-    
+    this.boundsLayerCities = this.buildVectorLayer('boundscities', 'jpt_nazwa_');
+    this.boundsLayerGminy = this.buildVectorLayer('boundsgminy', 'jpt_nazwa_');
+    this.boundsLayerPowiaty = this.buildVectorLayer('boundspowiaty', 'jpt_nazwa_');
+    this.boundsLayerWojewodz = this.buildVectorLayer('boundswojewodz', 'jpt_nazwa_');
+    this.boundsLayerPanstwo = this.buildVectorLayer('boundspanstwo', 'jpt_nazwa_');
+
     this.map = new Map({
       target: 'map',
       layers: [
