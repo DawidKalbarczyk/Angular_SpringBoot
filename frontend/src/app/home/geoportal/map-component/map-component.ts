@@ -149,6 +149,9 @@ export class MapComponent implements AfterViewInit {
         updateWhileInteracting: false,
       });
     }
+    else {
+      return null as unknown as VectorLayer; 
+    }
   }
 
   private stylingFunc(feature: FeatureLike, atrybut: string, color: string): Style {
