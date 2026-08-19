@@ -11,17 +11,22 @@ import { Style, Text, Fill, Stroke, Circle as CircleStyle } from 'ol/style';
 import { FeatureLike } from 'ol/Feature';
 import TileWMS from 'ol/source/TileWMS';
 import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/layer-visibility';
+import { InfoToggle } from '../../../services/info-toggle/info-toggle';
+import { InfoComponent } from '../geoportal-headbar/info-component/info-component';
+
 
 @Component({
   selector: 'app-map-component',
-  imports: [],
+  imports: [InfoComponent],
   templateUrl: './map-component.html',
   styleUrl: './map-component.scss',
 })
 export class MapComponent implements AfterViewInit {
   private mapLayersVisibility = inject(LayerVisibility);
+  private infoToggleService = inject(InfoToggle);
 
   private osmLayer!: TileLayer;
+  private ortoLayer!: TileLayer;
   private boundsLayerCities!: TileLayer;
   private boundsLayerGminy!: TileLayer;
   private boundsLayerPowiaty!: TileLayer;
@@ -56,6 +61,20 @@ export class MapComponent implements AfterViewInit {
 
     this.vectorLayer = this.buildVectorLayer();
 
+    this.ortoLayer = new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wmts?`,
+        params: {
+          'LAYERS': 'AngularAppSpring:ORTOFOTOMAPA',
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous',
+      }),
+      visible: true,
+    });
     this.map = new Map({
       target: 'map',
       layers: [
@@ -66,6 +85,7 @@ export class MapComponent implements AfterViewInit {
         this.boundsLayerGminy,
         this.boundsLayerCities,
         this.vectorLayer,
+        this.ortoLayer,
       ],
       view: new View({
         center: fromLonLat([19.3, 52.2]),
@@ -74,40 +94,44 @@ export class MapComponent implements AfterViewInit {
     });
 
     this.map.on('singleclick', (event) => {
-      console.log('kliknięto', event.coordinate);
-      const viewResolution = this.map.getView().getResolution();
-      if (!viewResolution) return;
+      if (this.infoToggleService.isInfoClicked()) {
+        console.log('kliknięto', event.coordinate);
+        const viewResolution = this.map.getView().getResolution();
+        if (!viewResolution) return;
 
-      let matchedAny = false;
+        let matchedAny = false;
 
-      this.map.getLayers().forEach((layer) => {
-        if (layer instanceof TileLayer && layer.getVisible()) {
-          const source = layer.getSource();
-          if (source instanceof TileWMS) {
-            matchedAny = true;
-            const url = source.getFeatureInfoUrl(
-              event.coordinate,
-              viewResolution,
-              'EPSG:3857',
-              { INFO_FORMAT: 'application/json' }
-            );
-            console.log('GetFeatureInfo URL:', url);
-            if (url) {
-              fetch(url)
-                .then((response) => response.json())
-                .then((data) => {
-                  console.log('WMS Feature Info:', data);
-                })
-                .catch((error) => {
-                  console.error('Error fetching WMS Feature Info:', error);
-                });
+        this.map.getLayers().forEach((layer) => {
+          if (layer instanceof TileLayer && layer.getVisible()) {
+            const source = layer.getSource();
+            if (source instanceof TileWMS) {
+              matchedAny = true;
+              const url = source.getFeatureInfoUrl(
+                event.coordinate,
+                viewResolution,
+                'EPSG:3857',
+                { INFO_FORMAT: 'application/json' }
+              );
+              console.log('GetFeatureInfo URL:', url);
+              if (url) {
+                fetch(url)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log('WMS Feature Info:', data);
+                  })
+                  .catch((error) => {
+                    console.error('Error fetching WMS Feature Info:', error);
+                  });
+              }
             }
           }
-        }
-      });
+        });
 
-      console.log('Czy trafiono w jakąś warstwę WMS?', matchedAny);
-  });
+        console.log('Czy trafiono w jakąś warstwę WMS?', matchedAny);
+      } else {
+        console.log('Info toggle is not active. Click ignored.');
+      }
+    });
   }
 
   private tileLayer(visibleLayer: LayerKey, layerName: string): TileLayer {
@@ -174,12 +198,12 @@ export class MapComponent implements AfterViewInit {
       }),
       text: showLabel
         ? new Text({
-            text: feature.get('nazwa'),
-            offsetY: -12,
-            font: '15px Arial',
-            fill: new Fill({ color: '#000' }),
-            stroke: new Stroke({ color: '#fff', width: 3 }),
-          })
+          text: feature.get('nazwa'),
+          offsetY: -12,
+          font: '15px Arial',
+          fill: new Fill({ color: '#000' }),
+          stroke: new Stroke({ color: '#fff', width: 3 }),
+        })
         : undefined,
     });
   }
