@@ -12,8 +12,24 @@
     <div>
         Wyszukiwarka
     </div>
-    <div>
-        Przełącz mapę podkładową
+    <div (click)="baseLayerOut()" class="baselayer" [class.active-baselayer]="isBaseLayerOut">
+        @if(isBaseLayerOut){
+            <div class="baselayer-container" (click)="$event.stopPropagation()">
+                <div>
+                    <p>Mapa OpenStreetMap</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('osmLayer')" (change)="mapLayerService.setLayerVisibility('osmLayer', $event.checked)"></mat-slide-toggle>
+                </div>
+                <div>
+                    <p>Ortofotomapa</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('ortoLayer')" (change)="mapLayerService.setLayerVisibility('ortoLayer', $event.checked)"></mat-slide-toggle>
+                </div>
+                <div>
+                    <p>Mapa wspólna</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('commonLayer')" (change)="mapLayerService.setLayerVisibility('commonLayer', $event.checked)"></mat-slide-toggle>
+                </div>
+            </div>
+        }
+        Mapa bazowa
     </div>
     <div (click)="infoToggleService.infoClicked()" class="info" [class.active-info]="infoToggleService.isInfoClicked()">
         Info
@@ -24,6 +40,10 @@
                 <div>
                     <p>Miejscowości</p>
                     <mat-slide-toggle [checked]="mapLayerService.isVisible('vectorLayer')" (change)="mapLayerService.setLayerVisibility('vectorLayer', $event.checked)"></mat-slide-toggle>
+                </div>
+                <div>
+                    <p>Budynki</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('budLayer')" (change)="mapLayerService.setLayerVisibility('budLayer', $event.checked)"></mat-slide-toggle>
                 </div>
                 <div>
                     <p>Granice miast</p>

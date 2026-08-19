@@ -6,11 +6,19 @@ export type LayerKey =
     | 'boundsLayerGminy'
     | 'boundsLayerPowiaty'
     | 'boundsLayerWojewodz'
-    | 'boundsLayerPanstwo';
+    | 'boundsLayerPanstwo'
+    | 'osmLayer'
+    | 'ortoLayer'
+    | 'commonLayer'
+    | 'budLayer';
 
 const LAYER_VISIBILITY_STORAGE_KEY = 'layerVisibility';
 
 const DEFAULT_LAYERS_VISIBILITY: Record<LayerKey, boolean> = {
+    osmLayer: true,
+    ortoLayer: false,
+    commonLayer: false,
+    budLayer: false,
     boundsLayerPanstwo: true,
     vectorLayer: true,
     boundsLayerCities: false,

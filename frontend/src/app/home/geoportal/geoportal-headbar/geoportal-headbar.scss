@@ -68,6 +68,36 @@
         }
     }
 
+    .baselayer {
+        position: relative;
+        pointer-events: auto;
+
+        .baselayer-container {
+            position: absolute;
+            top: 90px;
+            right: -30%;
+            left: 0;
+            row-gap: 1rem;
+            display: flex;
+            flex-direction: column;
+            background-color: $background-color-light;
+            pointer-events: auto;
+            padding: 1rem 2rem;
+            left: -30%;
+            border: 1px solid rgba(0,0,0,0.5);
+            border-radius: 0rem 0rem 2rem 2rem;
+            
+            
+            div {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                column-gap: 1rem;
+            }
+        }
+    }
+
     
     .active-info {
         background-color: $background-color-light;

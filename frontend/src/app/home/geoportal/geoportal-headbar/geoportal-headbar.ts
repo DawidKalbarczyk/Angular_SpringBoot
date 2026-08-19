@@ -13,12 +13,16 @@ import { InfoComponent } from './info-component/info-component';
 })
 export class GeoportalHeadbar {
   public isLayersOut = false;
+  public isBaseLayerOut = false;
   public mapLayerService = inject(LayerVisibility);
   public infoToggleService = inject(InfoToggle);
 
   layersOut(): void {
     this.isLayersOut = !this.isLayersOut;
     this.mapLayerService.layerClicked();
+  }
+  baseLayerOut(): void {
+    this.isBaseLayerOut = !this.isBaseLayerOut;
   }
 }
 
