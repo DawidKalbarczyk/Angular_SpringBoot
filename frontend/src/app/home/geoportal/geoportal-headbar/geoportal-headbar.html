@@ -15,7 +15,7 @@
     <div>
         Przełącz mapę podkładową
     </div>
-    <div>
+    <div (click)="infoToggleService.infoClicked()" class="info" [class.active-info]="infoToggleService.isInfoClicked()">
         Info
     </div>
     <div (click)="layersOut()" class="layers">

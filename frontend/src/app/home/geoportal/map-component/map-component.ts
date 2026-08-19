@@ -74,40 +74,40 @@ export class MapComponent implements AfterViewInit {
     });
 
     this.map.on('singleclick', (event) => {
-  console.log('kliknięto', event.coordinate);
-  const viewResolution = this.map.getView().getResolution();
-  if (!viewResolution) return;
+      console.log('kliknięto', event.coordinate);
+      const viewResolution = this.map.getView().getResolution();
+      if (!viewResolution) return;
 
-  let matchedAny = false;
+      let matchedAny = false;
 
-  this.map.getLayers().forEach((layer) => {
-    if (layer instanceof TileLayer && layer.getVisible()) {
-      const source = layer.getSource();
-      if (source instanceof TileWMS) {
-        matchedAny = true;
-        const url = source.getFeatureInfoUrl(
-          event.coordinate,
-          viewResolution,
-          'EPSG:3857',
-          { INFO_FORMAT: 'application/json' }
-        );
-        console.log('GetFeatureInfo URL:', url);
-        if (url) {
-          fetch(url)
-            .then((response) => response.json())
-            .then((data) => {
-              console.log('WMS Feature Info:', data);
-            })
-            .catch((error) => {
-              console.error('Error fetching WMS Feature Info:', error);
-            });
+      this.map.getLayers().forEach((layer) => {
+        if (layer instanceof TileLayer && layer.getVisible()) {
+          const source = layer.getSource();
+          if (source instanceof TileWMS) {
+            matchedAny = true;
+            const url = source.getFeatureInfoUrl(
+              event.coordinate,
+              viewResolution,
+              'EPSG:3857',
+              { INFO_FORMAT: 'application/json' }
+            );
+            console.log('GetFeatureInfo URL:', url);
+            if (url) {
+              fetch(url)
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log('WMS Feature Info:', data);
+                })
+                .catch((error) => {
+                  console.error('Error fetching WMS Feature Info:', error);
+                });
+            }
+          }
         }
-      }
-    }
-  });
+      });
 
-  console.log('Czy trafiono w jakąś warstwę WMS?', matchedAny);
-});
+      console.log('Czy trafiono w jakąś warstwę WMS?', matchedAny);
+  });
   }
 
   private tileLayer(visibleLayer: LayerKey, layerName: string): TileLayer {

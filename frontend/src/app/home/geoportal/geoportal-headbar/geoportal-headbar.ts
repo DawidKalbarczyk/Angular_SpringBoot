@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ngAfterViewInit} from '@angular/core';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/layer-visibility';
+import { InfoToggle } from '../../../services/info-toggle/info-toggle';
 
 
 @Component({
@@ -9,10 +10,10 @@ import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/la
   templateUrl: './geoportal-headbar.html',
   styleUrl: './geoportal-headbar.scss',
 })
-export class GeoportalHeadbar {
-  isLayersOut = false;
-  mapLayerService = inject(LayerVisibility);
-
+export class GeoportalHeadbar implements ngAfterViewInit {
+  public isLayersOut = false;
+  public mapLayerService = inject(LayerVisibility);
+  public infoToggleService = inject(InfoToggle);
 
   layersOut(): void {
     this.isLayersOut = !this.isLayersOut;
