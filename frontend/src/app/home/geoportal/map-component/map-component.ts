@@ -114,6 +114,7 @@ export class MapComponent implements AfterViewInit {
         this.osmLayer,
         this.ortoLayer,
         this.commonLayer,
+        this.budLayer,
         this.boundsLayerPanstwo,
         this.boundsLayerWojewodz,
         this.boundsLayerPowiaty,
