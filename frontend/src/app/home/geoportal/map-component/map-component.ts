@@ -42,6 +42,10 @@ export class MapComponent implements AfterViewInit {
     effect(() => {
       const visibility = this.mapLayersVisibility.layersVisibility();
       this.vectorLayer?.setVisible(visibility.vectorLayer);
+      this.osmLayer?.setVisible(visibility.osmLayer);
+      this.ortoLayer?.setVisible(visibility.ortoLayer);
+      this.commonLayer?.setVisible(visibility.commonLayer);
+      this.budLayer?.setVisible(visibility.budLayer);
       this.boundsLayerCities?.setVisible(visibility.boundsLayerCities);
       this.boundsLayerGminy?.setVisible(visibility.boundsLayerGminy);
       this.boundsLayerPowiaty?.setVisible(visibility.boundsLayerPowiaty);
@@ -75,7 +79,7 @@ export class MapComponent implements AfterViewInit {
         transition: 300,
         crossOrigin: 'anonymous',
       }),
-      visible: true,
+      visible: false,
     });
 
     this.commonLayer = new TileLayer({
@@ -90,7 +94,7 @@ export class MapComponent implements AfterViewInit {
         transition: 300,
         crossOrigin: 'anonymous',
       }),
-      visible: true,
+      visible: false,
     });
     this.budLayer = new TileLayer({
       source: new TileWMS({
@@ -104,7 +108,7 @@ export class MapComponent implements AfterViewInit {
         transition: 300,
         crossOrigin: 'anonymous',
       }),
-      visible: true,
+      visible: false,
     });
 
 
