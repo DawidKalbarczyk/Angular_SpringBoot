@@ -95,15 +95,78 @@ export class MapComponent implements AfterViewInit {
       features.forEach((f, i) => f.set('__idx', i));
     });
 
-    return new VectorLayer({
-      source: this.vectorSource,
-      visible: this.mapLayersVisibility.isVisible('vectorLayer'),
-      style: (feature, resolution) => this.decimatedStyle(feature, resolution, atrybut),
-      updateWhileAnimating: false,
-      updateWhileInteracting: false,
-    });
+    if (url === 'sql_data') {
+      return new VectorLayer({
+        source: this.vectorSource,
+        visible: this.mapLayersVisibility.isVisible('vectorLayer'),
+        style: (feature, resolution) => this.decimatedStyle(feature, resolution, atrybut),
+        updateWhileAnimating: false,
+        updateWhileInteracting: false,
+      });
+    }
+    else if(url === 'boundscities') {
+      return new VectorLayer({
+        source: this.vectorSource,
+        visible: this.mapLayersVisibility.isVisible(`boundsLayerCities`),
+        style: (feature) => this.stylingFunc(feature, atrybut, '#fc6d74'),
+        updateWhileAnimating: false,
+        updateWhileInteracting: false,
+      });
+    }
+    else if(url === 'boundsgminy') {
+      return new VectorLayer({
+        source: this.vectorSource,
+        visible: this.mapLayersVisibility.isVisible(`boundsLayerGminy`),
+        style: (feature) => this.stylingFunc(feature, atrybut, '#a3ffd4'),
+        updateWhileAnimating: false,
+        updateWhileInteracting: false,
+      });
+    }
+    else if(url === 'boundspowiaty') {
+      return new VectorLayer({
+        source: this.vectorSource,
+        visible: this.mapLayersVisibility.isVisible(`boundsLayerPowiaty`),
+        style: (feature) => this.stylingFunc(feature, atrybut, '#fcb56d'),
+        updateWhileAnimating: false,
+        updateWhileInteracting: false,
+      });
+    }
+    else if(url === 'boundswojewodz') {
+      return new VectorLayer({
+        source: this.vectorSource,
+        visible: this.mapLayersVisibility.isVisible(`boundsLayerWojewodz`),
+        style: (feature) => this.stylingFunc(feature, atrybut, '#9adeed'),
+        updateWhileAnimating: false,
+        updateWhileInteracting: false,
+      });
+    }
+    else if(url === 'boundspanstwo') {
+      return new VectorLayer({
+        source: this.vectorSource,
+        visible: this.mapLayersVisibility.isVisible(`boundsLayerPanstwo`),
+        style: (feature) => this.stylingFunc(feature, atrybut, '#babebf'),
+        updateWhileAnimating: false,
+        updateWhileInteracting: false,
+      });
+    }
   }
 
+  private stylingFunc(feature: FeatureLike, atrybut: string, color: string): Style {
+    const idx = feature.get('__idx') ?? 0;
+    return new Style({
+      stroke: new Stroke({
+        color: color,
+        width: 0.5,
+      }),
+      text: new Text({
+        text: feature.get(atrybut) ?? '',
+        offsetY: -12,
+        font: '15px Arial',
+        fill: new Fill({ color: '#000' }),
+        stroke: new Stroke({ color: '#fff', width: 3 }),
+      }),
+    });
+  }
   private decimatedStyle(feature: FeatureLike, resolution: number, atrybut: string): Style | undefined {
     const idx = feature.get('__idx') ?? 0;
     const skip = this.getSkipFactor(resolution);
@@ -116,6 +179,11 @@ export class MapComponent implements AfterViewInit {
     const showLabel = resolution < 350; // próg dobierz eksperymentalnie
 
     return new Style({
+      image: new CircleStyle({
+        radius: 5,
+        fill: new Fill({ color: '#3399CC' }),
+        stroke: new Stroke({ color: '#fff', width: 1.5 }),
+      }),
       text: showLabel
         ? new Text({
             text: feature.get(atrybut) ?? '',
