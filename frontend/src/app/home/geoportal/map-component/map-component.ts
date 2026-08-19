@@ -166,7 +166,7 @@ export class MapComponent implements AfterViewInit {
       }),
       text: new Text({
         text: feature.get(atrybut) ?? '',
-        offsetY: -12,
+        offsetY: -30,
         font: '30px Arial',
         fill: new Fill({ color: '#000' }),
         stroke: new Stroke({ color: '#fff', width: 3 }),
@@ -194,7 +194,7 @@ export class MapComponent implements AfterViewInit {
       text: showLabel
         ? new Text({
             text: feature.get(atrybut) ?? '',
-            offsetY: -12,
+            offsetY: -15,
             font: '15px Arial',
             fill: new Fill({ color: '#000' }),
             stroke: new Stroke({ color: '#fff', width: 3 }),
