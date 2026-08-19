@@ -1,0 +1,61 @@
+@use '../../../../../variables' as *;
+
+.info-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 1000;
+
+    .marker {
+        position: absolute;
+        width: 17.5rem;
+        height: 25rem;
+        background-color: $secondary-color-light;
+        border: 1px solid rgba(0,0,0,0.5);
+        border-radius: 0.5rem;
+        pointer-events: auto;
+        z-index: 10000;
+
+        .marker-close {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            position: absolute;
+            top: 0.3rem;
+            right: 0.3rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .marker-content {
+            margin: 3rem 1rem 1rem 1rem;
+            padding: 1rem 1rem 1rem 1rem;
+            overflow-y: auto;
+            background-color: $background-color-light;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    .marker-active-vertical {
+        transform: translate(0%, -100%);
+    }
+
+    .marker-active-horizontal {
+        transform: translate(-100%, 0%);
+    }
+
+    .marker-active-horizontal-vertical {
+        transform: translate(-100%, -100%);
+    }
+}

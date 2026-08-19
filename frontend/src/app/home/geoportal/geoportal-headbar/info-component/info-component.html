@@ -1,0 +1,21 @@
+<div class="info-area" (click)="setMarkerPosition($event)">
+    @if (showMarker()) {
+        <div class="marker"
+        [style.left.px]="markerX()"
+        [style.top.px]="markerY()"
+        [class.marker-active-vertical]="turnMarkerUpsideDown()"
+        [class.marker-active-horizontal]="turnMarkerHorizontal()"
+        [class.marker-active-horizontal-vertical]="turnMarkerHorVer()">
+            <div class="marker-close" (click)="showMarker.set(false)">
+                <img src="/images/icons/close.png" alt="Close"/>
+            </div>
+            <!-- @for { -->
+            <div class="marker-content">
+                <p>Współrzędne:</p>
+                <p>X: {{ markerX() }}</p>
+                <p>Y: {{ markerY() }}</p>
+            </div>
+            <!-- } -->
+        </div>
+    }
+</div>
