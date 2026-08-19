@@ -63,7 +63,7 @@ export class MapComponent implements AfterViewInit {
 
     this.ortoLayer = new TileLayer({
       source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wmts?`,
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
         params: {
           'LAYERS': 'AngularAppSpring:ORTOFOTOMAPA',
           'TILED': true,
