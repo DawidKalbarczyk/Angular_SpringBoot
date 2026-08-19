@@ -22,11 +22,11 @@ export class MapComponent implements AfterViewInit {
   private mapLayersVisibility = inject(LayerVisibility);
 
   private osmLayer!: TileLayer;
-  private boundsLayerCities!: TileLayer;
-  private boundsLayerGminy!: TileLayer;
-  private boundsLayerPowiaty!: TileLayer;
-  private boundsLayerWojewodz!: TileLayer;
-  private boundsLayerPanstwo!: TileLayer;
+  private boundsLayerCities!: VectorLayer;
+  private boundsLayerGminy!: VectorLayer;
+  private boundsLayerPowiaty!: VectorLayer;
+  private boundsLayerWojewodz!: VectorLayer;
+  private boundsLayerPanstwo!: VectorLayer;
   private map!: Map;
   private vectorLayer!: VectorLayer;
   private vectorSource!: VectorSource;
@@ -51,82 +51,13 @@ export class MapComponent implements AfterViewInit {
       source: new OSM(),
     });
 
-    this.boundsLayerPanstwo = new TileLayer({
-      source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
-        params: {
-          'LAYERS': 'AngularAppSpring:boundspanstwo',
-          'TILED': true,
-          'VERSION': '1.1.1',
-        },
-        serverType: 'geoserver',
-        transition: 300,
-        crossOrigin: 'anonymous'
-      }),
-      visible: visibility.boundsLayerPanstwo,
-     });
 
-    this.vectorLayer = this.buildVectorLayer();
-
-    this.boundsLayerCities = new TileLayer({
-      source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
-        params: {
-          'LAYERS': 'AngularAppSpring:boundscities',
-          'TILED': true,
-          'VERSION': '1.1.1',
-        },
-        serverType: 'geoserver',
-        transition: 300,
-        crossOrigin: 'anonymous'
-      }),
-      visible: visibility.boundsLayerCities,
-     });
-
-    this.boundsLayerGminy = new TileLayer({
-      source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
-        params: {
-          'LAYERS': 'AngularAppSpring:boundsgminy',
-          'TILED': true,
-          'VERSION': '1.1.1',
-        },
-        serverType: 'geoserver',
-        transition: 300,
-        crossOrigin: 'anonymous'
-      }),
-      visible: visibility.boundsLayerGminy,
-     });
-
-     this.boundsLayerPowiaty = new TileLayer({
-      source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
-        params: {
-          'LAYERS': 'AngularAppSpring:boundspowiaty',
-          'TILED': true,
-          'VERSION': '1.1.1',
-        },
-        serverType: 'geoserver',
-        transition: 300,
-        crossOrigin: 'anonymous'
-      }),
-      visible: visibility.boundsLayerPowiaty,
-     });
-
-     this.boundsLayerWojewodz = new TileLayer({
-      source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
-        params: {
-          'LAYERS': 'AngularAppSpring:boundswojewodz',
-          'TILED': true,
-          'VERSION': '1.1.1',
-        },
-        serverType: 'geoserver',
-        transition: 300,
-        crossOrigin: 'anonymous'
-      }),
-      visible: visibility.boundsLayerWojewodz,
-    });
+    this.vectorLayer = this.buildVectorLayer('sql_data', 'nazwa');
+    this.boundsLayerCities = this.buildVectorLayer('boundscities', 'nazwa');
+    this.boundsLayerGminy = this.buildVectorLayer('boundsgminy', 'nazwa');
+    this.boundsLayerPowiaty = this.buildVectorLayer('boundspowiaty', 'nazwa');
+    this.boundsLayerWojewodz = this.buildVectorLayer('boundswojewodz', 'nazwa');
+    this.boundsLayerPanstwo = this.buildVectorLayer('boundspanstwo', 'nazwa');
     
     this.map = new Map({
       target: 'map',
@@ -146,11 +77,11 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  private buildVectorLayer(): VectorLayer {
+  private buildVectorLayer(url: string, atrybut: string): VectorLayer {
     const wfsUrl =
       `${window.location.origin}/geoserver/AngularAppSpring/ows?` +
       `service=WFS&version=1.0.0&request=GetFeature` +
-      `&typeName=AngularAppSpring:sql_data` +
+      `&typeName=AngularAppSpring:${url}` +
       `&outputFormat=application/json&srsname=EPSG:3857`;
 
     this.vectorSource = new VectorSource({
@@ -167,13 +98,13 @@ export class MapComponent implements AfterViewInit {
     return new VectorLayer({
       source: this.vectorSource,
       visible: this.mapLayersVisibility.isVisible('vectorLayer'),
-      style: (feature, resolution) => this.decimatedStyle(feature, resolution),
+      style: (feature, resolution) => this.decimatedStyle(feature, resolution, atrybut),
       updateWhileAnimating: false,
       updateWhileInteracting: false,
     });
   }
 
-  private decimatedStyle(feature: FeatureLike, resolution: number): Style | undefined {
+  private decimatedStyle(feature: FeatureLike, resolution: number, atrybut: string): Style | undefined {
     const idx = feature.get('__idx') ?? 0;
     const skip = this.getSkipFactor(resolution);
 
@@ -192,7 +123,7 @@ export class MapComponent implements AfterViewInit {
       }),
       text: showLabel
         ? new Text({
-            text: feature.get('nazwa'),
+            text: feature.get(atrybut) ?? '',
             offsetY: -12,
             font: '15px Arial',
             fill: new Fill({ color: '#000' }),
