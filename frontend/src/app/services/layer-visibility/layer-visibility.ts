@@ -22,6 +22,11 @@ const DEFAULT_LAYERS_VISIBILITY: Record<LayerKey, boolean> = {
 
 @Service()
 export class LayerVisibility {
+    isLayerClicked = signal<boolean>(false);
+    layerClicked(): void {
+        this.isLayerClicked.set(!this.isLayerClicked());
+    }
+
     readonly layersVisibility = signal<Record<LayerKey, boolean>>(DEFAULT_LAYERS_VISIBILITY);
 
     constructor() {

@@ -6,6 +6,5 @@ export class InfoToggle {
 
     infoClicked(): void {
         this.isInfoClicked.set(!this.isInfoClicked());
-        
     }
 }
