@@ -27,6 +27,10 @@
                     <p>Mapa wspólna</p>
                     <mat-slide-toggle [checked]="mapLayerService.isVisible('commonLayer')" (change)="mapLayerService.setLayerVisibility('commonLayer', $event.checked)"></mat-slide-toggle>
                 </div>
+                <div>
+                    <p>Budynki</p>
+                    <mat-slide-toggle [checked]="mapLayerService.isVisible('budLayer')" (change)="mapLayerService.setLayerVisibility('budLayer', $event.checked)"></mat-slide-toggle>
+                </div>
             </div>
         }
         Mapa bazowa
@@ -40,10 +44,6 @@
                 <div>
                     <p>Miejscowości</p>
                     <mat-slide-toggle [checked]="mapLayerService.isVisible('vectorLayer')" (change)="mapLayerService.setLayerVisibility('vectorLayer', $event.checked)"></mat-slide-toggle>
-                </div>
-                <div>
-                    <p>Budynki</p>
-                    <mat-slide-toggle [checked]="mapLayerService.isVisible('budLayer')" (change)="mapLayerService.setLayerVisibility('budLayer', $event.checked)"></mat-slide-toggle>
                 </div>
                 <div>
                     <p>Granice miast</p>
