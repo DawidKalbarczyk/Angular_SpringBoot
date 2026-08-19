@@ -36,6 +36,9 @@
         border: none;
     }
 
+    .active-layers {
+        background-color: $background-color-light;
+    }
     .layers {
         position: relative;
         pointer-events: auto;
@@ -65,9 +68,8 @@
         }
     }
 
-    .info {
-        .active-info {
-            background-color: $background-color-light;
-        }
+    
+    .active-info {
+        background-color: $background-color-light;
     }
 }

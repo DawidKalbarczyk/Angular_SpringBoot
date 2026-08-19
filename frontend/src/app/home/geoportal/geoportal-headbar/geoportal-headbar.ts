@@ -2,6 +2,7 @@ import { Component, inject} from '@angular/core';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/layer-visibility';
 import { InfoToggle } from '../../../services/info-toggle/info-toggle';
+import { InfoComponent } from './info-component/info-component';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class GeoportalHeadbar {
 
   layersOut(): void {
     this.isLayersOut = !this.isLayersOut;
+    this.mapLayerService.layerClicked();
   }
 }
 
