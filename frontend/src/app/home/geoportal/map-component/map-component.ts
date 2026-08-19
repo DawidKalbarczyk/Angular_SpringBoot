@@ -27,6 +27,8 @@ export class MapComponent implements AfterViewInit {
 
   private osmLayer!: TileLayer;
   private ortoLayer!: TileLayer;
+  private budLayer!: TileLayer;
+  private commonLayer!: TileLayer;
   private boundsLayerCities!: TileLayer;
   private boundsLayerGminy!: TileLayer;
   private boundsLayerPowiaty!: TileLayer;
@@ -75,17 +77,49 @@ export class MapComponent implements AfterViewInit {
       }),
       visible: true,
     });
+
+    this.commonLayer = new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
+        params: {
+          'LAYERS': 'AngularAppSpring:Ogolnogeograficzna',
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous',
+      }),
+      visible: true,
+    });
+    this.budLayer = new TileLayer({
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
+        params: {
+          'LAYERS': 'AngularAppSpring:budynki', 
+          'TILED': true,
+          'VERSION': '1.1.1',
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous',
+      }),
+      visible: true,
+    });
+
+
     this.map = new Map({
       target: 'map',
       layers: [
         this.osmLayer,
+        this.ortoLayer,
+        this.commonLayer,
         this.boundsLayerPanstwo,
         this.boundsLayerWojewodz,
         this.boundsLayerPowiaty,
         this.boundsLayerGminy,
         this.boundsLayerCities,
-        this.vectorLayer,
-        this.ortoLayer,
+        this.vectorLayer
       ],
       view: new View({
         center: fromLonLat([19.3, 52.2]),
