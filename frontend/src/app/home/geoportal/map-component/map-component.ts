@@ -116,11 +116,6 @@ export class MapComponent implements AfterViewInit {
     const showLabel = resolution < 350; // próg dobierz eksperymentalnie
 
     return new Style({
-      image: new CircleStyle({
-        radius: 5,
-        fill: new Fill({ color: '#3399CC' }),
-        stroke: new Stroke({ color: '#fff', width: 1.5 }),
-      }),
       text: showLabel
         ? new Text({
             text: feature.get(atrybut) ?? '',
