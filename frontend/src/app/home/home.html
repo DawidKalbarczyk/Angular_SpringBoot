@@ -1,7 +1,7 @@
 <app-author-bar></app-author-bar>
 <app-login-corner></app-login-corner>
 <app-return-corner></app-return-corner>
-<div class="home-container">
+<div class="home-container" [class.dark-home]="isDarkMode()">
     <div class="selection-geoportal" routerLink="geoportal">
         <div class="selection-text">
             <p>Geoportal miejscowości</p>

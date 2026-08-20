@@ -1,5 +1,6 @@
 import { Component, inject, signal} from '@angular/core';
 import { Router } from '@angular/router';
+import { DarkMode } from '../../services/dark-mode/dark-mode';
 
 @Component({
   selector: 'app-return-corner',
@@ -10,6 +11,8 @@ import { Router } from '@angular/router';
 export class ReturnCorner {
   private router: Router = inject(Router);
   public url: string = this.router.url;
+  public isDarkMode = inject(DarkMode).isDarkMode;
+
 
   constructor() {
     console.log('Current URL:', this.url);
@@ -18,7 +21,13 @@ export class ReturnCorner {
     }
   }
 
-  
+  switchColors(): void {
+    this.isDarkMode.set(!this.isDarkMode());
+    console.log('Dark mode is now:', this.isDarkMode());
+
+    localStorage.setItem('darkMode', this.isDarkMode() ? 'true' : 'false');
+  }
+      
 
   goBack(): void {
     const lastUrl = localStorage.getItem('lastUrl') || this.router.url;

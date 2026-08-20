@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { DarkMode } from '../../services/dark-mode/dark-mode';
 
 @Component({
   selector: 'app-author-bar',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './author-bar.scss',
 })
 export class AuthorBar {
-  
+  public isDarkMode = inject(DarkMode).isDarkMode;
 }

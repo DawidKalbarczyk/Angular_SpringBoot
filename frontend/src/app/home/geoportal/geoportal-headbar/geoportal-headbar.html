@@ -66,15 +66,11 @@
         @if(infoToggleService.isInfoClicked()){
             Info (
                 <div>
-                    <img src="/images/icons/decline.png" alt="Decline" />
-                </div>
-            )
-        } @else {
-            Info (
-                <div>
                     <img src="/images/icons/check.png" alt="Accept" class="check-ico"/>
                 </div>
             )
+        } @else {
+            Info
         }
     </div>
     <div (click)="layersOut()" class="layers" [class.active-layers]="mapLayerService.isLayerClicked()">

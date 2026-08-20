@@ -4,6 +4,25 @@ div, button {
     font-family: $text-font-family;
 }
 
+.login-dark {
+    .img-container {
+        border: 1px solid $secondary-color-light !important;
+        img {
+            filter: invert(1);
+        }   
+    }
+    .button-container {
+        .first-button {
+            color: $text-color-dark !important;
+            background-color: $buttons-color;
+
+            &:hover {
+            background-color: $secondary-color-dark !important;
+        }
+        }
+    }
+}
+
 .headbar {
     display: flex;
     flex-direction: row;

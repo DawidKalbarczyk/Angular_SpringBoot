@@ -15,5 +15,18 @@ div {
     flex-direction: row;
     justify-content: center;
     column-gap: 10rem;
+    transition: background-color 0.5s ease;
     
+    p {
+        color: $text-color-light;
+        font-size: 1rem;
+        transition: color 0.5s ease;
+    }
+}
+
+.author-dark {
+    background-color: $author-bar-color-dark;
+    p {
+        color: $text-color-dark;
+    }
 }

@@ -1,5 +1,16 @@
 @use '../../../_variables.scss' as *;
 
+.mode-dark {
+    div {
+        border: 1px solid $secondary-color-light !important;
+        &:hover {
+            background-color: $secondary-color-dark !important;
+        }
+        img {
+            filter: invert(1);
+        }
+    }
+}
 .container {
     position: fixed;
     top: 0;
@@ -31,7 +42,6 @@
         .return-button {
             transform: scale(0.8);
         }
-
         
     }
     

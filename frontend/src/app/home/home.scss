@@ -1,5 +1,17 @@
 @use '../../_variables.scss' as *;
 
+.dark-home {
+    .selection-history, .selection-search, .selection-geoportal {
+        background-color: $secondary-color-dark !important;
+
+        .selection-text {
+            p {
+                color: $text-color-dark !important;
+            }
+        }
+    }
+}
+
 .home-container {
     box-sizing: border-box;
     display: flex;
@@ -23,7 +35,7 @@
         height: 100%;
         display: grid;
         grid-template-rows: 1fr 1fr;
-        transition: filter 0.3s ease-in-out;
+        transition: filter 0.3s ease-in-out, background-color 0.5s ease-in-out;
 
         div {
             img {
@@ -45,6 +57,7 @@
                 font-weight: 500;
                 text-align: center;
                 width: 80%;
+                transition: color 0.5s ease-in-out;
             }
         }
 
