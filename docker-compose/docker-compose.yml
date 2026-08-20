@@ -65,6 +65,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     command: tunnel --url http://nginx:80
+    container_name: Angular-SpringBootApp-${ENV_NAME}-cloudflared
     depends_on:
       - nginx
 
