@@ -62,6 +62,12 @@ services:
     ports:
       - "${NGINX_PORT}:80"
 
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --url http://nginx:80
+    depends_on:
+      - nginx
+
 volumes:
   geoserver-data:
   postgres-data:
