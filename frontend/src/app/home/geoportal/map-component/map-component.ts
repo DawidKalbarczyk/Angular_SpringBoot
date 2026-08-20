@@ -59,58 +59,15 @@ export class MapComponent implements AfterViewInit {
       source: new OSM(),
     });
 
+    this.ortoLayer = this.tileLayer('ortoLayer', 'ORTOFOTOMAPA');
+    this.commonLayer = this.tileLayer('commonLayer', 'Ogolnogeograficzna');
+    this.budLayer = this.tileLayer('budLayer', 'budynki');
     this.boundsLayerPanstwo = this.tileLayer('boundsLayerPanstwo', 'boundspanstwo');
     this.boundsLayerWojewodz = this.tileLayer('boundsLayerWojewodz', 'boundswojewodz');
     this.boundsLayerPowiaty = this.tileLayer('boundsLayerPowiaty', 'boundspowiaty');
     this.boundsLayerGminy = this.tileLayer('boundsLayerGminy', 'boundsgminy');
     this.boundsLayerCities = this.tileLayer('boundsLayerCities', 'boundscities');
-
     this.vectorLayer = this.buildVectorLayer();
-
-    this.ortoLayer = new TileLayer({
-      source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
-        params: {
-          'LAYERS': 'AngularAppSpring:ORTOFOTOMAPA',
-          'TILED': true,
-          'VERSION': '1.1.1',
-        },
-        serverType: 'geoserver',
-        transition: 300,
-        crossOrigin: 'anonymous',
-      }),
-      visible: false,
-    });
-
-    this.commonLayer = new TileLayer({
-      source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
-        params: {
-          'LAYERS': 'AngularAppSpring:Ogolnogeograficzna',
-          'TILED': true,
-          'VERSION': '1.1.1',
-        },
-        serverType: 'geoserver',
-        transition: 300,
-        crossOrigin: 'anonymous',
-      }),
-      visible: false,
-    });
-    this.budLayer = new TileLayer({
-      source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
-        params: {
-          'LAYERS': 'AngularAppSpring:budynki', 
-          'TILED': true,
-          'VERSION': '1.1.1',
-        },
-        serverType: 'geoserver',
-        transition: 300,
-        crossOrigin: 'anonymous',
-      }),
-      visible: false,
-    });
-
 
     this.map = new Map({
       target: 'map',

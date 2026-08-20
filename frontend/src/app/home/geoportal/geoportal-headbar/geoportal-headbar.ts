@@ -19,10 +19,11 @@ export class GeoportalHeadbar {
 
   layersOut(): void {
     this.isLayersOut = !this.isLayersOut;
-    this.mapLayerService.layerClicked();
+    this.isBaseLayerOut = false;
   }
   baseLayerOut(): void {
     this.isBaseLayerOut = !this.isBaseLayerOut;
+    this.isLayersOut = false;
   }
 }
 
