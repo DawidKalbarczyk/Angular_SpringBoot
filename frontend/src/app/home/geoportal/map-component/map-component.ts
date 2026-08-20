@@ -56,7 +56,7 @@ export class MapComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.osmLayer = new TileLayer({
-      source: new OSM(),
+      source: new OSM({attributions:[]}),
     });
 
     this.ortoLayer = this.tileLayer('ortoLayer', 'ORTOFOTOMAPA');
@@ -71,6 +71,7 @@ export class MapComponent implements AfterViewInit {
 
     this.map = new Map({
       target: 'map',
+      controls: [],
       layers: [
         this.osmLayer,
         this.ortoLayer,

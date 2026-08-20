@@ -18,14 +18,22 @@
         </div>
         Zapis analizy
     </div>
-    <div class="geoportal-tool">
+    <div (click)="searchOut()" class="search">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/loupe.png" alt="Search" class="geoportal-tool-icon"/>
         </div>
+        @if(headbarKeys.search){
+            <div class="search-container" (click)="$event.stopPropagation()">
+                <input type="text" placeholder="Wyszukaj..." />
+                <button>
+                    <img src="/images/icons/loupe.png" alt="Search-bar"/>
+                </button>
+            </div>
+        }
         Wyszukiwarka
     </div>
-    <div (click)="baseLayerOut()" class="baselayer" [class.active-baselayer]="isBaseLayerOut">
-        @if(isBaseLayerOut){
+    <div (click)="baseLayerOut()" class="baselayer" [class.active-baselayer]="headbarKeys.baseLayer">
+        @if(headbarKeys.baseLayer){
             <div class="baselayer-container" (click)="$event.stopPropagation()">
                 <div>
                     <p>Mapa OpenStreetMap</p>
@@ -74,7 +82,7 @@
             <img src="/images/icons/layers.png" alt="Layers" class="geoportal-tool-icon"/>
         </div>
         
-        @if(isLayersOut){
+        @if(headbarKeys.layers){
             <div class="layers-container" (click)="$event.stopPropagation()">
                 <div>
                     <p>Miejscowości</p>

@@ -41,6 +41,79 @@
     .active-layers {
         background-color: $background-color-light;
     }
+
+    .search {
+        position: relative;
+        pointer-events: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .geoportal-tool-icon-container {
+            margin-right: 0.5rem;
+
+            .geoportal-tool-icon {
+                width: 2rem;
+                height: 2rem;
+                object-fit: contain;
+            }
+        }
+
+        .search-container {
+            position: absolute;
+            top: 90px;
+            right: -50%;
+            display: flex;
+            flex-direction: row;
+            background-color: $secondary-color-light;
+            pointer-events: auto;
+            padding: 1rem 2rem;
+            left: -50%;
+            border: 1px solid rgba(0,0,0,0.5);
+            border-radius: 0rem 0rem 2rem 2rem;
+
+            input {
+                background-color: transparent;
+                padding: 0.5rem;
+                font-size: 1rem;
+                border: 1px solid rgba(0,0,0,0.5);
+                border-right: none;
+                border-radius: 0.5rem 0 0 0.5rem;
+                flex: 5;
+                width: 200px; /* Adjust the width as needed */
+                font-family: 'Roboto Flex', sans-serif; /* Inherit font from parent */
+                &::placeholder {
+                    color: rgba(0,0,0,0.7); /* Placeholder text color */
+                }
+                &:focus {
+                    outline: none; /* Remove default focus outline */
+                    background-color: white; /* Change border color on focus */
+                }
+            }
+
+            button {
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+                background-color: white; /* Use your desired color */
+                color: black; /* Text color */
+                border: 1px solid rgba(0,0,0,0.5);
+                border-radius: 0 0.5rem 0.5rem 0;
+                flex: 1;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    object-fit: contain;
+                }
+            }
+        }
+    }
+
     .layers {
         position: relative;
         pointer-events: auto;
@@ -66,7 +139,7 @@
             row-gap: 1rem;
             display: flex;
             flex-direction: column;
-            background-color: $background-color-light;
+            background-color: $secondary-color-light;
             pointer-events: auto;
             padding: 1rem 2rem;
             left: -30%;
@@ -148,7 +221,7 @@
             row-gap: 1rem;
             display: flex;
             flex-direction: column;
-            background-color: $background-color-light;
+            background-color: $secondary-color-light;
             pointer-events: auto;
             padding: 1rem 2rem;
             left: -30%;

@@ -4,6 +4,12 @@ import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/la
 import { InfoToggle } from '../../../services/info-toggle/info-toggle';
 import { InfoComponent } from './info-component/info-component';
 
+export interface HeadbarKeys {
+  search: boolean;
+  baseLayer: boolean;
+  layers: boolean;
+}
+
 
 @Component({
   selector: 'app-geoportal-headbar',
@@ -12,18 +18,35 @@ import { InfoComponent } from './info-component/info-component';
   styleUrl: './geoportal-headbar.scss',
 })
 export class GeoportalHeadbar {
-  public isLayersOut = false;
-  public isBaseLayerOut = false;
   public mapLayerService = inject(LayerVisibility);
   public infoToggleService = inject(InfoToggle);
+  public headbarKeys: HeadbarKeys = {
+    search: false,
+    baseLayer: false,
+    layers: false,
+  }
 
+  checkButt(arg: keyof HeadbarKeys): void {
+    for (const key in this.headbarKeys) {
+      const typedKey = key as keyof HeadbarKeys;
+      if (key !== arg) {
+        this.headbarKeys[typedKey] = false;
+      } else {
+        this.headbarKeys[typedKey] = !this.headbarKeys[typedKey];
+      }
+    }
+  }
+
+  searchOut(): void {
+    this.checkButt('search');
+  }
   layersOut(): void {
-    this.isLayersOut = !this.isLayersOut;
-    this.isBaseLayerOut = false;
+    this.checkButt('layers');
   }
   baseLayerOut(): void {
-    this.isBaseLayerOut = !this.isBaseLayerOut;
-    this.isLayersOut = false;
+    this.checkButt('baseLayer');
   }
+
+  
 }
 
