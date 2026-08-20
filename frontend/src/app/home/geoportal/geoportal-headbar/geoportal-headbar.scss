@@ -24,7 +24,9 @@
         font-size: 1.25rem;
         text-align: center;
         transition: background-color 0.3s ease;
-        
+        max-height: 72px;
+        box-sizing: border-box;
+
     }
 
     > div:hover {
@@ -42,6 +44,20 @@
     .layers {
         position: relative;
         pointer-events: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .geoportal-tool-icon-container {
+            margin-right: 0.5rem;
+
+            .geoportal-tool-icon {
+                width: 2rem;
+                height: 2rem;
+                object-fit: contain;
+            }
+        }
 
         .layers-container {
             position: absolute;
@@ -68,10 +84,61 @@
         }
     }
 
+
+    .geoportal-tool {
+        div {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            column-gap: 0.5rem;
+
+            img {
+                width: 2rem;
+                height: 2rem;
+                object-fit: contain;
+            }
+            .check-ico {
+                transform: scale(0.85);
+            }
+        }
+
+        .geoportal-tool-icon-container {
+            margin-right: 0.5rem;
+
+            .geoportal-tool-icon {
+                width: 2rem;
+                height: 2rem;
+                object-fit: contain;
+            }
+            .geoportal-tool-icon-scaled08 {
+                transform: scale(0.8);
+            }
+            .geoportal-tool-icon-scaled09 {
+                transform: scale(0.9);
+            }
+        }
+    }
+
     .baselayer {
         position: relative;
         pointer-events: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
 
+        .geoportal-tool-icon-container {
+            margin-right: 0.5rem;
+
+            .geoportal-tool-icon {
+                width: 2rem;
+                height: 2rem;
+                object-fit: contain;
+            }
+        }
         .baselayer-container {
             position: absolute;
             top: 90px;
