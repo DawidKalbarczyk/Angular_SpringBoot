@@ -9,13 +9,14 @@
             <div class="marker-close" (click)="showMarker.set(false)">
                 <img src="/images/icons/close.png" alt="Close"/>
             </div>
-            <!-- @for { -->
-            <div class="marker-content">
-                <p>Współrzędne:</p>
-                <p>X: {{ markerX() }}</p>
-                <p>Y: {{ markerY() }}</p>
-            </div>
-            <!-- } -->
+            @for (layer of layerWithId(); track layer; let i = $index) {
+                <div class="marker-content">
+                    <p>Nazwa warstwy: {{ layer.split('.')[0] }} Id: {{ layer.split('.')[1] }}</p>
+                    <p>Obiekt: {{ properties()[i]?.jpt_nazwa_}}</p>
+                    <p>Y: {{ markerY() }}</p>
+                </div>
+            }
+            
         </div>
     }
 </div>

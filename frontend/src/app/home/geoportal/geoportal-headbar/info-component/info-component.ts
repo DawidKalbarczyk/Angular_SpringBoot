@@ -1,5 +1,6 @@
 import { Component, signal, inject, HostListener } from '@angular/core';
 import { InfoToggle } from '../../../../services/info-toggle/info-toggle';
+import { InfoFeatures } from '../../../../services/info-features/info-features';
 
 
 @Component({
@@ -19,6 +20,10 @@ export class InfoComponent {
   markerX = signal<number>(0);
   markerY = signal<number>(0);
   isClickInsideTarget = signal<boolean>(false);
+
+  public infoFeatures = inject(InfoFeatures);
+  public layerWithId = this.infoFeatures.layerWithId;
+  public properties = this.infoFeatures.properties;
 
 
   private mouseDownX = 0;
