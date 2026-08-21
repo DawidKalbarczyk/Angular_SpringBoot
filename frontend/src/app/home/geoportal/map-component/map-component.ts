@@ -114,6 +114,11 @@ export class MapComponent implements AfterViewInit {
                 fetch(url)
                   .then((response) => response.json())
                   .then((data) => {
+                    if (data.features && data.features.length > 0) {
+                      console.log('WMS Feature Info:', data.features);
+                    } else {
+                      console.log('No features found at this location.');
+                    }
                     console.log('WMS Feature Info:', data);
                   })
                   .catch((error) => {
