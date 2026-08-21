@@ -8,7 +8,7 @@ div, button {
     .img-container {
         border: 1px solid $secondary-color-light !important;
         img {
-            filter: invert(1);
+            filter: invert(1) !important;
         }   
     }
     .button-container {
@@ -41,7 +41,7 @@ div, button {
         border-radius: 50%;
         overflow: hidden;
         padding: 0.35rem;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, border 0.5s ease, filter 0.5s ease;
 
         &:hover {
             pointer-events: none;
@@ -77,6 +77,7 @@ div, button {
             color: $login-button-1st-color-light;
             background-color: transparent;
             border: none;
+            transition: color 0.5s ease;
 
             &:hover {
                 background-color: $secondary-color-light;

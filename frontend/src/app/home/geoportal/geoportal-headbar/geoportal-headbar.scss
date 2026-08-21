@@ -41,6 +41,9 @@
     .active-layers {
         background-color: $background-color-light;
     }
+    .active-search {
+        background-color: $background-color-light;
+    }
 
     .search {
         position: relative;
@@ -71,6 +74,7 @@
             padding: 1rem 2rem;
             left: -50%;
             border: 1px solid rgba(0,0,0,0.5);
+            pointer-events: none;
             border-radius: 0rem 0rem 2rem 2rem;
 
             input {
@@ -84,6 +88,7 @@
                 width: 200px; /* Adjust the width as needed */
                 font-family: 'Roboto Flex', sans-serif; /* Inherit font from parent */
                 transition: background-color 0.3s ease;
+                pointer-events: auto;
                 
                 &::placeholder {
                     color: rgba(0,0,0,0.7); /* Placeholder text color */
@@ -106,6 +111,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                pointer-events: auto;
 
                 img {
                     width: 1.5rem;

@@ -18,7 +18,7 @@
         </div>
         Zapis analizy
     </div>
-    <div (click)="searchOut()" class="search">
+    <div (click)="searchOut()" class="search" [class.active-search]="headbarKeys.search">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/loupe.png" alt="Search" class="geoportal-tool-icon"/>
         </div>
