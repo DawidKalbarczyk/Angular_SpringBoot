@@ -118,6 +118,7 @@ export class MapComponent implements AfterViewInit {
                 fetch(url)
                   .then((response) => response.json())
                   .then((data) => {
+                    console.log('WMS Dane DATA dla debugu:', data);
                     if (data.features && data.features.length > 0) {
                       data.features.forEach((feature: any) => {
                         this.infoProperties.updateProperties([feature.properties]);
