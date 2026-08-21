@@ -37,6 +37,9 @@
             }
         }
 
+        .marker-content:nth-child(2) {
+            margin-top: 3rem;
+        }
         .marker-content {
             margin: 1rem 1rem 1rem 1rem;
             padding: 1rem 1rem 1rem 1rem;
@@ -45,9 +48,7 @@
             border-radius: 0.5rem;
             font-size: 0.8rem;
         }
-        .marker-contet:nth-child(0) {
-            margin-top: 3rem;
-        }
+        
     }
 
     .marker-active-vertical {
