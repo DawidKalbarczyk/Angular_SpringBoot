@@ -26,7 +26,6 @@ export class GeoportalHeadbar {
     baseLayer: false,
     layers: false,
   }
-  public mapComponentgetProperties = inject(MapComponent).getProperties;
 
   checkButt(arg: keyof HeadbarKeys): void {
     for (const key in this.headbarKeys) {

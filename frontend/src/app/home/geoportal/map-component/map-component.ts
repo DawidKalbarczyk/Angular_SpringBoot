@@ -13,6 +13,7 @@ import TileWMS from 'ol/source/TileWMS';
 import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/layer-visibility';
 import { InfoToggle } from '../../../services/info-toggle/info-toggle';
 import { InfoComponent } from '../geoportal-headbar/info-component/info-component';
+import { InfoFeatures } from '../../../services/info-features/info-features';
 
 
 @Component({
@@ -24,7 +25,7 @@ import { InfoComponent } from '../geoportal-headbar/info-component/info-componen
 export class MapComponent implements AfterViewInit {
   private mapLayersVisibility = inject(LayerVisibility);
   private infoToggleService = inject(InfoToggle);
-  public getProperties: any[] = [];
+  public infoProperties = inject(InfoFeatures);
 
   private osmLayer!: TileLayer;
   private ortoLayer!: TileLayer;
@@ -93,7 +94,7 @@ export class MapComponent implements AfterViewInit {
 
     this.map.on('singleclick', (event) => {
       if (this.infoToggleService.isInfoClicked()) {
-        this.getProperties = []; // Reset properties before fetching new data
+        this.infoProperties.clear(); // Reset properties before fetching new data
         console.log('kliknięto', event.coordinate);
         const viewResolution = this.map.getView().getResolution();
         if (!viewResolution) return;
@@ -119,9 +120,9 @@ export class MapComponent implements AfterViewInit {
                   .then((data) => {
                     if (data.features && data.features.length > 0) {
                       data.features.forEach((feature: any) => {
-                        this.getProperties.push(feature.properties);
+                        this.infoProperties.updateProperties([feature.properties]);
                       });
-                      console.log('Zebrane właściwości:', this.getProperties);
+                      console.log('Zebrane właściwości:', this.infoProperties.properties());
                     } else {
                       console.log('No features found at this location.');
                     }
