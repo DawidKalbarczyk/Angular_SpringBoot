@@ -119,8 +119,8 @@ export class MapComponent implements AfterViewInit {
                   .then((response) => response.json())
                   .then((data) => {
                     console.log('WMS Dane DATA dla debugu:', data);
-                    if (data.features.id) {
-                      this.infoProperties.updateLayerWithId(data.features.id);
+                    if (data.features && data.features.length > 0 && data.features[0].id) {
+                      this.infoProperties.updateLayerWithId(data.features[0].id);
                       console.log('Zebrane ID warstwy:', this.infoProperties.layerWithId());
                     } else {
                       console.log('Layer doesnt have an ID or features are missing:', data);
