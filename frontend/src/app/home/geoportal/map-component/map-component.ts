@@ -24,6 +24,7 @@ import { InfoComponent } from '../geoportal-headbar/info-component/info-componen
 export class MapComponent implements AfterViewInit {
   private mapLayersVisibility = inject(LayerVisibility);
   private infoToggleService = inject(InfoToggle);
+  public getProperties: any[] = [];
 
   private osmLayer!: TileLayer;
   private ortoLayer!: TileLayer;
@@ -92,6 +93,7 @@ export class MapComponent implements AfterViewInit {
 
     this.map.on('singleclick', (event) => {
       if (this.infoToggleService.isInfoClicked()) {
+        this.getProperties = []; // Reset properties before fetching new data
         console.log('kliknięto', event.coordinate);
         const viewResolution = this.map.getView().getResolution();
         if (!viewResolution) return;
@@ -110,12 +112,16 @@ export class MapComponent implements AfterViewInit {
                 { INFO_FORMAT: 'application/json' }
               );
               console.log('GetFeatureInfo URL:', url);
+
               if (url) {
                 fetch(url)
                   .then((response) => response.json())
                   .then((data) => {
                     if (data.features && data.features.length > 0) {
-                      console.log('WMS Feature Info FEATURES:', data.features);
+                      data.features.forEach((feature: any) => {
+                        this.getProperties.push(feature.properties);
+                      });
+                      console.log('Zebrane właściwości:', this.getProperties);
                     } else {
                       console.log('No features found at this location.');
                     }

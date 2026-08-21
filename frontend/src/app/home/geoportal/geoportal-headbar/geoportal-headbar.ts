@@ -3,6 +3,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/layer-visibility';
 import { InfoToggle } from '../../../services/info-toggle/info-toggle';
 import { InfoComponent } from './info-component/info-component';
+import { MapComponent } from '../map-component/map-component';
 
 export interface HeadbarKeys {
   search: boolean;
@@ -25,6 +26,7 @@ export class GeoportalHeadbar {
     baseLayer: false,
     layers: false,
   }
+  public mapComponentgetProperties = inject(MapComponent).getProperties;
 
   checkButt(arg: keyof HeadbarKeys): void {
     for (const key in this.headbarKeys) {
