@@ -46,7 +46,6 @@ export class MapComponent implements AfterViewInit {
       this.vectorLayer?.setVisible(visibility.vectorLayer);
       this.osmLayer?.setVisible(visibility.osmLayer);
       this.ortoLayer?.setVisible(visibility.ortoLayer);
-      this.commonLayer?.setVisible(visibility.commonLayer);
       this.budLayer?.setVisible(visibility.budLayer);
       this.boundsLayerCities?.setVisible(visibility.boundsLayerCities);
       this.boundsLayerGminy?.setVisible(visibility.boundsLayerGminy);
@@ -62,7 +61,6 @@ export class MapComponent implements AfterViewInit {
     });
 
     this.ortoLayer = this.tileLayer('ortoLayer', 'ORTOFOTOMAPA');
-    this.commonLayer = this.tileLayer('commonLayer', 'Ogolnogeograficzna');
     this.budLayer = this.tileLayer('budLayer', 'budynki');
     this.boundsLayerPanstwo = this.tileLayer('boundsLayerPanstwo', 'boundspanstwo');
     this.boundsLayerWojewodz = this.tileLayer('boundsLayerWojewodz', 'boundswojewodz');
@@ -77,7 +75,6 @@ export class MapComponent implements AfterViewInit {
       layers: [
         this.osmLayer,
         this.ortoLayer,
-        this.commonLayer,
         this.budLayer,
         this.boundsLayerPanstwo,
         this.boundsLayerWojewodz,
@@ -154,9 +151,11 @@ export class MapComponent implements AfterViewInit {
     const visibility = this.mapLayersVisibility.layersVisibility();
     return new TileLayer({
       source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
+        //url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
+        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
         params: {
-          'LAYERS': `AngularAppSpring:${layerName}`,
+          //'LAYERS': `AngularAppSpring:${layerName}`,
+          'LAYERS': `AngularLocal:${layerName}`,
           'TILED': true,
           'VERSION': '1.1.1',
         },
@@ -169,10 +168,15 @@ export class MapComponent implements AfterViewInit {
   }
 
   private buildVectorLayer(): VectorLayer {
-    const wfsUrl =
-      `${window.location.origin}/geoserver/AngularAppSpring/ows?` +
+    // const wfsUrl =
+    //   `${window.location.origin}/geoserver/AngularAppSpring/ows?` +
+    //   `service=WFS&version=1.0.0&request=GetFeature` +
+    //   `&typeName=AngularAppSpring:sql_data` +
+    //   `&outputFormat=application/json&srsname=EPSG:3857`;
+
+    const wfsUrl = `${window.location.origin}/geoserver/AngularLocal/ows?` +
       `service=WFS&version=1.0.0&request=GetFeature` +
-      `&typeName=AngularAppSpring:sql_data` +
+      `&typeName=AngularLocal:sql_data` +
       `&outputFormat=application/json&srsname=EPSG:3857`;
 
     this.vectorSource = new VectorSource({
