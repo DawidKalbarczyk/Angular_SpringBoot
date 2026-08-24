@@ -2,31 +2,31 @@
 <div class="geoportal-headbar">
     <div class="geoportal-tool">
         <div class="geoportal-tool-icon-container">
-            <img src="/images/icons/analysis.png" alt="Analysis" class="geoportal-tool-icon"/>
+            <img src="/images/icons/analysis.png" alt="Analysis" draggable="false" class="geoportal-tool-icon"/>
         </div>
         Analizy atrybutowe
     </div>
     <div class="geoportal-tool">
         <div class="geoportal-tool-icon-container">
-            <img src="/images/icons/tape-measure.png" alt="Measure" class="geoportal-tool-icon"/>
+            <img src="/images/icons/tape-measure.png" alt="Measure" draggable="false" class="geoportal-tool-icon"/>
         </div>
         Mierzenie
     </div>
     <div class="geoportal-tool">
         <div class="geoportal-tool-icon-container">
-            <img src="/images/icons/save.png" alt="Save Analysis" class="geoportal-tool-icon geoportal-tool-icon-scaled08"/>
+            <img src="/images/icons/save.png" alt="Save Analysis" draggable="false" class="geoportal-tool-icon geoportal-tool-icon-scaled08"/>
         </div>
         Zapis analizy
     </div>
     <div (click)="searchOut()" class="search" [class.active-search]="headbarKeys.search">
         <div class="geoportal-tool-icon-container">
-            <img src="/images/icons/loupe.png" alt="Search" class="geoportal-tool-icon"/>
+            <img src="/images/icons/loupe.png" alt="Search" draggable="false" class="geoportal-tool-icon"/>
         </div>
         @if(headbarKeys.search){
             <div class="search-container" (click)="$event.stopPropagation()">
                 <input type="text" placeholder="Wyszukaj..." />
                 <button>
-                    <img src="/images/icons/loupe.png" alt="Search-bar"/>
+                    <img src="/images/icons/loupe.png" alt="Search-bar" draggable="false"/>
                 </button>
             </div>
         }
@@ -50,19 +50,19 @@
             </div>
         }
         <div class="geoportal-tool-icon-container">
-            <img src="/images/icons/maps.png" alt="Base Layers" class="geoportal-tool-icon"/>
+            <img src="/images/icons/maps.png" alt="Base Layers" draggable="false" class="geoportal-tool-icon"/>
         </div>
         Mapa bazowa
     </div>
     <div (click)="infoToggleService.infoClicked()" class="geoportal-tool" [class.active-info]="infoToggleService.isInfoClicked()">
         <div class="geoportal-tool-icon-container">
-            <img src="/images/icons/info.png" alt="Info" class="geoportal-tool-icon"/>
+            <img src="/images/icons/info.png" alt="Info" draggable="false" class="geoportal-tool-icon"/>
         </div>
 
         @if(infoToggleService.isInfoClicked()){
             Info (
                 <div>
-                    <img src="/images/icons/check.png" alt="Accept" class="check-ico"/>
+                    <img src="/images/icons/check.png" alt="Accept" draggable="false" class="check-ico"/>
                 </div>
             )
         } @else {
@@ -71,7 +71,7 @@
     </div>
     <div (click)="layersOut()" class="layers" [class.active-layers]="mapLayerService.isLayerClicked()">
         <div class="geoportal-tool-icon-container">
-            <img src="/images/icons/layers.png" alt="Layers" class="geoportal-tool-icon"/>
+            <img src="/images/icons/layers.png" alt="Layers" draggable="false" class="geoportal-tool-icon"/>
         </div>
         
         @if(headbarKeys.layers){
