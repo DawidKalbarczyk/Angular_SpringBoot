@@ -9,6 +9,18 @@
     pointer-events: none;
     z-index: 1000;
 
+    .marker-point {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        box-sizing: border-box;
+        transform: translate(-50%, calc(-50% - 15px)); // wycentrowanie na kliknięcie
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
     .marker {
         position: absolute;
         width: 17.5rem;
@@ -18,6 +30,7 @@
         border-radius: 0.5rem;
         pointer-events: auto;
         z-index: 10000;
+        transform: translate(10%, 0%);
         overflow-y: auto;
         scrollbar-width: thin;
         
@@ -40,7 +53,7 @@
         }
 
         .marker-content:nth-child(2) {
-            margin-top: 3rem;
+            margin-top: 3rem !important;
         }
         .marker-content {
             margin: 1rem 1rem 1rem 1rem;
@@ -48,19 +61,42 @@
             background-color: $background-color-light;
             border-radius: 0.5rem;
             font-size: 0.8rem;
+
+
+            p {
+                padding: 0.2rem 0.5rem;
+
+                &:nth-child(1) {
+                    border-radius: 0.5rem 0.5rem 0 0;
+                }
+                &:nth-child(odd) {
+                    background-color: white;
+                }
+                &:nth-child(even) {
+                    background-color: $secondary-color-light;
+                }
+                &:last-child {
+                    border-radius: 0 0 0.5rem 0.5rem;
+                }
+            }
+        }
+        .separator-div {
+            height: 1px;
+            background-color: rgba(0,0,0,0.5);
+            margin: 0.5rem 0;
         }
         
     }
 
     .marker-active-vertical {
-        transform: translate(0%, -100%);
+        transform: translate(10%, -100%);
     }
 
     .marker-active-horizontal {
-        transform: translate(-100%, 0%);
+        transform: translate(-110%, 0%);
     }
 
     .marker-active-horizontal-vertical {
-        transform: translate(-100%, -100%);
+        transform: translate(-110%, -100%);
     }
 }

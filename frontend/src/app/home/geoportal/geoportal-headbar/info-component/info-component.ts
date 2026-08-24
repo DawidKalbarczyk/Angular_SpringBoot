@@ -1,6 +1,16 @@
-import { Component, signal, inject, HostListener } from '@angular/core';
+import { Component, signal, inject, HostListener, effect } from '@angular/core';
 import { InfoToggle } from '../../../../services/info-toggle/info-toggle';
 import { InfoFeatures } from '../../../../services/info-features/info-features';
+
+type LayerKey = 
+    | 'vectorLayer'
+    | 'boundscities'
+    | 'boundsgminy'
+    | 'boundspowiaty'
+    | 'boundswojewodz'
+    | 'boundspanstwo'
+    | 'budLayer';
+
 
 
 @Component({
@@ -9,7 +19,6 @@ import { InfoFeatures } from '../../../../services/info-features/info-features';
   templateUrl: './info-component.html',
   styleUrl: './info-component.scss',
 })
-
 
 export class InfoComponent {
   infoToggleService = inject(InfoToggle);
@@ -25,6 +34,41 @@ export class InfoComponent {
   public layerWithId = this.infoFeatures.layerWithId;
   public properties = this.infoFeatures.properties;
 
+  private layerType = signal<Record<LayerKey, string>>({
+    vectorLayer: 'Miejscowości',
+    boundscities: 'Miasta',
+    boundsgminy: 'Gminy',
+    boundspowiaty: 'Powiaty',
+    boundswojewodz: 'Województwa',
+    boundspanstwo: 'Państwo',
+    budLayer: 'Budynki',
+  });
+  private objectType = signal<Record<LayerKey, string>>({
+    vectorLayer: 'Miejscowość',
+    boundscities: 'Miasto',
+    boundsgminy: 'Gmina',
+    boundspowiaty: 'Powiat',
+    boundswojewodz: 'Województwo',
+    boundspanstwo: 'Państwo',
+    budLayer: 'Budynek',
+  });
+
+  getLayerLabel(layer: string): string {
+    const layerName = layer.split('.')[0] as LayerKey;
+    if (layerName in this.layerType()) {
+      return this.layerType()[layerName];
+    } else {
+      return '';
+    }
+  }
+  getObjectLabel(layer: string): string {
+    const layerName = layer.split('.')[0] as LayerKey;
+    if (layerName in this.objectType()) {
+      return this.objectType()[layerName];
+    } else {
+      return '';
+    }
+  }
 
   private mouseDownX = 0;
   private mouseDownY = 0;
@@ -82,5 +126,8 @@ export class InfoComponent {
     this.turnMarkerHorVer.set(isRightHalf && isBottomHalf);
     this.turnMarkerUpsideDown.set(!isRightHalf && isBottomHalf);
     this.turnMarkerHorizontal.set(isRightHalf && !isBottomHalf);
+
+
+  
   }
 }
