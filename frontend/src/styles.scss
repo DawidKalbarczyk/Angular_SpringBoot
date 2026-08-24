@@ -50,3 +50,12 @@ p {
   margin-block-start: 0em;
   margin-block-end: 0em;
 }
+
+img {
+  --webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  pointer-events: auto;
+}
