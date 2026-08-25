@@ -2,6 +2,7 @@ import { effect, Service, signal } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import Map from 'ol/Map';
 import VectorLayer from 'ol/layer/Vector';
+import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import Feature from 'ol/Feature';
 
@@ -9,7 +10,7 @@ import Feature from 'ol/Feature';
 export class ZoomToObject {
     private coordinates = signal<[number, number]>([0, 0]);
     private map: Map | null = null;
-    private vectorL: VectorLayer | null  = null;
+    private vectorL: VectorImageLayer | null  = null;
     private selectedFeature: Feature | null = null;
     public isHighlightedService = signal<boolean>(false);
     public isListRendered = signal<boolean>(true);
@@ -30,7 +31,7 @@ export class ZoomToObject {
         this.map = map;
     }
 
-    vectorLayer(layer: VectorLayer): void {
+    vectorLayer(layer: VectorImageLayer): void {
         this.vectorL = layer;
     }
 
