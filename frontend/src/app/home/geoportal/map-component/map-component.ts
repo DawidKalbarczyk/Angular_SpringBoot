@@ -30,7 +30,6 @@ export class MapComponent implements AfterViewInit {
   private osmLayer!: TileLayer;
   private ortoLayer!: TileLayer;
   private budLayer!: TileLayer;
-  private commonLayer!: TileLayer;
   private boundsLayerCities!: TileLayer;
   private boundsLayerGminy!: TileLayer;
   private boundsLayerPowiaty!: TileLayer;
@@ -92,11 +91,17 @@ export class MapComponent implements AfterViewInit {
     this.map.on('singleclick', (event) => {
       if (this.infoToggleService.isInfoClicked()) {
         this.infoProperties.clear(); // Reset properties before fetching new data
-        console.log('kliknięto', event.coordinate);
+        this.infoProperties.isInfoReady.set(false); // Reset info ready state before fetching new data
+
         const viewResolution = this.map.getView().getResolution();
-        if (!viewResolution) return;
+        if (!viewResolution) {
+          this.infoProperties.isInfoReady.set(true); // Set info ready state to true if resolution is not available
+          return;
+        }
 
         let matchedAny = false;
+
+        const requests: Promise<void>[] = [];
 
         this.map.getLayers().forEach((layer) => {
           if (layer instanceof TileLayer && layer.getVisible()) {
@@ -109,10 +114,9 @@ export class MapComponent implements AfterViewInit {
                 'EPSG:3857',
                 { INFO_FORMAT: 'application/json' }
               );
-              console.log('GetFeatureInfo URL:', url);
 
               if (url) {
-                fetch(url)
+                const request = fetch(url)
                   .then((response) => response.json())
                   .then((data) => {
                     console.log('WMS Dane DATA dla debugu:', data);
@@ -135,9 +139,13 @@ export class MapComponent implements AfterViewInit {
                   .catch((error) => {
                     console.error('Error fetching WMS Feature Info:', error);
                   });
+                requests.push(request);
               }
             }
           }
+        });
+        Promise.all(requests).then(() => {
+          this.infoProperties.isInfoReady.set(true); // Set the info ready state after fetching data
         });
 
         console.log('Czy trafiono w jakąś warstwę WMS?', matchedAny);

@@ -4,6 +4,7 @@ import { Service, signal } from '@angular/core';
 export class InfoFeatures {
     public properties = signal<any[]>([]);
     public layerWithId = signal<string[]>([]);
+    public isInfoReady = signal<boolean>(false);
 
     updateProperties(newProperties: any[]): void {
         this.properties.update(c => [...c, ...newProperties]);
@@ -16,5 +17,6 @@ export class InfoFeatures {
     clear(): void {
         this.properties.set([]);
         this.layerWithId.set([]);
+        this.isInfoReady.set(false);
     }
 }

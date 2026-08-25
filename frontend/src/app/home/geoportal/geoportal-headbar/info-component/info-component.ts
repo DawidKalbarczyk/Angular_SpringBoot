@@ -1,6 +1,7 @@
-import { Component, signal, inject, HostListener, effect } from '@angular/core';
+import { Component, signal, inject, HostListener, effect, computed } from '@angular/core';
 import { InfoToggle } from '../../../../services/info-toggle/info-toggle';
 import { InfoFeatures } from '../../../../services/info-features/info-features';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 type LayerKey = 
     | 'vectorLayer'
@@ -15,7 +16,7 @@ type LayerKey =
 
 @Component({
   selector: 'app-info-component',
-  imports: [],
+  imports: [MatProgressSpinnerModule],
   templateUrl: './info-component.html',
   styleUrl: './info-component.scss',
 })
@@ -33,6 +34,38 @@ export class InfoComponent {
   public infoFeatures = inject(InfoFeatures);
   public layerWithId = this.infoFeatures.layerWithId;
   public properties = this.infoFeatures.properties;
+
+  public markerReady = signal<boolean>(false);
+
+  private layerPriority: Record<LayerKey, number> = {
+    boundspanstwo: 6,
+    boundswojewodz: 5,
+    boundspowiaty: 4,
+    boundsgminy: 3,
+    boundscities: 2,
+    vectorLayer: 0,
+    budLayer: 1,
+  };
+
+  public sortedLayerData = computed(() => {
+    const layers = this.layerWithId();
+    const props = this.properties();
+    const combined = layers.map((layer, index) => ({
+      layer,
+      properties: props[index] || [],
+    }));
+
+    return combined.sort((a, b) => {
+      const keyA = a.layer.split('.')[0] as LayerKey;
+      const keyB = b.layer.split('.')[0] as LayerKey;
+
+      const priorityA = this.layerPriority[keyA] ?? 999;
+      const priorityB = this.layerPriority[keyB] ?? 999;
+
+      return priorityA - priorityB;
+
+    });
+  });
 
   private layerType = signal<Record<LayerKey, string>>({
     vectorLayer: 'Miejscowości',
