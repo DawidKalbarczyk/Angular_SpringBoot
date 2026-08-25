@@ -4,7 +4,7 @@ import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
 import { fromLonLat } from 'ol/proj';
-import VectorLayer from 'ol/layer/Vector';
+import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Style, Text, Fill, Stroke, Circle as CircleStyle } from 'ol/style';
@@ -37,7 +37,7 @@ export class MapComponent implements AfterViewInit {
   private boundsLayerWojewodz!: TileLayer;
   private boundsLayerPanstwo!: TileLayer;
   public map!: Map;
-  private vectorLayer!: VectorLayer;
+  private vectorLayer!: VectorImageLayer;
   private vectorSource!: VectorSource;
   private zoomToObject = inject(ZoomToObject);
 
@@ -181,7 +181,7 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  private buildVectorLayer(): VectorLayer {
+  private buildVectorLayer(): VectorImageLayer {
     // const wfsUrl =
     //   `${window.location.origin}/geoserver/AngularAppSpring/ows?` +
     //   `service=WFS&version=1.0.0&request=GetFeature` +
@@ -211,12 +211,10 @@ export class MapComponent implements AfterViewInit {
       features.forEach((f, i) => f.set('__idx', i));
     });
 
-    return new VectorLayer({
+    return new VectorImageLayer({
       source: this.vectorSource,
       visible: this.mapLayersVisibility.isVisible('vectorLayer'),
       style: (feature, resolution) => this.decimatedStyle(feature, resolution),
-      updateWhileAnimating: false,
-      updateWhileInteracting: false,
       declutter: true,
     });
   }
