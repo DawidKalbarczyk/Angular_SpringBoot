@@ -11,20 +11,32 @@
         [class.marker-active-vertical]="turnMarkerUpsideDown()"
         [class.marker-active-horizontal]="turnMarkerHorizontal()"
         [class.marker-active-horizontal-vertical]="turnMarkerHorVer()">
-            <div class="marker-close" (click)="showMarker.set(false)">
-                <img src="/images/icons/close.png" alt="Close"/>
-            </div>
-            @for (layer of layerWithId(); track layer; let i = $index) {
-                <div class="marker-content">
-                    <p class="testClass">Warstwa: {{ getLayerLabel(layer) }}</p>
-                    <p>Id w warstwie: {{ layer.split('.')[1] }}</p>
-                    <p>{{ getObjectLabel(layer) }}: {{ properties()[i]?.jpt_nazwa_ }}</p>
+        @if (infoFeatures.isInfoReady()) {
+            <div class="marker-header">
+                <div class="marker-title-con">
+                    <p class="marker-title">Informacje dotyczące warstw</p>
                 </div>
-                @if (i < layerWithId().length - 1) {
+                <div class="marker-close" (click)="showMarker.set(false)">
+                    <img src="/images/icons/close.png" alt="Close"/>
+                </div>
+            </div>
+            
+            @for (item of sortedLayerData(); track item.layer; let i = $index) {
+                <div class="marker-content">
+                    <p>Warstwa: {{ getLayerLabel(item.layer) }}</p>
+                    <p>Id w warstwie: {{ item.layer.split('.')[1] }}</p>
+                    <p>{{ getObjectLabel(item.layer) }}: {{ item.properties?.jpt_nazwa_ }}</p>
+                </div>
+                @if (i < sortedLayerData().length - 1) {
                     <div class="separator-div"></div>
                 }
             }
+        } @else {
+            <div class="mat-spinner-con">
+                <mat-spinner></mat-spinner>
+            </div>
             
+        }
         </div>
     }
 </div>

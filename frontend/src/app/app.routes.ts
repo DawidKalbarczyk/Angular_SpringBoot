@@ -21,5 +21,9 @@ export const routes: Routes = [
     {
         path: 'search',
         loadComponent: () => import('./home/search/search').then(m => m.Search),
+    },
+    {
+        path: '**',
+        redirectTo: ''
     }
 ];
