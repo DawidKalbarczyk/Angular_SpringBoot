@@ -14,6 +14,7 @@ import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/la
 import { InfoToggle } from '../../../services/info-toggle/info-toggle';
 import { InfoComponent } from '../geoportal-headbar/info-component/info-component';
 import { InfoFeatures } from '../../../services/info-features/info-features';
+import { ZoomToObject } from '../../../services/zoom-to-object/zoom-to-object';
 
 
 @Component({
@@ -35,9 +36,10 @@ export class MapComponent implements AfterViewInit {
   private boundsLayerPowiaty!: TileLayer;
   private boundsLayerWojewodz!: TileLayer;
   private boundsLayerPanstwo!: TileLayer;
-  private map!: Map;
+  public map!: Map;
   private vectorLayer!: VectorLayer;
   private vectorSource!: VectorSource;
+  private zoomToObject = inject(ZoomToObject);
 
   constructor() {
     effect(() => {
@@ -68,6 +70,8 @@ export class MapComponent implements AfterViewInit {
     this.boundsLayerCities = this.tileLayer('boundsLayerCities', 'boundscities');
     this.vectorLayer = this.buildVectorLayer();
 
+    this.zoomToObject.vectorLayer(this.vectorLayer);
+
     this.map = new Map({
       target: 'map',
       controls: [],
@@ -87,7 +91,8 @@ export class MapComponent implements AfterViewInit {
         zoom: 7,
       }),
     });
-
+    this.zoomToObject.setMap(this.map);
+    
     this.map.on('singleclick', (event) => {
       if (this.infoToggleService.isInfoClicked()) {
         this.infoProperties.clear(); // Reset properties before fetching new data
@@ -153,6 +158,7 @@ export class MapComponent implements AfterViewInit {
         console.log('Info toggle is not active. Click ignored.');
       }
     });
+    
   }
 
   private tileLayer(visibleLayer: LayerKey, layerName: string): TileLayer {
@@ -195,6 +201,13 @@ export class MapComponent implements AfterViewInit {
     // Po załadowaniu danych nadaj każdemu obiektowi stabilny indeks
     this.vectorSource.once('featuresloadend', () => {
       const features = this.vectorSource.getFeatures();
+
+      features.sort((a, b) => {
+        const popA = Number(a.get('liczbamies')) || 0;
+        const popB = Number(b.get('liczbamies')) || 0;
+        return popB - popA; 
+      });
+
       features.forEach((f, i) => f.set('__idx', i));
     });
 
@@ -204,44 +217,86 @@ export class MapComponent implements AfterViewInit {
       style: (feature, resolution) => this.decimatedStyle(feature, resolution),
       updateWhileAnimating: false,
       updateWhileInteracting: false,
+      declutter: true,
     });
   }
 
+  private isHighlightedService = this.zoomToObject.isHighlightedService;
+  private readonly ALWAYS_SHOW_TOP_N = 60;
   private decimatedStyle(feature: FeatureLike, resolution: number): Style | undefined {
     const idx = feature.get('__idx') ?? 0;
-    const skip = this.getSkipFactor(resolution);
+    const isHighlighted = feature.get('highlighted') === true;
 
-    // pokaż tylko co "skip"-ty punkt
-    if (idx % skip !== 0) {
-      return undefined; // nie renderuj tego obiektu w ogóle
+    if (isHighlighted && this.isHighlightedService()) {
+      return new Style({
+        image: new CircleStyle({
+          radius: 10,
+          fill: new Fill({ color: 'red' }),
+          stroke: new Stroke({ color: '#fff', width: 3 }),
+        }),
+        text: new Text({
+          text: feature.get('nazwa'),
+          offsetY: -35,
+          font: 'bold 35px Roboto Flex',
+        }),
+        zIndex: 9999
+      })
     }
 
-    const showLabel = resolution < 350; // próg dobierz eksperymentalnie
+    const skip = this.getSkipFactor(resolution);
+    const isGuaranteed = idx < this.ALWAYS_SHOW_TOP_N;
+    if (!isGuaranteed && (idx % skip !== 0)) {
+      return undefined; 
+    }
+
+    const showLabel = resolution < 350; 
+    const population = Number(feature.get('liczbamies')) || 0;
+    const {radius, fontSize} = this.getSizeByPopulatiuon(population);
 
     return new Style({
       image: new CircleStyle({
-        radius: 5,
+        radius,
         fill: new Fill({ color: '#3399CC' }),
         stroke: new Stroke({ color: '#fff', width: 1.5 }),
       }),
       text: showLabel
         ? new Text({
           text: feature.get('nazwa'),
-          offsetY: -12,
-          font: '15px Arial',
+          offsetY: -(radius + 10),
+          font: `${fontSize}px Roboto Flex`,
           fill: new Fill({ color: '#000' }),
           stroke: new Stroke({ color: '#fff', width: 3 }),
         })
         : undefined,
+      zIndex: population,
     });
   }
 
+  private getSizeByPopulatiuon(population: number): { radius: number; fontSize: number } {
+    const minPop = 0;
+    const maxPop = 1_000_000;
+    const minRadius = 3;
+    const maxRadius = 10;
+    const minFont = 13;
+    const maxFont = 25;
+
+    const t = Math.min(1, Math.max(minPop, population / maxPop));
+
+    const radius = minRadius + t * (maxRadius - minRadius);
+    const fontSize = minFont + t * (maxFont - minFont);
+
+    return { radius, fontSize: Math.round(fontSize) };
+  }
+
   private getSkipFactor(resolution: number): number {
-    if (resolution > 2000) return 50;   // bardzo daleko -> co 50. punkt
-    if (resolution > 1000) return 25;
-    if (resolution > 500) return 10;
+    if (resolution > 3000) return 100;  
+    if (resolution > 1500) return 50;
+    if (resolution > 750) return 25;
+    if (resolution > 350) return 10;
     if (resolution > 200) return 5;
-    if (resolution > 50) return 2;
+    if (resolution > 100) return 2;
     return 1;
   }
+
+
 }
