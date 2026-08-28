@@ -1,7 +1,6 @@
 import { effect, Service, signal } from '@angular/core';
 import { fromLonLat } from 'ol/proj';
 import Map from 'ol/Map';
-import VectorLayer from 'ol/layer/Vector';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import Feature from 'ol/Feature';
@@ -67,10 +66,6 @@ export class ZoomToObject {
 
         const features = source.getFeatures();
 
-         console.log('Liczba załadowanych features:', features.length);
-        console.log('Szukane idprng:', idprng, typeof idprng);
-        console.log('Wszystkie idprng w źródle:', features.map(f => f.get('idprng')));
-        console.log('Properties pierwszego feature:', features[0]?.getProperties());
 
         const match = features.find((feature) => 
             Number(feature.get('idprng')) === Number(idprng));
