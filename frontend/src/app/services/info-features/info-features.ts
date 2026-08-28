@@ -5,6 +5,14 @@ export class InfoFeatures {
     public properties = signal<any[]>([]);
     public layerWithId = signal<string[]>([]);
     public isInfoReady = signal<boolean>(false);
+    public isCursorDragged = signal<boolean>(false);
+    
+    isDragged(): void {
+        this.isCursorDragged.set(true);
+    }
+    resetDragged(): void {
+        this.isCursorDragged.set(false);
+    }
 
     updateProperties(newProperties: any[]): void {
         this.properties.update(c => [...c, ...newProperties]);
