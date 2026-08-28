@@ -144,6 +144,11 @@
                 pointer-events: none;
                 scrollbar-width: thin;
 
+                div.selected-result {
+                    background-color: purple !important;
+                    outline: 1px solid rgba(0,0,0,0.4);
+                }
+
                 div {
                     pointer-events: auto;
                     font-size: 0.9rem;

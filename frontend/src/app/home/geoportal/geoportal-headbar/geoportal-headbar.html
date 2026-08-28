@@ -9,7 +9,7 @@
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/tape-measure.png" alt="Measure" draggable="false" class="geoportal-tool-icon" />
         </div>
-        Mierzenie
+        Analizy ręczne
     </div>
     <div class="geoportal-tool">
         <div class="geoportal-tool-icon-container">
@@ -19,25 +19,27 @@
         Zapis analizy
     </div>
     <div (click)="searchOut(); zoomToObject.setHighlightedService(); zoomToObject.isListRendered.set(true)"
-        class="search" [class.active-search]="headbarKeys.search">
+        class="search" [class.active-search]="headbarKeys.search && (infoFeatures.isCursorDragged() === false)">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/loupe.png" alt="Search" draggable="false" class="geoportal-tool-icon" />
         </div>
         @if(headbarKeys.search){
         <div class="search-container-wrapper">
             <div class="search-container" (click)="$event.stopPropagation()">
-                <input [value]="inputValue()" (keyup.enter)="searchItems(inputValue())"
-                    (input)="inputValue.set($event.target.value)" (change)="cons()" type="text"
+                <input [value]="inputValue()" 
+                    (keyup.enter)="searchItems((inputValue().toLowerCase()).charAt(0).toUpperCase() + inputValue().slice(1)); 
+                    wasSearchResultClicked.set(false);"
+                    (input)="inputValue.set($event.target.value)" type="text"
                     placeholder="Wyszukaj..." />
-                <button (click)="searchItems(inputValue())">
+                <button (click)="searchItems(inputValue()); wasSearchResultClicked.set(false);">
                     <img src="/images/icons/loupe.png" alt="Search-bar" draggable="false" />
                 </button>
             </div>
-            <div class="search-results" [class.search-results-display]="zoomToObject.isListRendered()">
+            <div class="search-results" [class.search-results-display]="zoomToObject.isListRendered() || wasSearchResultClicked()">
                 @for(result of (searchResults().data ?? []) | slice:0:50; track result; let idx = $index) {
-                <div (click)="$event.stopPropagation(); 
+                <div (click)="$event.stopPropagation(); wasSearchResultClicked.set(true); 
                         zoomToObject.zoomToCoordinates(result.st_asgeojson, result.idprng);">
-                    {{ result.nazwa }} — {{ result.rodzaj }} —
+                    <span style="font-weight: bold;">{{ (result.nazwa) | uppercase }}</span> — {{ result.rodzaj }} —
                     pow.{{ result.powiat }} —
                     gmin.{{ (result.gmina).split('-')[0] }}
                 </div>
@@ -75,13 +77,13 @@
         </div>
         Mapa bazowa
     </div>
-    <div (click)="infoToggleService.infoClicked()" class="geoportal-tool"
-        [class.active-info]="infoToggleService.isInfoClicked()">
+    <div (click)="infoOut(); infoToggleService.infoClicked()" class="geoportal-tool"
+        [class.active-info]="headbarKeys.info && (infoFeatures.isCursorDragged() === false)">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/info.png" alt="Info" draggable="false" class="geoportal-tool-icon" />
         </div>
 
-        @if(infoToggleService.isInfoClicked()){
+        @if(headbarKeys.info){
         Info (
         <div>
             <img src="/images/icons/check.png" alt="Accept" draggable="false" class="check-ico" />
