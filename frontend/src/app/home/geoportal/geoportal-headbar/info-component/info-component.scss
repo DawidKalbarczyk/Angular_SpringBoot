@@ -90,17 +90,29 @@
             }
         }
         
+        .marker-index {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: rgba(0,0,0,0.7);
+            text-align: center;
+            padding: 0.25rem 0rem;
+        }
+
         .marker-content {
 
             padding: 1rem 1rem 1rem 1rem;
             background-color: $background-color-light;
             border-radius: 0.5rem;
             font-size: 0.8rem;
-            margin: 1rem;
+            margin: 0 1rem 1rem 1rem;
 
-
+            .p-bold {
+                font-weight: bold;
+            }
             p {
                 padding: 0.2rem 0.5rem;
+                text-align: center;
+                word-break: break-word;
 
                 &:nth-child(1) {
                     border-radius: 0.5rem 0.5rem 0 0;

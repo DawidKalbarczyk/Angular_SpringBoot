@@ -1,8 +1,8 @@
-import { Component, signal, inject, HostListener, effect, computed } from '@angular/core';
+import { Component, signal, inject, HostListener, effect, computed, Host } from '@angular/core';
 import { InfoToggle } from '../../../../services/info-toggle/info-toggle';
 import { InfoFeatures } from '../../../../services/info-features/info-features';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import { LayerVisibility } from '../../../../services/layer-visibility/layer-visibility';
 type LayerKey = 
     | 'vectorLayer'
     | 'boundscities'
@@ -35,6 +35,14 @@ export class InfoComponent {
   public layerWithId = this.infoFeatures.layerWithId;
   public properties = this.infoFeatures.properties;
 
+  constructor() {
+    effect(() => {
+      if (this.infoFeatures.isCursorDragged()) {
+        this.showMarker.set(false);
+      }
+    });
+  }
+
   public markerReady = signal<boolean>(false);
 
   private layerPriority: Record<LayerKey, number> = {
@@ -46,16 +54,18 @@ export class InfoComponent {
     vectorLayer: 0,
     budLayer: 1,
   };
-
+  
+  private vectorResults = inject(LayerVisibility).vectorResults;
   public sortedLayerData = computed(() => {
     const layers = this.layerWithId();
-    const props = this.properties();
-    const combined = layers.map((layer, index) => ({
-      layer,
-      properties: props[index] || [],
-    }));
-
-    return combined.sort((a, b) => {
+    const wmsProps = this.properties();
+    const vectorProps = this.vectorResults();
+    const combinedProps = [
+      ...vectorProps.map((feat) => ({layer: 'vectorLayer', properties: feat})),
+      ...layers.map((layer, index) => ({layer, properties: wmsProps[index] || []})),
+    ];
+  
+    return combinedProps.sort((a, b) => {
       const keyA = a.layer.split('.')[0] as LayerKey;
       const keyB = b.layer.split('.')[0] as LayerKey;
 
@@ -105,17 +115,51 @@ export class InfoComponent {
 
   private mouseDownX = 0;
   private mouseDownY = 0;
-  private dragThreshold = 50;
+  private dragThreshold = 20;
+  private isMouseDown = false;
+  private hasDraggedThisPress = false;
+  private mouseDownInsideInfoPanel = false;
   @HostListener('document:mousedown', ['$event'])
   onMouseDown(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    this.mouseDownInsideInfoPanel = !!target.closest('.marker');
+
     this.mouseDownX = event.clientX;
     this.mouseDownY = event.clientY;
+    this.isMouseDown = true;
+    this.hasDraggedThisPress = false;
+    this.infoFeatures.resetDragged();
+  }
+  
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent): void {
+    if (!this.isMouseDown || this.hasDraggedThisPress || this.mouseDownInsideInfoPanel) {
+      return;
+    }
+
+    const deltaX = Math.abs(event.clientX - this.mouseDownX);
+    const deltaY = Math.abs(event.clientY - this.mouseDownY);
+
+    if (deltaX > this.dragThreshold || deltaY > this.dragThreshold) {
+      this.infoFeatures.isDragged();
+      this.hasDraggedThisPress = true;
+    }
+  }
+
+  @HostListener('document:mouseup', ['$event'])
+  onMouseUp(event: MouseEvent): void {
+    this.isMouseDown = false;
   }
 
   @HostListener('document:click', ['$event'])
   setMarkerPosition(event: MouseEvent): void {
     const deltaX = Math.abs(event.clientX - this.mouseDownX);
     const deltaY = Math.abs(event.clientY - this.mouseDownY);
+
+    if (this.mouseDownInsideInfoPanel) {
+      this.mouseDownInsideInfoPanel = false;
+      return;
+    }
 
     if (deltaX > this.dragThreshold || deltaY > this.dragThreshold) {
       this.showMarker.set(false);
