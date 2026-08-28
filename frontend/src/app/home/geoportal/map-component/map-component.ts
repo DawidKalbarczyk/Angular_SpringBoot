@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, inject } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, signal} from '@angular/core';
 import Map from 'ol/Map';
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
@@ -27,7 +27,6 @@ export class MapComponent implements AfterViewInit {
   private mapLayersVisibility = inject(LayerVisibility);
   private infoToggleService = inject(InfoToggle);
   public infoProperties = inject(InfoFeatures);
-
   private osmLayer!: TileLayer;
   private ortoLayer!: TileLayer;
   private budLayer!: TileLayer;
@@ -40,6 +39,7 @@ export class MapComponent implements AfterViewInit {
   private vectorLayer!: VectorImageLayer;
   private vectorSource!: VectorSource;
   private zoomToObject = inject(ZoomToObject);
+  public vectorResults = inject(LayerVisibility).vectorResults;
 
   constructor() {
     effect(() => {
@@ -92,11 +92,13 @@ export class MapComponent implements AfterViewInit {
       }),
     });
     this.zoomToObject.setMap(this.map);
-    
+
+
     this.map.on('singleclick', (event) => {
       if (this.infoToggleService.isInfoClicked()) {
         this.infoProperties.clear(); // Reset properties before fetching new data
         this.infoProperties.isInfoReady.set(false); // Reset info ready state before fetching new data
+
 
         const viewResolution = this.map.getView().getResolution();
         if (!viewResolution) {
@@ -104,7 +106,22 @@ export class MapComponent implements AfterViewInit {
           return;
         }
 
-        let matchedAny = false;
+        // Łapanie kliknięcia warstwy miejscowości
+        this.vectorResults.set([]); 
+        this.map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
+          if (layer === this.vectorLayer) {
+            const feat = feature.getProperties();
+            this.vectorResults.update(f => [...f, feat]);
+            console.log("COKOLWIEKTRAFIONE", feature.getProperties())
+            console.log(this.vectorResults())
+          }
+          return false;
+          }, { hitTolerance: 50 }
+       );
+       // -----------------------------------------
+       //Dodać do props to co jest w vectorResults
+
+
 
         const requests: Promise<void>[] = [];
 
@@ -112,7 +129,6 @@ export class MapComponent implements AfterViewInit {
           if (layer instanceof TileLayer && layer.getVisible()) {
             const source = layer.getSource();
             if (source instanceof TileWMS) {
-              matchedAny = true;
               const url = source.getFeatureInfoUrl(
                 event.coordinate,
                 viewResolution,
@@ -152,8 +168,6 @@ export class MapComponent implements AfterViewInit {
         Promise.all(requests).then(() => {
           this.infoProperties.isInfoReady.set(true); // Set the info ready state after fetching data
         });
-
-        console.log('Czy trafiono w jakąś warstwę WMS?', matchedAny);
       } else {
         console.log('Info toggle is not active. Click ignored.');
       }
@@ -198,7 +212,6 @@ export class MapComponent implements AfterViewInit {
       url: wfsUrl,
     });
 
-    // Po załadowaniu danych nadaj każdemu obiektowi stabilny indeks
     this.vectorSource.once('featuresloadend', () => {
       const features = this.vectorSource.getFeatures();
 
@@ -215,7 +228,7 @@ export class MapComponent implements AfterViewInit {
       source: this.vectorSource,
       visible: this.mapLayersVisibility.isVisible('vectorLayer'),
       style: (feature, resolution) => this.decimatedStyle(feature, resolution),
-      declutter: true,
+      declutter: false,
     });
   }
 
@@ -236,6 +249,7 @@ export class MapComponent implements AfterViewInit {
           text: feature.get('nazwa'),
           offsetY: -35,
           font: 'bold 35px Roboto Flex',
+          stroke: new Stroke ({ color: '#fff', width: 5 }),
         }),
         zIndex: 9999
       })
@@ -247,7 +261,7 @@ export class MapComponent implements AfterViewInit {
       return undefined; 
     }
 
-    const showLabel = resolution < 350; 
+    const showLabel = resolution < 500; 
     const population = Number(feature.get('liczbamies')) || 0;
     const {radius, fontSize} = this.getSizeByPopulatiuon(population);
 
@@ -272,13 +286,15 @@ export class MapComponent implements AfterViewInit {
 
   private getSizeByPopulatiuon(population: number): { radius: number; fontSize: number } {
     const minPop = 0;
-    const maxPop = 1_000_000;
+    const maxPop = 2_000_000;
     const minRadius = 3;
-    const maxRadius = 10;
+    const maxRadius = 15;
     const minFont = 13;
-    const maxFont = 25;
+    const maxFont = 26;
 
-    const t = Math.min(1, Math.max(minPop, population / maxPop));
+    const safePop = Math.max(0, Math.min(population, maxPop));
+
+    const t = Math.pow(safePop / maxPop, 1 / 3);
 
     const radius = minRadius + t * (maxRadius - minRadius);
     const fontSize = minFont + t * (maxFont - minFont);
