@@ -63,6 +63,30 @@
             }
         }
 
+        .enter-animation-opacity {
+            animation: opacity-fade 0.5s;
+        }
+        .leave-animation-opacity {
+            animation: opacity-fade-out 0.5s;
+        }
+
+        @keyframes opacity-fade {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes opacity-fade-out {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
         .search-container-wrapper {
             position: absolute;
             top: 90px;
@@ -243,6 +267,21 @@
             }
         }
 
+        .enter-animation {
+            animation: slide-side 0.5s;
+        }
+
+        @keyframes slide-side {
+            from {
+                transform: translateX(200px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
         .layers-container {
             position: absolute;
             top: 90px;
@@ -256,7 +295,6 @@
             left: -30%;
             border: 1px solid rgba(0,0,0,0.5);
             border-radius: 0rem 0rem 0rem 2rem;
-            
             
             div {
                 display: flex;
@@ -324,6 +362,31 @@
                 object-fit: contain;
             }
         }
+
+        .enter-animation-opacity {
+            animation: opacity-fade 0.5s;
+        }
+        .leave-animation-opacity {
+            animation: opacity-fade-out 0.5s;
+        }
+
+        @keyframes opacity-fade {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes opacity-fade-out {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
         .baselayer-container {
             position: absolute;
             top: 90px;

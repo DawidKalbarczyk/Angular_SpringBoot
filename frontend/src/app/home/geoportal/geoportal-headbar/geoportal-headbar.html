@@ -24,8 +24,8 @@
             <img src="/images/icons/loupe.png" alt="Search" draggable="false" class="geoportal-tool-icon" />
         </div>
         @if(headbarKeys.search){
-        <div class="search-container-wrapper">
-            <div class="search-container" (click)="$event.stopPropagation()">
+        <div class="search-container-wrapper" [class]="headbarKeys.search ? 'enter-animation-opacity' : 'leave-animation-opacity'">
+            <div class="search-container " (click)="$event.stopPropagation()">
                 <input [value]="inputValue()" 
                     (keyup.enter)="searchItems((inputValue().toLowerCase()).charAt(0).toUpperCase() + inputValue().slice(1)); 
                     wasSearchResultClicked.set(false);"
@@ -54,7 +54,7 @@
     </div>
     <div (click)="baseLayerOut()" class="baselayer" [class.active-baselayer]="headbarKeys.baseLayer">
         @if(headbarKeys.baseLayer){
-        <div class="baselayer-container" (click)="$event.stopPropagation()">
+        <div class="baselayer-container" [class]="headbarKeys.baseLayer ? 'enter-animation-opacity' : 'leave-animation-opacity'" >
             <div>
                 <p>Mapa OpenStreetMap</p>
                 <mat-slide-toggle [checked]="mapLayerService.isVisible('osmLayer')"
@@ -99,7 +99,7 @@
         </div>
 
         @if(headbarKeys.layers){
-        <div class="layers-container" (click)="$event.stopPropagation()">
+        <div class="layers-container enter-animation" (click)="$event.stopPropagation()">
             <div>
                 <p>Miejscowości</p>
                 <mat-slide-toggle [checked]="mapLayerService.isVisible('vectorLayer')"
