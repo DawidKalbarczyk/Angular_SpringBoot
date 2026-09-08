@@ -1,15 +1,15 @@
 <div class="geoportal-headbar">
-    <div class="geoportal-tool">
+    <div class="geoportal-tool" (click)="AMservice.analysysOut()">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/analysis.png" alt="Analysis" draggable="false" class="geoportal-tool-icon" />
         </div>
-        Analizy atrybutowe
+        Analizy
     </div>
-    <div class="geoportal-tool">
+    <div class="geoportal-tool measure" (click)="AMservice.measureOut()">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/tape-measure.png" alt="Measure" draggable="false" class="geoportal-tool-icon" />
         </div>
-        Analizy ręczne
+        Mierzenie
     </div>
     <div class="geoportal-tool">
         <div class="geoportal-tool-icon-container">

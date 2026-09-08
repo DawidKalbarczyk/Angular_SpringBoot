@@ -74,51 +74,57 @@
                 position: relative;
                 display: flex;
                 flex-direction: row;
-                background-color: $secondary-color-light;
+                background-color: transparent;
                 pointer-events: auto;
                 padding: 1rem 2rem;
                 z-index: 2;
                 box-sizing: border-box;
-                border: 1px solid rgba(0,0,0,0.5);
                 pointer-events: none;
                 border-radius: 0rem 0rem 2rem 2rem;
 
                 input {
-                    background-color: transparent;
+                    background-color: $secondary-color-light;
                     padding: 0.5rem;
                     font-size: 1rem;
                     border: 1px solid rgba(0,0,0,0.5);
                     border-right: none;
-                    border-radius: 0.5rem 0 0 0.5rem;
+                    border-radius: 1.5rem 0 0 1.5rem;
                     flex: 5;
                     width: 200px; /* Adjust the width as needed */
                     font-family: 'Roboto Flex', sans-serif; /* Inherit font from parent */
                     transition: background-color 0.3s ease;
                     pointer-events: auto;
+                    padding-left: 1rem;
                     
                     &::placeholder {
                         color: rgba(0,0,0,0.7); /* Placeholder text color */
+                        
                     }
                     &:focus {
                         outline: none; /* Remove default focus outline */
-                        background-color: white; /* Change border color on focus */
+                       background-color: white;
                     }
                 }
 
                 button {
                     padding: 0.5rem 1rem;
                     font-size: 1rem;
-                    background-color: white; /* Use your desired color */
+                    background-color: $secondary-color-light;
                     color: black; /* Text color */
                     border: 1px solid rgba(0,0,0,0.5);
-                    border-radius: 0 0.5rem 0.5rem 0;
+                    border-left: none;
+                    border-radius: 0 1.5rem 1.5rem 0;
                     flex: 1;
                     cursor: pointer;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     pointer-events: auto;
+                    transition: background-color 0.3s ease;
 
+                    &:hover {
+                        background-color: white;
+                    }
                     img {
                         width: 1.5rem;
                         height: 1.5rem;
@@ -131,8 +137,7 @@
             }
             .search-results {
                 position: absolute;
-                top: 2rem;
-                padding: 3rem 1rem 1rem 1rem;
+                padding: 1rem 1rem 1rem 1rem;
                 background-color: white;
                 border: 1px solid rgba(0,0,0,0.5);
                 width: 100%;
@@ -173,6 +178,51 @@
             }
         }
         
+    }
+
+
+    .measure {
+        position: relative;
+        pointer-events: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .geoportal-tool-icon-container {
+            margin-right: 0.5rem;
+
+            .geoportal-tool-icon {
+                width: 2rem;
+                height: 2rem;
+                object-fit: contain;
+            }
+        }
+
+        .measure-container {
+            position: absolute;
+            top: 90px;
+            right: 0;
+            row-gap: 1rem;
+            display: flex;
+            flex-direction: column;
+            background-color: $secondary-color-light;
+            pointer-events: auto;
+            padding: 1rem 2rem;
+            left: -30%;
+            border: 1px solid rgba(0,0,0,0.5);
+            border-radius: 0rem 0rem 0rem 2rem;
+            
+            
+            div {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                column-gap: 1rem;
+                font-size: 1rem;
+            }
+        }
     }
 
     .layers {

@@ -7,6 +7,7 @@ import { SlicePipe } from '@angular/common';
 import { ZoomToObject } from '../../../services/zoom-to-object/zoom-to-object';
 import { InfoFeatures } from '../../../services/info-features/info-features';
 import { UpperCasePipe } from '@angular/common';
+import { AMService } from '../../../services/a-m-service/a-m-service';
 
 export interface HeadbarKeys {
   search: boolean;
@@ -76,6 +77,9 @@ export class GeoportalHeadbar {
   infoOut(): void {
     this.checkButt('info');
   }
+  public AMservice = inject(AMService);
+  
+
 
   public inputValue = signal<string>('');
   public searchResults = signal<{ data: SearchResult[] }>({ data: [] });
