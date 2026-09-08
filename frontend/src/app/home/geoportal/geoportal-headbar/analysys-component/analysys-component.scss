@@ -1,0 +1,101 @@
+@use '../../../../../variables' as *;
+
+:host {
+    position: fixed;
+    top: 90px;
+    z-index: 2;
+
+    .enter-animation {
+        animation: slide-side 0.5s;
+    }
+
+    @keyframes slide-side {
+        from {
+            transform: translateX(-200px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+  
+    
+    .main {
+        background-color: transparent;
+        width: 20rem;
+        height: 25rem;
+        font-family: 'Roboto Flex', sans-serif;
+        padding: 1rem;
+
+        
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 0rem 0rem 1rem 0rem;
+            background-color: $secondary-color-light;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(0,0,0,0.3);
+
+            .title {
+                background-color: $background-color-light;
+                border-radius: 0.5rem 0.5rem 0rem 0rem;
+                border-bottom: 1px solid rgba(0,0,0,0.3);
+                box-sizing: border-box;
+                width: 100%;
+                padding: 0.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                p {
+                    font-size: 1.35rem;
+                }
+        }
+            .content-section{
+                
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                
+                .info {
+                    margin: 1rem 0rem;
+                    
+                    p {
+                        font-size: 1rem;
+                    }
+                }
+                .butt-section {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    column-gap: 0.5rem;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 0rem 1rem;
+
+                    button {
+                        display: inline-block;
+                        word-break: break-word;
+                        padding: 0.5rem 1rem;
+                        border: 1px solid rgba(0,0,0,0.3);
+                        margin: 0rem;
+                        border-radius: 0.5rem;
+                        transition: background-color 0.3s ease;
+                        background-color: transparent;
+                        cursor: pointer;
+                        
+                        &:hover {
+                            background-color: $background-color-light;
+                        }
+                    }
+                }
+            }
+            
+            
+        }
+    }
+}
