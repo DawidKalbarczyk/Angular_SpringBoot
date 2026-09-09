@@ -1,0 +1,31 @@
+<div class="main" animate.enter="enter-animation">
+    <div class="content-wrapper">
+        <div class="title">
+            <p>Narzędzie analiz</p>
+        </div>
+        <section class="content-section">
+            @if (!analysysPicked()) {
+                <div class="info">
+                    <p>Wybierz typ analiz:</p>
+                </div>
+                <section class="butt-section">
+                    <button (click)="pickAnalysys()">Analiza atrybutowa</button>
+                    <button (click)="pickAnalysys()">Analiza przestrzenna</button>
+                </section>
+            } @else {
+                <div class="info">
+                    <p>Analiza testowana</p>
+                    <button>createLayer</button>
+                    <input [value]="inputText()" placeholder="Wpisz nazwę warstwy" (input)="inputText.set($event.target.value)">
+                    <button (click)="userCreation(inputText(), 'createWorkspace')">createWorkspace</button>
+                    <button (click)="userCreation(inputText(), 'createDatastore')">createDatastore</button>
+                    <button (click)="userCreation(inputText(), 'createTempWorkspace')">createTempWorkspace</button>
+                    <button (click)="userCreation(inputText(), 'createTempDatastore')">createTempDatastore</button>
+                    <p>`{{ inputText() }}`</p>
+                </div>
+            }   
+            
+        </section>
+        
+    </div>
+</div>

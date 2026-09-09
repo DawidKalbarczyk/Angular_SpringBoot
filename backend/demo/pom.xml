@@ -29,6 +29,12 @@
 	<properties>
 		<java.version>26</java.version>
 	</properties>
+	<repositories>
+		<repository>
+			<id>osgeo</id>
+			<url>https://repo.osgeo.org/repository/release/</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
