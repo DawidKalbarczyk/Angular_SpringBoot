@@ -15,6 +15,7 @@ div, button {
         .first-button {
             color: $text-color-dark !important;
             background-color: $buttons-color;
+            transition: background-color 0.5s ease !important;
 
             &:hover {
             background-color: $secondary-color-dark !important;
@@ -77,7 +78,7 @@ div, button {
             color: $login-button-1st-color-light;
             background-color: transparent;
             border: none;
-            transition: color 0.5s ease;
+            transition: background-color 0.3s ease !important;
 
             &:hover {
                 background-color: $secondary-color-light;

@@ -90,4 +90,6 @@ export class LayerVisibility {
             // ignore
         }
     }
+
+    public vectorResults = signal<any[]>([]); // Signal to hold the vector results
 }

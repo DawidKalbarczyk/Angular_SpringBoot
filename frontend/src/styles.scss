@@ -42,6 +42,7 @@ body {
   background-color: $background-color-light;
   color: $text-color-light;
   font-family: $text-font-family;
+  user-select: none !important;
 }
 
 p {
@@ -49,6 +50,7 @@ p {
   padding: 0;
   margin-block-start: 0em;
   margin-block-end: 0em;
+  user-select: none !important;
 }
 
 img {

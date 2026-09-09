@@ -39,6 +39,10 @@ services:
       - "${GEOSERVER_PORT}:8080"
     volumes:
       - geoserver-data:/opt/geoserver_data
+    networks:
+      default:
+        aliases:
+          - geoserver
 
   springboot:
     build:
@@ -50,8 +54,14 @@ services:
       - *env-postgres-db
       - *env-postgres-user
       - *env-postgres-password
+      - *env-geoserver-user
+      - *env-geoserver-password
     ports:
       - "${SPRINGBOOT_PORT}:10000"
+    networks:
+      default:
+        aliases:
+          - springboot
 
   nginx:
     build:

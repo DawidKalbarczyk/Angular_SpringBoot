@@ -2,4 +2,10 @@
 <app-return-corner></app-return-corner>
 <app-map-component></app-map-component>
 <app-author-bar></app-author-bar>
+@if (AMservice.headbarKeys.analysys) {
+    <app-analysys-component></app-analysys-component>
+}
+@if (AMservice.headbarKeys.measure) {
+    <app-measure-component></app-measure-component>
+}
 

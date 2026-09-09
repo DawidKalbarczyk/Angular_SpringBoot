@@ -1,0 +1,11 @@
+:host {
+    top: 90px;
+    position: fixed;
+    left: 0;
+
+    .main {
+        width: 25rem;
+        height: 25rem;
+        background-color: blue !important;
+    }
+}
