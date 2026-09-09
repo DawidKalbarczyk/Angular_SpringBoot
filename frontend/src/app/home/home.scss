@@ -1,6 +1,6 @@
 @use '../../_variables.scss' as *;
 
-.dark-home {
+.dark-home { // robi jako home-container
     .selection-history, .selection-search, .selection-geoportal {
         background-color: $secondary-color-dark !important;
 
@@ -11,103 +11,328 @@
         }
     }
 }
-
-.home-container {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    column-gap: 7rem;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - $basic-padding-bottom - $basic-padding-top);
-    margin-top: $basic-padding-top;
-    padding: 
-        2.5rem
-        12rem 
-        5rem
-        12rem;
-
-
-    .selection-history, .selection-search, .selection-geoportal {
-        background-color: $secondary-color-light;
-        border-radius: 1rem;
-        width: 100%;
-        height: 100%;
-        display: grid;
-        grid-template-rows: 1fr 1fr;
-        transition: filter 0.3s ease-in-out, background-color 0.5s ease-in-out;
-
-        div {
-            img {
-                border-radius: 0rem 0rem 1rem 1rem;;
+.dark-pop-up {
+    .log-in-pop-up-content {
+        background-color: $secondary-color-dark !important;
+        .log-in-pop-up-close {
+            color: $text-color-dark !important;
+            &:hover {
+                background-color: $secondary-color-light !important;
+                color: $text-color-light !important;
             }
         }
-
-        &:hover {
-            cursor: pointer;
-            filter: brightness(1.15);
-        }
-
-        .selection-text {
-            display: flex;
-            padding: 5rem 0;
-            justify-content: center;
+        .log-in-pop-up-info {
+            .log-in-pop-up-eyebrow {
+                color: rgba(255,255,255,0.7) !important;
+            }
+            h2 {
+                color: $text-color-dark !important;
+            }
             p {
-                font-size: 2.5rem;
-                font-weight: 500;
-                text-align: center;
-                width: 80%;
-                transition: color 0.5s ease-in-out;
+                color: rgba(255,255,255,0.7) !important;
             }
+
         }
 
-        .selection-text-history {
-            padding: 7.5rem 0;
-        }
+        .log-in-pop-up-buttons {
+            .first-button {
+                color: $login-button-1st-color-light !important;
+                background-color: rgba(255, 255, 255, 0.45) !important;
         
 
-        div:nth-child(1), div:nth-child(2) {
-            min-height: 0;
+                &:hover {
+                    background-color: $buttons-color !important;
+                    color: white !important;
+                }
+            }
+
+            .second-button {
+                color: $login-button-2nd-color-light !important;
+                background-color: $buttons-color !important;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.7) !important;
+                    color: black !important;
+                }
+            }
         }
-        div:nth-child(1) {
-            width: 100%;
-            height: 100%;
+    }
+}
 
+
+
+:host {
+    position: relative;
+
+    .log-in-pop-up-container {
+        position: absolute;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        top: 0;
+        bottom: $basic-padding-bottom;
+        left: 0;
+        right: 0;
+        pointer-events: none;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out;
+
+        @starting-style {
+            opacity: 0;
+            background-color: rgba(0, 0, 0, 0);
         }
 
-        div:nth-child(2) {
-            width: 100%;
-            height: 100%;
+        &.log-in-pop-up-container-pointer-events {
+            pointer-events: auto;
+        }
 
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
+        &.log-in-pop-up-container-ending-style {
+            opacity: 0;
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        .log-in-pop-up-content {
+            background-color: $secondary-color-light;
+            border-radius: 1rem;
+            box-sizing: border-box;
+            width: 40rem;
+            height: 25rem;
+            position: relative;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+            opacity: 1;
+            transform: translateY(0);
+            transition: 
+                opacity 0.5s ease-in-out, 
+                transform 0.5s ease-in-out,
+                background-color 0.5s ease-in-out;
+
+            &.log-in-pop-up-ending-style {
+                opacity: 0;
+                transform: translateY(-1.5rem);
+            }
+
+            @starting-style {
+                opacity: 0;
+                transform: translateY(-1.5rem);
+            }
+
+            .log-in-pop-up-close {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                width: 2rem;
+                height: 2rem;
+                border: none;
+                border-radius: 50%;
+                background-color: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                color: $text-color-light;
+                transition: background-color 0.5s ease, color 0.5s ease;
+
+                &::before, &::after {
+                    position: absolute;
+                    width: 1rem;
+                    height: 2px;
+                    background-color: currentColor;
+                    content: '';
+                }
+
+                &::before {
+                    transform: rotate(45deg);
+                }
+
+                &::after {
+                    transform: rotate(-45deg);
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: $secondary-color-dark;
+                    color: $text-color-dark;
+                }
+            }
+
+            .log-in-pop-up-info {
+                text-align: center;
+
+                .log-in-pop-up-eyebrow {
+                    display: block;
+                    color: $author-bar-color-light;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    margin-bottom: 1rem;
+                    transition: color 0.5s ease;
+                }
+
+                h2 {
+                    color: $text-color-light;
+                    font-size: 2rem;
+                    font-weight: 600;
+                    margin: 0 0 1rem 0;
+                    transition: color 0.5s ease;
+                }
+
+                p {
+                    color: $author-bar-color-light;
+                    font-size: 1rem;
+                    margin: 0;
+                    transition: color 0.5s ease;
+                }
+            }
+
+            .log-in-pop-up-buttons {
+                display: flex;
+                gap: 1rem;
+
+                button {
+                    border: none;
+                    border-radius: 0.5rem;
+                    font-size: 1.2rem;
+                    width: 8rem;
+                    padding: 0.7rem 1rem;
+                    transition: background-color 0.3s ease;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+
+                .first-button {
+                    color: $login-button-1st-color-light;
+                    background-color: rgba(255, 255, 255, 0.45);
+                    transition: background-color 0.5s ease,
+                    color 0.5s ease !important;
+
+                    &:hover {
+                        background-color: #ffffff;
+                    }
+                }
+
+                .second-button {
+                    color: $login-button-2nd-color-light;
+                    background-color: $buttons-color;
+                    transition: background-color 0.5s ease,
+                    color 0.5s ease !important;
+
+                    &:hover {
+                        background-color: $secondary-color-dark;
+                    }
+                }
             }
         }
     }
 
-    .selection-geoportal {
-        grid-template-rows: 1fr 2.5fr;
+    .home-container {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        column-gap: 7rem;
+        align-items: center;
+        justify-content: center;
+        height: calc(100vh - $basic-padding-bottom - $basic-padding-top);
+        margin-top: $basic-padding-top;
+        padding: 
+            2.5rem
+            12rem 
+            5rem
+            12rem;
 
-        div:nth-child(2) {
+
+        .selection-history, .selection-search, .selection-geoportal {
+            background-color: $secondary-color-light;
+            border-radius: 1rem;
             width: 100%;
             height: 100%;
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            transition: filter 0.3s ease-in-out, background-color 0.5s ease-in-out;
 
-            img {
-                clip-path: polygon(0% 0%, 100% 30%, 100% 100%, 0% 100%);            }
+            div {
+                img {
+                    border-radius: 0rem 0rem 1rem 1rem;;
+                }
+            }
+
+            &:hover {
+                cursor: pointer;
+                filter: brightness(1.15);
+            }
+
+            .selection-text {
+                display: flex;
+                padding: 5rem 0;
+                justify-content: center;
+                p {
+                    font-size: 2.5rem;
+                    font-weight: 500;
+                    text-align: center;
+                    width: 80%;
+                    transition: color 0.5s ease-in-out;
+                }
+            }
+
+            .selection-text-history {
+                padding: 7.5rem 0;
+            }
+            
+
+            div:nth-child(1), div:nth-child(2) {
+                min-height: 0;
+            }
+            div:nth-child(1) {
+                width: 100%;
+                height: 100%;
+
+            }
+
+            div:nth-child(2) {
+                width: 100%;
+                height: 100%;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
         }
-    }
 
-    .selection-search {
-        grid-template-rows: 1fr 2.5fr;
+        .selection-geoportal {
+            grid-template-rows: 1fr 2.5fr;
 
-        div:nth-child(2) {
-            width: 100%;
-            height: 100%;
+            div:nth-child(2) {
+                width: 100%;
+                height: 100%;
 
-            img {
-                clip-path: polygon(0% 30%, 100% 0%, 100% 100%, 0% 100%);
+                img {
+                    clip-path: polygon(0% 0%, 100% 30%, 100% 100%, 0% 100%);            }
+            }
+        }
+
+        .selection-search {
+            grid-template-rows: 1fr 2.5fr;
+
+            div:nth-child(2) {
+                width: 100%;
+                height: 100%;
+
+                img {
+                    clip-path: polygon(0% 30%, 100% 0%, 100% 100%, 0% 100%);
+                }
             }
         }
     }

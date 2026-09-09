@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DarkMode } from '../../services/dark-mode/dark-mode';
+import { LoginService } from '../../services/login-service/login-service';
 
 @Component({
   selector: 'app-login-corner',
@@ -9,6 +10,6 @@ import { DarkMode } from '../../services/dark-mode/dark-mode';
   styleUrl: './login-corner.scss',
 })
 export class LoginCorner {
-  public isLoggedIn: boolean = true;
+  public isLoggedIn: boolean = inject(LoginService).isLoggedIn();
   public isDarkMode = inject(DarkMode).isDarkMode;
 }

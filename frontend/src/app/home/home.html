@@ -10,7 +10,7 @@
             <img src="./images/home-page/scaled/geoportal_20.jpg" draggable="false" alt="Geoportal"/>
         </div>
     </div>
-    <div class="selection-history" routerLink="history">
+    <div class="selection-history" [routerLink]="isLoggedIn ? 'history' : null" (click)="middleClickHandler()">
         <div class="selection-text selection-text-history">
             <p>Historia działań użytkownika</p>
         </div>
@@ -27,5 +27,27 @@
         </div>
     </div>
 </div>
+@if (isLoggedIn === false && wasMiddleClicked()) {
+    <div class="log-in-pop-up-container" 
+    [class.log-in-pop-up-container-pointer-events]="wasMiddleClicked()"
+    [class.log-in-pop-up-container-ending-style]="wasPopUpCloseClicked()" 
+    [class.dark-pop-up]="isDarkMode()"
+    (click)="wasPopUpBgClicked()">
+        <div class="log-in-pop-up-content"
+        [class.log-in-pop-up-ending-style]="wasPopUpCloseClicked()"
+        (click)="$event.stopPropagation()">
+            <button class="log-in-pop-up-close" type="button" aria-label="Close" (click)="wasPopUpBgClicked()"></button>
+            <div class="log-in-pop-up-info">
+                <span class="log-in-pop-up-eyebrow">HISTORIA DZIAŁAŃ</span>
+                <h2>Sekcja dla zalogowanych</h2>
+                <p>Zaloguj się lub utwórz konto, aby zobaczyć historię swoich działań.</p>
+            </div>
+            <div class="log-in-pop-up-buttons">
+                <button class="first-button">Sign In</button>
+                <button class="second-button">Log In</button>
+            </div>
+        </div>
+    </div>
+}
 
 
