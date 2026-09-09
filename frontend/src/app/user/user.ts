@@ -4,6 +4,7 @@ import { LoginCorner } from '../global-components/login-corner/login-corner';
 import { ReturnCorner } from '../global-components/return-corner/return-corner';
 import { Router } from '@angular/router';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { DarkMode } from '../services/dark-mode/dark-mode';
 
 @Component({
   selector: 'app-user',
@@ -27,4 +28,6 @@ export class User {
       }, 3000);
     }
   }
+
+  public darkMode = inject(DarkMode).isDarkMode;
 }

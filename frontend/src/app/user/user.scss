@@ -1,6 +1,59 @@
 @use '../../variables' as *;
 @use '@angular/material' as mat;
 
+.dark-mode {
+    .user-ui {
+        background-color: $secondary-color-dark !important;
+
+        .user-settings {
+            background-color: $background-color-dark !important;
+
+            > div {
+                border-bottom: 1px solid white !important;
+                &:last-child {
+                    border: none !important;
+                }
+                div {
+                    color: $text-color-dark !important;
+                    
+                    &:hover {
+                        background-color: rgba(255, 255, 255, 0.2) !important;
+                    }
+                }
+            }
+        }
+
+        .user-info {
+            .user-pic-container{
+                .user-pic-wrapper{
+                    border: 5px solid white !important;
+                    img {
+                        filter: invert(1) !important;
+                    }
+                }
+            }
+
+            .user-details {
+                p {
+                    color: $text-color-dark !important;
+                }
+            }
+
+            .user-button-container {
+                button {
+                    color: $login-button-color-dark;
+                    background-color: $buttons-color;
+
+                    &:hover {
+                        background-color: $background-color-dark !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 .user-container {
     box-sizing: border-box;
     display: flex;
@@ -39,11 +92,15 @@
         width: 100%;
         padding: 4rem 5rem;
         column-gap: 3rem;
+        border-radius: 2rem;
+        transition: background-color 0.3s ease;
 
         .user-settings {
             background-color: $background-color-light;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s ease;
+            border-radius: 2rem;
 
             > div {
                 flex: 1;
@@ -51,12 +108,13 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                transition: border 0.3s ease, background-color 0.3s ease;
 
                 div {
                     padding: 0.5rem 2rem;
                     font-size: 1.25rem;
                     border-radius: 0.5rem;
-                    transition: background-color 0.3s ease;
+                    transition: background-color 0.3s ease, color 0.3s ease;
                     
                     &:hover {
                         cursor: pointer;
@@ -82,9 +140,10 @@
 
                 .user-pic-wrapper {
                     width: 70%;  
-                    border: 1px solid black;
+                    border: 5px solid black;
                     border-radius: 50%;
                     overflow: hidden;
+                    transition: border 0.3s ease;
 
 
                     img {
@@ -92,6 +151,7 @@
                         width: 100%;
                         height: 100%;
                         object-fit: cover;
+                        transition: filter 0.3s ease;
                     }
                 }
             }
@@ -104,6 +164,7 @@
 
                 p {
                     font-size: 1.5rem;
+                    transition: color 0.3s ease;
                 }
 
             }
@@ -121,6 +182,7 @@
                     color: $login-button-2nd-color-light;
                     background-color: $buttons-color;
                     border: none;
+                    transition: background-color 0.3s ease, color 0.3s ease;
 
                     &:hover {
                         cursor: pointer;

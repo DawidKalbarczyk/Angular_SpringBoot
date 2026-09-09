@@ -1,7 +1,7 @@
 <app-author-bar></app-author-bar>
 <app-login-corner></app-login-corner>
 <app-return-corner></app-return-corner>
-<div class="user-container">
+<div class="user-container" [class.dark-mode]="darkMode()">
     @if (redirectUrl === true) {
         <div class="redirect-container">
             <p>Nie jesteś zalogowany. Przekierowuję...</p>
