@@ -59,11 +59,35 @@ public class GeoServerService {
         }
     }
 
+    public void deleteTemp(String userId) {
+      if (isCreated(userId, "workspacetemp")) {
+          String url = geoserverUrl + "/rest/workspaces/user_" + userId + "_temp?recurse=true";
+          HttpHeaders headers = new HttpHeaders();
+          headers.setBasicAuth(username, password);
+          HttpEntity<String> entity = new HttpEntity<>(headers);
+          restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
+          logger.info("Deleted temporary workspace for user: {}", userId);
+      } 
+    }
 
-    public void createWorkspace(String userId) {
+
+    public void deleteUserData(String userId) {
+      if (isCreated(userId, "workspace")) {
+          String url = geoserverUrl + "/rest/workspaces/user_" + userId + "?recurse=true";
+          HttpHeaders headers = new HttpHeaders();
+          headers.setBasicAuth(username, password);
+          HttpEntity<String> entity = new HttpEntity<>(headers);
+          restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
+          logger.info("Deleted workspace for user: {}", userId);
+      } 
+
+    }
+
+
+    public boolean createWorkspace(String userId) {
       if (isCreated(userId, "workspace")) {
           logger.info("Workspace already exists for user: {}", userId);
-          return;
+          return false;
       }
       String url = geoserverUrl + "/rest/workspaces";
       String body = """
@@ -79,11 +103,13 @@ public class GeoServerService {
 
       restTemplate.postForEntity(url, new HttpEntity<>(body, headers), String.class);
       enableWorkspaceServices("user_" + userId);
+      return true;
     }
-    public void createTempWorkspace(String userId) {
+
+    public boolean createTempWorkspace(String userId) {
         if (isCreated(userId, "workspacetemp")) {
           logger.info("Temporary workspace already exists for user: {}", userId);
-          return;
+          return false;
       }
         String url = geoserverUrl + "/rest/workspaces";
         String body = """
@@ -98,7 +124,8 @@ public class GeoServerService {
         headers.setBasicAuth(username, password);
 
         restTemplate.postForEntity(url, new HttpEntity<>(body, headers), String.class);
-    enableWorkspaceServices("user_" + userId + "_temp");
+        enableWorkspaceServices("user_" + userId + "_temp");
+        return true;
     }
 
   private void enableWorkspaceServices(String workspaceName) {
@@ -121,10 +148,10 @@ public class GeoServerService {
     }
   }
     
-    public void createDatastore(String userId) {
+    public boolean createDatastore(String userId) {
         if (isCreated(userId, "datastore")) {
             logger.info("Datastore already exists for user: {}", userId);
-            return;
+            return false;
         }
         String url = geoserverUrl + "/rest/workspaces/user_" + userId + "/datastores";
         String body = """
@@ -148,11 +175,13 @@ public class GeoServerService {
         headers.setBasicAuth(username, password);
 
         restTemplate.postForEntity(url, new HttpEntity<>(body, headers), String.class);
+    
+      return true;
     }
-    public void createTempDatastore(String userId) {
+    public boolean createTempDatastore(String userId) {
         if (isCreated(userId, "datastoretemp")) {
           logger.info("Temporary datastore already exists for user: {}", userId);
-          return;
+          return false;
         }
         String url = geoserverUrl + "/rest/workspaces/user_" + userId + "_temp/datastores";
         String body = """
@@ -176,6 +205,7 @@ public class GeoServerService {
         headers.setBasicAuth(username, password);
 
         restTemplate.postForEntity(url, new HttpEntity<>(body, headers), String.class);
+      return true;
     }
 
     public void publishLayer(String tableName, String title, String userId) {

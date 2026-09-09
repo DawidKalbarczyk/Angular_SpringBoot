@@ -17,6 +17,16 @@ export class GeoserverService {
         return this.http.post('/create/create-layer', layerRequest);
     }
 
+    deleteTemps(userId: string) {
+        console.log('Deleting temporary workspaces and datastores');
+        return this.http.delete(`/create/delete-temp?userId=${userId}`, { responseType: 'text' });
+    }
+
+    deleteUserData(userId: string) {
+        console.log(`Deleting user data for userId: ${userId}`);
+        return this.http.delete(`/create/delete-user-data?userId=${userId}`, { responseType: 'text' });
+    }
+
     createWorkspace(userId: string) {
         console.log(`Creating workspace for userId: ${userId}`);
         return this.http.post(`/create/create-workspace?userId=${userId}`, null, {responseType: 'text'});
