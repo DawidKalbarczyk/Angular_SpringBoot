@@ -8,6 +8,7 @@ import { ZoomToObject } from '../../../services/zoom-to-object/zoom-to-object';
 import { InfoFeatures } from '../../../services/info-features/info-features';
 import { UpperCasePipe } from '@angular/common';
 import { AMService } from '../../../services/a-m-service/a-m-service';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 export interface HeadbarKeys {
   search: boolean;
@@ -28,7 +29,7 @@ export interface SearchResult {
 
 @Component({
   selector: 'app-geoportal-headbar',
-  imports: [MatSlideToggleModule, SlicePipe, UpperCasePipe],
+  imports: [MatSlideToggleModule, SlicePipe, UpperCasePipe, TranslatePipe],
   templateUrl: './geoportal-headbar.html',
   styleUrl: './geoportal-headbar.scss',
 })
