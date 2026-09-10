@@ -27,6 +27,11 @@ export class GeoserverService {
         return this.http.delete(`/create/delete-user-data?userId=${userId}`, { responseType: 'text' });
     }
 
+    createUserData(userId: string) {
+        console.log(`Creating user data for userId: ${userId}`);
+        return this.http.post(`/create/create-user-data?userId=${userId}`, null, { responseType: 'text' });
+    }
+
     createWorkspace(userId: string) {
         console.log(`Creating workspace for userId: ${userId}`);
         return this.http.post(`/create/create-workspace?userId=${userId}`, null, {responseType: 'text'});
