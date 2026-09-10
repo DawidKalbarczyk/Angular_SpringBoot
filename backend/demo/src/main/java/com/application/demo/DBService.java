@@ -18,7 +18,7 @@ public class DBService {
     }
 
     public void createUser(String userId, String userEmail, String userName, String photoURLString) {
-        String sql = "INSERT INTO users (id, username, email, photoUrl) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (id, username, email, \"photoUrl\") VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, userId, userName, userEmail, photoURLString);
     }
 
