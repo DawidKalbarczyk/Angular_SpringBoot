@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DarkMode } from '../services/dark-mode/dark-mode';
 import { LoginService } from '../services/login-service/login-service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-user',
@@ -15,7 +16,9 @@ import { LoginService } from '../services/login-service/login-service';
   styleUrl: './user.scss',
 })
 export class User {
-  public isLoggedIn = inject(LoginService).isLoggedIn;
+  private loginService = inject(LoginService);
+  public isLoggedIn = this.loginService.isLoggedIn;
+  public userData = this.loginService.userData;
   private router: Router = inject(Router);
   public url: string = this.router.url;
   public redirectUrl: boolean = false;

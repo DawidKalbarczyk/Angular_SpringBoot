@@ -21,19 +21,23 @@
             <div class="user-info">
                 <div class="user-pic-container">
                     <div class="user-pic-wrapper">
-                        <img src="./images/icons/user.png" alt="User" draggable="false"/>
+                        <img [src]="userData()?.photoURL || './images/icons/user.png'" alt="User" draggable="false"/>
                     </div>
                 </div>
                 <div class="user-details">
-                    <p>Username</p>
-                    <p>Email</p>
+                    <p>Nazwa użytkownika</p>
+                    <p>{{ userData()?.displayName }}</p>
+                    <p>E-mail</p>
+                    <p>{{ userData()?.email }}</p>
                 </div>
                 <div class="user-button-container">
                     <button>
                         Log Out
                     </button>
                 </div>
-                
+                <!-- Zrób tak, aby wszystko było wkłądane do bazy z opcjonalnym zdjęciem profilowym, 
+                 a dopiero potem wszystkie dane są brane do jednej zmiennej jak userData np. i dopiero z tej zmiennjej
+                 są ściągane do frontendu -->
             </div>
         </div>
     }  

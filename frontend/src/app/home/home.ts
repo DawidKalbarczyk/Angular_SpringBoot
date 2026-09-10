@@ -54,8 +54,11 @@ export class Home {
   public GeoserverService = inject(GeoserverService);
 
   createTempGeo() {
-    const userDataLocal = JSON.parse(localStorage.getItem('userDataLocal') || '{}');
-    const userId = userDataLocal.uid;
+    const userStringCheck = this.loginService.userData()?.uid;
+    let userId: string = '';
+    if (userStringCheck) {
+      userId = userStringCheck;
+    }
     this.GeoserverService.createTempWorkspace(userId).subscribe({
       next: (response) => {
         console.log('Temp workspace created:', response);
