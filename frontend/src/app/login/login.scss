@@ -1,0 +1,152 @@
+@use '../../variables' as *;
+
+.login-container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - $basic-padding-bottom - $basic-padding-top);
+    margin-top: $basic-padding-top;
+    padding: 
+        2.5rem
+        0rem 
+        5rem
+        0rem;
+    justify-content: start;
+    align-items: center;
+
+    .login-content {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 70rem;
+        height: 100%;
+        padding: 0rem 4rem 4rem 4rem;
+        
+        .login-header-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.25rem 5rem;
+            border-radius: 1.5rem;
+            height: 5rem;
+            background-color: $secondary-color-light;
+
+            > h1 {
+                color: $text-color-light;
+                text-align: center;
+                margin: 0;
+            }
+        }
+
+        .login-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 4rem;
+            height: 100%;
+            width: 100%;
+            margin-top: 2rem;
+
+            .login-email-box, .login-google-box {
+                border-radius: 1.5rem;
+                background-color: $secondary-color-light;
+                width: 100%;
+            }
+
+            .login-email-box {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                
+                .error-msg {
+                    text-align: center;
+                    color: red;
+                }
+
+                > h2 {
+                    margin-bottom: 3rem;
+                    margin-top: 0;
+                }
+
+                form {
+                    width: 100%;
+                   
+
+                    .input-group {
+                        display: flex;
+                        flex-direction: column;
+                        margin-bottom: 2rem;
+                        padding: 0rem 5rem;
+                        
+
+                        label {
+                            text-align: center;
+                            font-size: 1.25rem;
+                            margin-bottom: 0.25rem;
+                        }
+
+                        input {
+                            padding: 0.60rem 1.5rem;
+                            border: none;
+                            border-radius: 0.5rem;
+                            transition: background-color 0.5s ease-out;
+
+                            &:focus {
+                                outline: none;
+                                background-color: rgba(255,255,255,0.50);
+                                
+                            }
+                        }
+                    }
+
+                    .button-wrapper {
+                        display: flex;
+                        justify-content: center;
+                        margin-top: 3rem;
+
+                        .submit-button {
+                            padding: 0.75rem 2rem;
+                            font-size: 1.2rem;
+                            border: none;
+                            border-radius: 0.5rem;
+                            background-color: rgb(155, 27, 27);
+                            color: white;
+                            cursor: pointer;
+                            transition: 
+                                background-color 0.5s ease,
+                                color 0.5s ease,
+                                filter 0.5s ease;
+            
+                        }
+                        .submit-button-error {
+                            background-color: yellow !important;
+                            color: black !important;
+                        }
+
+                        .submit-button-ok {
+                            background-color: green;
+                        }
+
+                        .submit-button:hover,
+                        .submit-button-error:hover,
+                        .submit-button-ok:hover {
+                            filter: brightness(0.7) !important;
+                        }
+                    }
+                }
+
+                
+            }
+
+            .login-google-box {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        
+    }
+}

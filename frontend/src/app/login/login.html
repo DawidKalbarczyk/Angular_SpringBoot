@@ -1,0 +1,45 @@
+<app-author-bar></app-author-bar>
+<app-login-corner></app-login-corner>
+<app-return-corner></app-return-corner>
+<div class="login-container">
+    <div class="login-content">
+        <div class="login-header-wrapper">
+            <h1>{{ type() === 'signin' ? ('LOGIN-PAGE.TITLE' | translate) : ('LOGIN-PAGE.TITLE2' | translate) }}</h1>
+        </div>
+        <div class="login-main">
+            <div class="login-email-box">
+                <h2>{{ type() === 'signin' ? ('LOGIN-PAGE.TITLE-SIGNUP' | translate) : ('LOGIN-PAGE.TITLE-SIGNIN' | translate) }}</h2>
+                <form (submit)="onSubmit($event, emailInputEl.value, nameInputEl.value, passInputEl.value)">
+                    <div class="input-group">
+                        <label>{{ ('LOGIN-PAGE.TITLE-IN1-TEXT' | translate) }}</label>
+                        <input type="email" #emailInputEl placeholder="{{ ('LOGIN-PAGE.TITLE-IN1-PLACEHOLDER' | translate) }}" (input)="emailInput.set(emailInputEl.value)"/>
+                    </div>
+                    <div class="input-group">
+                        <label>{{ ('LOGIN-PAGE.TITLE-IN2-TEXT' | translate) }}</label>
+                        <input type="text" #nameInputEl placeholder="{{ ('LOGIN-PAGE.TITLE-IN2-PLACEHOLDER' | translate) }}" (input)="nameInput.set(nameInputEl.value)"/>
+                    </div>
+                    <div class="input-group">
+                        <label>{{ ('LOGIN-PAGE.TITLE-IN3-TEXT' | translate) }}</label>
+                        <input type="password" #passInputEl placeholder="{{ ('LOGIN-PAGE.TITLE-IN3-PLACEHOLDER' | translate) }}" (input)="passInput.set(passInputEl.value)"/>
+                    </div>
+                    @if (errorMessage()) {
+                        <p class="error-msg">{{ errorMessage() }}</p>
+                    }
+                    <div class="button-wrapper">
+                         <button type="submit" class="submit-button" 
+                         [disabled]="!isFormFilled()"
+                         [class.submit-button-error]="errorMessage()"
+                         [class.submit-button-ok]="isFormFilled()">
+                            {{ type() === 'signin' ? ('LOGIN-PAGE.BUTTON-SIGNUP' | translate) : ('LOGIN-PAGE.BUTTON-SIGNIN' | translate) }}
+                        </button>
+                    </div>
+                   
+                </form>
+            </div>
+            <div class="login-google-box">
+
+            </div>
+        </div>
+        
+    </div>
+</div>
