@@ -24,10 +24,12 @@ export class Login implements OnInit {
   protected passInput = signal<string>('');
 
   public isFormFilled = computed(() =>
-    this.nameInput().trim().length > 0 &&
     this.emailInput().trim().length > 0 &&
-    this.passInput().trim().length > 0
+    this.passInput().trim().length > 0 &&
+    (this.type() !== 'signin' || this.nameInput().trim().length > 0)
   );
+
+  public LoginService = inject(LoginService);
 
 
 
@@ -38,21 +40,23 @@ export class Login implements OnInit {
 
   public errorMessage = signal<string>('');
 
-  onSubmit(event: Event, email: string, name: string, password: string) {
+  onSubmit(event: Event, email: string, password: string) {
     event.preventDefault();
     this.errorMessage.set(''); 
 
     if (this.type() === 'signin') {
-      this.loginService.registerWithEmail(email, name, password)
+      this.loginService.registerWithEmail(email, this.nameInput(), password)
         .then(() => this.router.navigate(['/']))
         .catch((error) => this.handleError(error.code));
     } else if (this.type() === 'login') {
-      this.loginService.loginWithEmail(email, name, password)
+      this.loginService.loginWithEmail(email, '', password)
         .then(() => this.router.navigate(['/']))
         .catch((error) => this.handleError(error.code));
     }
   }
-  private handleError(code: string) {
+  private handleError(error: { code?: string }) {
+    const code = error?.code;
+
     switch (code) {
       case 'auth/email-already-in-use':
         this.errorMessage.set('Ten adres e-mail jest już zajęty.');
@@ -69,7 +73,11 @@ export class Login implements OnInit {
         this.errorMessage.set('Nieprawidłowy e-mail lub hasło.');
         break;
       default:
-        this.errorMessage.set('Wystąpił błąd podczas logowania.');
+        this.errorMessage.set(
+          this.type() === 'signin'
+            ? 'Wystąpił błąd podczas rejestracji.'
+            : 'Wystąpił błąd podczas logowania.'
+        );
     }
   }
 }

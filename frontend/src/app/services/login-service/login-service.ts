@@ -1,9 +1,12 @@
 import { Service, signal, effect, OnDestroy, inject} from '@angular/core';
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, getAdditionalUserInfo } from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, getAdditionalUserInfo, deleteUser } from 'firebase/auth';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { firebaseApp } from '../../firebase.config';
 import { GeoserverService } from '../GeoserverService/geoserver-service';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { DarkMode } from '../dark-mode/dark-mode';
 
 
 const SESSION_TIMEOUT = 900000;
@@ -23,7 +26,7 @@ export class LoginService implements OnDestroy {
     public userData = signal<UserData | null>(this.readStoredUserData());
     private auth = getAuth(firebaseApp);
     private googleProvider = new GoogleAuthProvider();
-
+    private router = inject(Router);
     private inactivityTimeoutId: ReturnType<typeof setTimeout> | null = null;
     private activityListener = this.resetInactivityTimer.bind(this);
 
@@ -50,6 +53,7 @@ export class LoginService implements OnDestroy {
                 photoURL: result.user.photoURL
             };
             localStorage.setItem('userDataLocal', JSON.stringify(userDataLocal));
+            this.router.navigate(['/']);
             return result.user;
         } catch (error) {
             console.error('Error during login:', error);
@@ -75,18 +79,17 @@ export class LoginService implements OnDestroy {
 
 
 
-    registerWithEmailCore(email: string, password: string) {
+    async registerWithEmailCore(email: string, name: string, password: string) {
         return createUserWithEmailAndPassword(this.auth, email, password)
             .then((result) => {
-                console.log('User registered successfully:', result.user);
-                this.setUserData(result.user);
-                const userDataLocal = {
+                const appUserData: UserData = {
                     uid: result.user.uid,
                     email: result.user.email,
-                    displayName: result.user.displayName,
+                    displayName: name,
                     photoURL: result.user.photoURL
                 };
-                localStorage.setItem('userDataLocal', JSON.stringify(userDataLocal));
+                console.log('User registered successfully:', result.user);
+                this.setUserData(appUserData);
                 return result.user;
             })
             .catch((error) => {
@@ -96,14 +99,44 @@ export class LoginService implements OnDestroy {
     }
 
     public geoServerService = inject(GeoserverService);
+    private http = inject(HttpClient);
     async registerWithEmail(email: string, name: string, password: string) {
-        const userName = name;
-        const userData = await this.registerWithEmailCore(email, password);
-        this.setLoggedIn(true);
-        console.log('UserName:', userName);
-        console.log('UserId:', userData.uid);
-        await firstValueFrom(this.geoServerService.createUserData(userData.uid));
-        //kod do springboota wkładający do users
+        const userData = await this.registerWithEmailCore(email, name, password);
+
+        try {
+            await firstValueFrom(this.geoServerService.createUserData(userData.uid));
+            this.setLoggedIn(true);
+            console.log('UserName:', name);
+            console.log('UserId:', userData.uid);
+            console.log('UserEmail:', userData.email);
+            this.http.post('/pass/create-user', {
+                userId: userData.uid,
+                userEmail: userData.email,
+                userName: name,
+                photoURL: userData.photoURL
+            }).subscribe({
+                next: (response) => {
+                    console.log('User data sent to Spring Boot successfully:', response);
+                },
+                error: (error) => {
+                    console.error('Error sending user data to Spring Boot:', error);
+                }
+            });
+        } catch (error) {
+            try {
+                await deleteUser(userData);
+            } catch (deleteError) {
+                console.error('Could not roll back Firebase registration:', deleteError);
+            }
+            await signOut(this.auth).catch((signOutError) => {
+                console.error('Could not sign out after failed registration:', signOutError);
+            });
+            this.setLoggedIn(false);
+            this.userData.set(null);
+            localStorage.removeItem('userData');
+            localStorage.removeItem('userDataLocal');
+            throw error;
+        }
     }
 
     loginWithEmailCore(email: string, password: string) {

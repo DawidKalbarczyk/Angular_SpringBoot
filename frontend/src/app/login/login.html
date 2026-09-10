@@ -9,15 +9,18 @@
         <div class="login-main">
             <div class="login-email-box">
                 <h2>{{ type() === 'signin' ? ('LOGIN-PAGE.TITLE-SIGNUP' | translate) : ('LOGIN-PAGE.TITLE-SIGNIN' | translate) }}</h2>
-                <form (submit)="onSubmit($event, emailInputEl.value, nameInputEl.value, passInputEl.value)">
+                <form (submit)="onSubmit($event, emailInputEl.value, passInputEl.value)">
                     <div class="input-group">
                         <label>{{ ('LOGIN-PAGE.TITLE-IN1-TEXT' | translate) }}</label>
                         <input type="email" #emailInputEl placeholder="{{ ('LOGIN-PAGE.TITLE-IN1-PLACEHOLDER' | translate) }}" (input)="emailInput.set(emailInputEl.value)"/>
                     </div>
-                    <div class="input-group">
-                        <label>{{ ('LOGIN-PAGE.TITLE-IN2-TEXT' | translate) }}</label>
-                        <input type="text" #nameInputEl placeholder="{{ ('LOGIN-PAGE.TITLE-IN2-PLACEHOLDER' | translate) }}" (input)="nameInput.set(nameInputEl.value)"/>
-                    </div>
+                    @if (type() === 'signin') {
+                        <div class="input-group">
+                            <label>{{ ('LOGIN-PAGE.TITLE-IN2-TEXT' | translate) }}</label>
+                            <input type="text" #nameInputEl placeholder="{{ ('LOGIN-PAGE.TITLE-IN2-PLACEHOLDER' | translate) }}" (input)="nameInput.set(nameInputEl.value)"/>
+                        </div>
+                    }
+                    
                     <div class="input-group">
                         <label>{{ ('LOGIN-PAGE.TITLE-IN3-TEXT' | translate) }}</label>
                         <input type="password" #passInputEl placeholder="{{ ('LOGIN-PAGE.TITLE-IN3-PLACEHOLDER' | translate) }}" (input)="passInput.set(passInputEl.value)"/>
@@ -37,7 +40,19 @@
                 </form>
             </div>
             <div class="login-google-box">
-
+                <div class="google-emblem" aria-hidden="true">
+                    <img src="./images/icons/google.png" alt="" draggable="false"/>
+                </div>
+                <div class="google-copy">
+                    <span class="google-eyebrow">{{'LOGIN-PAGE.HEADER' | translate}}</span>
+                    <h2>{{ type() === 'signin' ? ('LOGIN-PAGE.TITLE-SIGNUP-GOOGLE' | translate) : ('LOGIN-PAGE.TITLE-SIGNIN-GOOGLE' | translate) }}</h2>
+                    <p>{{ type() === 'signin' ? ('LOGIN-PAGE.HEADER-TEXT' | translate) : ('LOGIN-PAGE.HEADER-TEXT-LOGIN' | translate) }}</p>
+                </div>
+                <button class="google-button" (click)="LoginService.componentLoginGoogle()">
+                    <span aria-hidden="true">--&gt;</span>
+                    <span>{{ type() === 'signin' ? ('LOGIN-PAGE.BUTTON-HEADER' | translate) : ('LOGIN-PAGE.BUTTON-HEADER-LOGIN' | translate) }}</span>
+                    <span aria-hidden="true">&lt;--</span>
+                </button>
             </div>
         </div>
         

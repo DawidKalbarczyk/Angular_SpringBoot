@@ -30,7 +30,10 @@
             padding: 0.25rem 5rem;
             border-radius: 1.5rem;
             height: 5rem;
-            background-color: $secondary-color-light;
+            background:
+                radial-gradient(circle at 12% 50%, rgba(255, 137, 96, 0.2), transparent 38%),
+                radial-gradient(circle at 88% 50%, rgba(255, 207, 72, 0.2), transparent 38%),
+                linear-gradient(145deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.08));
 
             > h1 {
                 color: $text-color-light;
@@ -58,6 +61,25 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
+                position: relative;
+                overflow: hidden;
+                background:
+                    radial-gradient(circle at 8% 8%, rgba(255, 137, 96, 0.25), transparent 34%),
+                    linear-gradient(145deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.08));
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    inset: 0 0 auto;
+                    height: 0.35rem;
+                    background: linear-gradient(90deg, #ff6b6b 0 25%, #ff9f43 25% 50%, #feca57 50% 75%, #ee5253 75%);
+                }
+
+                > h2,
+                form {
+                    position: relative;
+                    z-index: 1;
+                }
                 
                 .error-msg {
                     text-align: center;
@@ -116,7 +138,10 @@
                             transition: 
                                 background-color 0.5s ease,
                                 color 0.5s ease,
-                                filter 0.5s ease;
+                                filter 0.5s ease,
+                                transform 0.2s ease,
+                                box-shadow 0.2s ease;
+                            box-shadow: 0 0.65rem 1.5rem rgba(38, 67, 92, 0.14);
             
                         }
                         .submit-button-error {
@@ -132,6 +157,14 @@
                         .submit-button-error:hover,
                         .submit-button-ok:hover {
                             filter: brightness(0.7) !important;
+                            transform: translateY(-0.15rem);
+                            box-shadow: 0 0.9rem 1.8rem rgba(38, 67, 92, 0.2);
+                        }
+
+                        .submit-button:active,
+                        .submit-button-error:active,
+                        .submit-button-ok:active {
+                            transform: translateY(0);
                         }
                     }
                 }
@@ -144,6 +177,135 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
+                position: relative;
+                overflow: hidden;
+                padding: 3rem;
+                box-sizing: border-box;
+                background:
+                    radial-gradient(circle at 90% 10%, rgba(255, 207, 72, 0.28), transparent 34%),
+                    linear-gradient(145deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.08));
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    inset: 0 0 auto;
+                    height: 0.35rem;
+                    background: linear-gradient(90deg, #4285f4 0 25%, #34a853 25% 50%, #fbbc05 50% 75%, #ea4335 75%);
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: 13rem;
+                    height: 13rem;
+                    right: -6rem;
+                    bottom: -7rem;
+                    border: 1px solid rgba(66, 133, 244, 0.18);
+                    border-radius: 50%;
+                    box-shadow: 0 0 0 1.5rem rgba(66, 133, 244, 0.05), 0 0 0 3rem rgba(66, 133, 244, 0.035);
+                }
+
+                .google-emblem {
+                    display: grid;
+                    place-items: center;
+                    width: 4.5rem;
+                    height: 4.5rem;
+                    margin-bottom: 1.5rem;
+                    border: 1px solid rgba(66, 133, 244, 0.2);
+                    border-radius: 1.4rem;
+                    background: rgba(255, 255, 255, 0.72);
+                    box-shadow: 0 0.8rem 1.8rem rgba(38, 67, 92, 0.12);
+
+                    img {
+                        width: 2.4rem;
+                        height: 2.4rem;
+                    }
+                }
+
+                .google-copy {
+                    position: relative;
+                    z-index: 1;
+                    text-align: center;
+
+                    .google-eyebrow {
+                        display: block;
+                        margin-bottom: 0.75rem;
+                        color: rgba(31, 55, 72, 0.62);
+                        font-size: 0.7rem;
+                        font-weight: 700;
+                        letter-spacing: 0.12rem;
+                    }
+
+                    h2 {
+                        margin: 0;
+                    }
+
+                    p {
+                        max-width: 18rem;
+                        margin: 0.9rem auto 2rem;
+                        color: rgba(31, 55, 72, 0.72);
+                        line-height: 1.5;
+                    }
+                }
+
+                .google-button {
+                    position: relative;
+                    z-index: 1;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.75rem;
+                    min-width: min(100%, 17rem);
+                    padding: 0.85rem 1.4rem;
+                    border: 1px solid rgba(66, 133, 244, 0.18);
+                    border-radius: 0.75rem;
+                    background: rgba(255, 255, 255, 0.94);
+                    color: #263746;
+                    box-shadow: 0 0.65rem 1.5rem rgba(38, 67, 92, 0.14);
+                    cursor: pointer;
+                    font: inherit;
+                    font-weight: 700;
+                    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+                    &:hover {
+                        transform: translateY(-0.15rem);
+                        background-color: white;
+                        box-shadow: 0 0.9rem 1.8rem rgba(38, 67, 92, 0.2);
+                    }
+
+                    &:active {
+                        transform: translateY(0);
+                    }
+
+                    &:focus-visible {
+                        outline: 3px solid rgba(66, 133, 244, 0.35);
+                        outline-offset: 3px;
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 52rem) {
+            padding-right: 1.5rem;
+            padding-left: 1.5rem;
+
+            .login-main {
+                column-gap: 1.5rem;
+            }
+
+            .login-google-box {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 40rem) {
+            width: 100%;
+            padding-right: 1rem;
+            padding-left: 1rem;
+
+            .login-main {
+                grid-template-columns: 1fr;
+                row-gap: 1.5rem;
             }
         }
 
