@@ -57,6 +57,15 @@
     "TITLE-IN3-TEXT": "Password",
     "TITLE-IN3-PLACEHOLDER": "Enter your password",
     "BUTTON-SIGNUP": "Sign Up",
-    "BUTTON-SIGNIN": "Log In"
+    "BUTTON-SIGNIN": "Log In",
+    "TITLE-SIGNUP-GOOGLE": "Sign Up with Google",
+    "TITLE-SIGNIN-GOOGLE": "Log In with Google",
+    "BUTTON-SIGNUP-GOOGLE": "Google",
+    "BUTTON-SIGNIN-GOOGLE": "Google",
+    "HEADER": "GOOGLE ACCOUNT",
+    "HEADER-TEXT": "Sign up with one click.",
+    "HEADER-TEXT-LOGIN": "Log in with one click.",
+    "BUTTON-HEADER": "Sign Up",
+    "BUTTON-HEADER-LOGIN": "Log In"
   }
 }

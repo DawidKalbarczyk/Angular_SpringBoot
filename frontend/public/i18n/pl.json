@@ -57,6 +57,15 @@
     "TITLE-IN3-TEXT": "Hasło",
     "TITLE-IN3-PLACEHOLDER": "Wpisz swoje hasło",
     "BUTTON-SIGNUP": "Zarejestruj się",
-    "BUTTON-SIGNIN": "Zaloguj się"
+    "BUTTON-SIGNIN": "Zaloguj się",
+    "TITLE-SIGNUP-GOOGLE": "Zarejestruj się z Google",
+    "TITLE-SIGNIN-GOOGLE": "Zaloguj się z Google",
+    "BUTTON-SIGNUP-GOOGLE": "Google",
+    "BUTTON-SIGNIN-GOOGLE": "Google",
+    "HEADER": "KONTO GOOGLE",
+    "HEADER-TEXT": "Zarejestruj się jednym kliknięciem.",
+    "HEADER-TEXT-LOGIN": "Zaloguj się jednym kliknięciem.",
+    "BUTTON-HEADER": "Zarejestruj",
+    "BUTTON-HEADER-LOGIN": "Zaloguj się"
   }
 }
