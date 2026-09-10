@@ -41,6 +41,31 @@ export class LoginService implements OnDestroy {
 
             if (additionalUserInfo?.isNewUser) {
                 await firstValueFrom(this.geoServerService.createUserData(result.user.uid));
+
+                try {
+                    await firstValueFrom(this.http.post('/pass/create-user', {
+                        userId: result.user.uid,
+                        userEmail: result.user.email,
+                        userName: result.user.displayName,
+                        photoURL: result.user.photoURL
+                    }, {responseType: 'text'}));
+                    console.log('User data sent to Spring Boot successfully');
+                } catch (springError) {
+                    console.error('Error sending user data to Spring Boot:', springError);
+                    try {
+                        await deleteUser(result.user);
+                    } catch (deleteError) {
+                        console.error('Could not roll back Firebase registration:', deleteError);
+                    }
+                    await signOut(this.auth).catch((signOutError) => {
+                        console.error('Could not sign out after failed registration:', signOutError);
+                    });
+                    this.setLoggedIn(false);
+                    this.userData.set(null);
+                    localStorage.removeItem('userData');
+                    localStorage.removeItem('userDataLocal');
+                    throw springError;
+                }
             }
 
             this.setLoggedIn(true);
@@ -109,12 +134,13 @@ export class LoginService implements OnDestroy {
             console.log('UserName:', name);
             console.log('UserId:', userData.uid);
             console.log('UserEmail:', userData.email);
+            console.log('UserPhotoURL:', userData.photoURL);    
             this.http.post('/pass/create-user', {
                 userId: userData.uid,
                 userEmail: userData.email,
                 userName: name,
                 photoURL: userData.photoURL
-            }).subscribe({
+            }, {responseType: 'text'}).subscribe({
                 next: (response) => {
                     console.log('User data sent to Spring Boot successfully:', response);
                 },
