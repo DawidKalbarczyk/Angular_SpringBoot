@@ -35,6 +35,19 @@ public class CreateController {
         }
     }
 
+    @PostMapping("/create-user-data")
+    public ResponseEntity<?> createUserData(@RequestParam String userId) {
+        try {
+            geoServerService.createWorkspace(userId);
+            geoServerService.createDatastore(userId);
+
+            return ResponseEntity.ok("User data created successfully for id: " + userId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating user data: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/create-workspace")
     public ResponseEntity<?> createWorkspace(@RequestParam String userId) {
         try {

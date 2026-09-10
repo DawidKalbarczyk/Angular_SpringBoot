@@ -5,6 +5,7 @@ import { ReturnCorner } from '../global-components/return-corner/return-corner';
 import { Router } from '@angular/router';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DarkMode } from '../services/dark-mode/dark-mode';
+import { LoginService } from '../services/login-service/login-service';
 
 @Component({
   selector: 'app-user',
@@ -14,18 +15,18 @@ import { DarkMode } from '../services/dark-mode/dark-mode';
   styleUrl: './user.scss',
 })
 export class User {
-  public isLoggedIn: boolean = true;
+  public isLoggedIn = inject(LoginService).isLoggedIn;
   private router: Router = inject(Router);
   public url: string = this.router.url;
   public redirectUrl: boolean = false;
   constructor() {
-    if (this.isLoggedIn === true && this.router.url === '/user') {
+    if (this.isLoggedIn() === true && this.router.url === '/user') {
       return;
-    } else if (this.isLoggedIn === false && this.router.url === '/user') {
+    } else if (this.isLoggedIn() === false && this.router.url === '/user') {
       this.redirectUrl = true;
       setTimeout(() => {
         this.router.navigate(['/']);
-      }, 3000);
+      }, 3000); //3s
     }
   }
 

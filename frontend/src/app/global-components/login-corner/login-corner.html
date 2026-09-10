@@ -3,12 +3,13 @@
         <img src="./images/icons/user.png" alt="User" draggable="false"/>
     </div>
     <div class="button-container">
-        @if (isLoggedIn) {
-            <button class="first-button" routerLink="user">Settings</button>
-            <button class="second-button">Log Out</button>
+        @if (isLoggedIn()) {
+            <button class="first-button" routerLink="/user">{{'LOGIN.LOGIN-SETTINGS' | translate}}</button>
+            <button class="second-button" routerLink="/" (click)="logoutWithGoogle()"> {{'LOGIN.LOGIN-LOGOUT' | translate}}</button>
+
         } @else {
-            <button class="first-button">Sign In</button>
-            <button class="second-button">Log In</button>
+            <button class="first-button" routerLink="/login" [queryParams]="{type: 'signin'}">{{'LOGIN.LOGIN-REGISTER' | translate}}</button>
+            <button class="second-button" routerLink="/login" [queryParams]="{type: 'login'}">{{'LOGIN.LOGIN-LOGIN' | translate}}</button>
         }
         
     </div>
