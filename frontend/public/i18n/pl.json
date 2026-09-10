@@ -1,0 +1,62 @@
+{
+  "HOME": {
+    "SELECTION1": "Geoportal miejscowości",
+    "SELECTION2": "Historia działań użytkownika",
+    "SELECTION3": "Przeglądanie danych miejscowości",
+    "POPUP": {
+        "TITLE": "HISTORIA DZIAŁAŃ",
+        "TITLE2": "Sekcja dla zalogowanych",
+        "TITLE3": "Zaloguj się lub utwórz konto, aby zobaczyć historię swoich działań"
+    }
+  },
+  "LOGIN": {
+    "LOGIN-REGISTER": "Rejestracja",
+    "LOGIN-LOGIN": "Zaloguj się",
+    "LOGIN-SETTINGS": "Ustawienia",
+    "LOGIN-LOGOUT": "Wyloguj się"
+  },
+  "AUTHOR": {
+    "AUTHOR-NAME": "Wykonawca: Dawid Kalbarczyk",
+    "AUTHOR-TEXT": "Projekt wykonany w celu samokształcenia."
+  },
+  "GEOPORTAL": {
+    "ANALYSIS": "Analizy",
+    "MEASURE": "Mierzenie",
+    "SAVE": "Zapis analizy",
+    "BROWSER": "Wyszukiwarka",
+    "BROWSER-CONTENT": {
+        "TEXT": "Wyszukaj...",
+        "TEXT2": "Brak wyników wyszukiwania"
+    },
+    "BASEMAP": "Mapa bazowa",
+    "BASEMAP-CONTENT": {
+        "LAY1": "Mapa OpenStreetMap",
+        "LAY2": "Ortofotomapa",
+        "LAY3": "Budynki (duża skala)"
+    },
+    "INFO": "Info",
+    "LAYERS": "Warstwy",
+    "INFO-CONTENT": {
+        "LAY1": "Miejscowości",
+        "LAY2": "Granice miast",
+        "LAY3": "Granice gmin",
+        "LAY4": "Granice powiatów",
+        "LAY5": "Granice województw",
+        "LAY6": "Granice państwa"
+    }
+  },
+  "LOGIN-PAGE": {
+    "TITLE": "Zarejestruj się",
+    "TITLE2": "Zaloguj się",
+    "TITLE-SIGNUP": "Klasyczna rejestracja",
+    "TITLE-SIGNIN": "Klasyczne logowanie",
+    "TITLE-IN1-TEXT": "Adres e-mail",
+    "TITLE-IN1-PLACEHOLDER": "Wpisz swój adres e-mail",
+    "TITLE-IN2-TEXT": "Nazwa użytkownika",
+    "TITLE-IN2-PLACEHOLDER": "Wpisz swoją nazwę użytkownika",
+    "TITLE-IN3-TEXT": "Hasło",
+    "TITLE-IN3-PLACEHOLDER": "Wpisz swoje hasło",
+    "BUTTON-SIGNUP": "Zarejestruj się",
+    "BUTTON-SIGNIN": "Zaloguj się"
+  }
+}

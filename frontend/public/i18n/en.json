@@ -1,0 +1,62 @@
+{
+  "HOME": {
+    "SELECTION1": "Locality geoportal",
+    "SELECTION2": "User activity history",
+    "SELECTION3": "Browse locality data",
+    "POPUP": {
+        "TITLE": "ACTIVITY HISTORY",
+        "TITLE2": "Exclusive section for logged-in users",
+        "TITLE3": "Sign in or create an account to view your activity history"
+    }
+  },
+  "LOGIN": {
+    "LOGIN-REGISTER": "Sign Up",
+    "LOGIN-LOGIN": "Login",
+    "LOGIN-SETTINGS": "Settings",
+    "LOGIN-LOGOUT": "Log Out"
+  },
+  "AUTHOR": {
+    "AUTHOR-NAME": "Developer: Dawid Kalbarczyk",
+    "AUTHOR-TEXT": "Project created for self-education purposes."
+  },
+  "GEOPORTAL": {
+    "ANALYSIS": "Analysis",
+    "MEASURE": "Measure",
+    "SAVE": "Save analisys",
+    "BROWSER": "Browser",
+    "BROWSER-CONTENT": {
+        "TEXT": "Search...",
+        "TEXT2": "No search results"
+    },
+    "BASEMAP": "Basemap",
+    "BASEMAP-CONTENT": {
+        "LAY1": "OpenStreetMap Map",
+        "LAY2": "Ortophotomap",
+        "LAY3": "Buildings (large scale)"
+    },
+    "INFO": "Info",
+    "LAYERS": "Layers",
+    "INFO-CONTENT": {
+        "LAY1": "Localities",
+        "LAY2": "Cities boundaries",
+        "LAY3": "Municipalities boundaries",
+        "LAY4": "Counties boundaries",
+        "LAY5": "Voivodeships boundaries",
+        "LAY6": "Country boundaries"
+    }
+  },
+  "LOGIN-PAGE": {
+    "TITLE": "Sign Up",
+    "TITLE2": "Sign In",
+    "TITLE-SIGNUP": "Classic Sign Up",
+    "TITLE-SIGNIN": "Classic Log In",
+    "TITLE-IN1-TEXT": "Email Address",
+    "TITLE-IN1-PLACEHOLDER": "Enter your email address",
+    "TITLE-IN2-TEXT": "Username",
+    "TITLE-IN2-PLACEHOLDER": "Enter your username",
+    "TITLE-IN3-TEXT": "Password",
+    "TITLE-IN3-PLACEHOLDER": "Enter your password",
+    "BUTTON-SIGNUP": "Sign Up",
+    "BUTTON-SIGNIN": "Log In"
+  }
+}
