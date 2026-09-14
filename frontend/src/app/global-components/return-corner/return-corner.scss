@@ -27,11 +27,14 @@
         border: 1px solid black;
         border-radius: 50%;
         padding: 0.35rem;
-        transition: background-color 0.3s ease;
+        transition: 
+            transform 0.3s ease,
+            background-color 0.3s ease;
 
         &:hover {
             cursor: pointer;
             background-color: $secondary-color-light;
+            transform: scale(1.05);
         }
 
         img {
