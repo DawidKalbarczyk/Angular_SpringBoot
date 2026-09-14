@@ -1,5 +1,6 @@
 import { Service, signal, effect, OnDestroy, inject} from '@angular/core';
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, getAdditionalUserInfo, deleteUser } from 'firebase/auth';
+// Importuje Firebase Authentication oraz obserwowanie stanu sesji.
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, getAdditionalUserInfo, deleteUser, onAuthStateChanged, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { firebaseApp } from '../../firebase.config';
 import { GeoserverService } from '../GeoserverService/geoserver-service';
@@ -22,18 +23,24 @@ interface UserData {
 
 @Service()
 export class LoginService implements OnDestroy {
-    public isLoggedIn = signal<boolean>(this.readStorageLoginState() || false);
-    public userData = signal<UserData | null>(this.readStoredUserData());
+    // Stan zaczyna się jako false, bo localStorage nie jest dowodem zalogowania.
+    public isLoggedIn = signal<boolean>(false);
+    // Dane profilu są puste do czasu potwierdzenia sesji przez Firebase.
+    public userData = signal<UserData | null>(null);
     private auth = getAuth(firebaseApp);
     private googleProvider = new GoogleAuthProvider();
     private router = inject(Router);
     private inactivityTimeoutId: ReturnType<typeof setTimeout> | null = null;
     private activityListener = this.resetInactivityTimer.bind(this);
+    // Przechowuje funkcję wyłączającą obserwatora Firebase.
+    private unsubscribeAuthState: (() => void) | null = null;
 
+    // Otwiera logowanie Google przez Firebase.
     loginWithGoogle() {
         return signInWithPopup(this.auth, this.googleProvider);
     }
 
+    // Kończy logowanie Google i tworzy dane użytkownika po pierwszym logowaniu.
     async componentLoginGoogle() {
         try {
             const result = await this.loginWithGoogle();
@@ -43,9 +50,8 @@ export class LoginService implements OnDestroy {
                 await firstValueFrom(this.geoServerService.createUserData(result.user.uid));
 
                 try {
+                    // Wysyła do backendu tylko dane profilu, bez UID i e-maila jako dowodu tożsamości.
                     await firstValueFrom(this.http.post('/pass/create-user', {
-                        userId: result.user.uid,
-                        userEmail: result.user.email,
                         userName: result.user.displayName,
                         photoURL: result.user.photoURL
                     }, {responseType: 'text'}));
@@ -70,6 +76,7 @@ export class LoginService implements OnDestroy {
 
             this.setLoggedIn(true);
             console.log('User logged in successfully:', result.user);
+            await this.logFirebaseTokenStatus(result.user);
             this.setUserData(result.user);
             const userDataLocal = {
                 uid: result.user.uid,
@@ -86,6 +93,7 @@ export class LoginService implements OnDestroy {
         }
     }
 
+    // Wylogowuje użytkownika z Firebase i czyści lokalny stan interfejsu.
     logoutWithGoogle() {
         return signOut(this.auth)
             .then(() => {
@@ -104,6 +112,7 @@ export class LoginService implements OnDestroy {
 
 
 
+    // Tworzy konto e-mail/hasło w Firebase bez wysyłania hasła do własnego backendu.
     async registerWithEmailCore(email: string, name: string, password: string) {
         return createUserWithEmailAndPassword(this.auth, email, password)
             .then((result) => {
@@ -125,6 +134,7 @@ export class LoginService implements OnDestroy {
 
     public geoServerService = inject(GeoserverService);
     private http = inject(HttpClient);
+    // Rejestruje konto i tworzy powiązane zasoby użytkownika.
     async registerWithEmail(email: string, name: string, password: string) {
         const userData = await this.registerWithEmailCore(email, name, password);
 
@@ -135,9 +145,8 @@ export class LoginService implements OnDestroy {
             console.log('UserId:', userData.uid);
             console.log('UserEmail:', userData.email);
             console.log('UserPhotoURL:', userData.photoURL);    
+            // Interceptor dołączy token Firebase do tego żądania automatycznie.
             this.http.post('/pass/create-user', {
-                userId: userData.uid,
-                userEmail: userData.email,
                 userName: name,
                 photoURL: userData.photoURL
             }, {responseType: 'text'}).subscribe({
@@ -165,6 +174,7 @@ export class LoginService implements OnDestroy {
         }
     }
 
+    // Loguje użytkownika e-mailem przez Firebase.
     loginWithEmailCore(email: string, password: string) {
         return signInWithEmailAndPassword(this.auth, email, password)
             .then((result) => {
@@ -186,18 +196,35 @@ export class LoginService implements OnDestroy {
             });
     }
 
+    // Udostępnia wyższy poziom logowania e-mailowego dla komponentu logowania.
     async loginWithEmail(email: string, name: string, password: string) {
         const userData = await this.loginWithEmailCore(email, password);
         this.setLoggedIn(true);
         console.log('UserName:', name);
         console.log('UserId:', userData.uid);
 
-        //kod przechodzący do springboota
+        // Pobiera token po zwykłym logowaniu e-mailowym.
+        await this.logFirebaseTokenStatus(userData);
+
+        // Nie wywołuje create-user, ponieważ logowanie istniejącego konta nie jest rejestracją.
+        console.log('[Firebase] Logowanie e-mail zakończone');
+    }
+
+    // Pobiera token tylko do potwierdzenia diagnostycznego; jego treść nie jest logowana.
+    private async logFirebaseTokenStatus(user: UserData) {
+        const token = await this.auth.currentUser?.getIdToken();
+
+        console.log('[Firebase] Token po zalogowaniu:', {
+            uid: user.uid,
+            tokenReceived: !!token,
+            tokenLength: token?.length ?? 0
+        });
     }
 
 
 
 
+    // Aktualizuje sygnał stanu sesji i lokalny timer bezczynności.
     private setLoggedIn(value: boolean) {
         this.isLoggedIn.set(value);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
@@ -212,6 +239,7 @@ export class LoginService implements OnDestroy {
         localStorage.setItem(STORAGE_TIMESTAMP_KEY, Date.now().toString());
     }
 
+    // Ustawia dane profilu otrzymane z Firebase.
     private setUserData(user: UserData) {
         this.userData.set(user);
         localStorage.setItem('userData', JSON.stringify(user));
@@ -245,6 +273,7 @@ export class LoginService implements OnDestroy {
         return true;
     }
 
+    // Odświeża licznik wylogowania po bezczynności użytkownika.
     private resetInactivityTimer() {
         if (!this.isLoggedIn()) return;
         this.updateLastActivity();
@@ -259,10 +288,12 @@ export class LoginService implements OnDestroy {
         }, Math.max(remaining, 0));
     }
 
+    // Rozpoczyna obserwowanie ruchu myszy.
     private startActivityTracking() {
         document.addEventListener('mousemove', this.activityListener, {passive: true});
     }
 
+    // Usuwa obserwatora ruchu i zatrzymuje timer.
     private stopActivityTracking() {
         document.removeEventListener('mousemove', this.activityListener);
         if (this.inactivityTimeoutId !== null) {
@@ -271,7 +302,44 @@ export class LoginService implements OnDestroy {
         }
     }
 
+    // Konstruktor uruchamia obserwowanie prawdziwej sesji Firebase.
     constructor() {
+        // Firebase jest jedynym źródłem informacji, czy sesja naprawdę istnieje.
+
+        setPersistence(this.auth, browserSessionPersistence)
+        .then(() => {
+            console.log('[Firebase] Ustawiono przetrwanie sesji w przeglądarce (browserSessionPersistence)');
+        })
+        .catch((error) => {
+            console.error('[Firebase] Błąd ustawiania przetrwania sesji:', error);
+        });
+        this.unsubscribeAuthState = onAuthStateChanged(this.auth, (user) => {
+            // Ustawia stan zalogowania wyłącznie na podstawie wyniku Firebase.
+            this.setLoggedIn(!!user);
+            // Potwierdza w konsoli, czy Firebase ma aktywną sesję.
+            console.log('[Firebase] Stan sesji:', user ? 'ZALOGOWANY' : 'WYLOGOWANY');
+            // Pokazuje bezpieczne dane diagnostyczne zalogowanego użytkownika.
+            if (user) {
+                console.log('[Firebase] Zalogowany użytkownik:', {
+                    uid: user.uid,
+                    email: user.email,
+                    provider: user.providerData.map((provider) => provider.providerId)
+                });
+            }
+            // Przepisuje dane użytkownika z obiektu Firebase albo czyści je po wylogowaniu.
+            this.userData.set(user ? {
+                // UID pochodzi bezpośrednio z Firebase.
+                uid: user.uid,
+                // E-mail pochodzi bezpośrednio z Firebase.
+                email: user.email,
+                // Nazwa pochodzi bezpośrednio z Firebase.
+                displayName: user.displayName,
+                // Zdjęcie pochodzi bezpośrednio z Firebase.
+                photoURL: user.photoURL
+            } : null);
+        });
+
+        // Reaguje na zmianę sygnału isLoggedIn i uruchamia albo zatrzymuje licznik bezczynności.
         effect(() => {
             if (this.isLoggedIn()) {
                 this.startActivityTracking();
@@ -282,7 +350,9 @@ export class LoginService implements OnDestroy {
         })
     }
 
+    // Sprząta obserwatora Firebase i eventy przy niszczeniu serwisu.
     ngOnDestroy() {
+        this.unsubscribeAuthState?.();
         this.stopActivityTracking();
     }
 }
