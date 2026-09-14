@@ -4,6 +4,7 @@ x-environment:
  - &env-postgres-password POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
  - &env-geoserver-password GEOSERVER_ADMIN_PASSWORD=${GEOSERVER_ADMIN_PASSWORD}
  - &env-geoserver-user GEOSERVER_ADMIN_USER=${GEOSERVER_ADMIN_USER}
+ - &env-firebase-service-account-json-base64 FIREBASE_SERVICE_ACCOUNT_JSON_BASE64=${FIREBASE_SERVICE_ACCOUNT_JSON_BASE64}
 
 
 services:
@@ -56,6 +57,7 @@ services:
       - *env-postgres-password
       - *env-geoserver-user
       - *env-geoserver-password
+      - *env-firebase-service-account-json-base64
     ports:
       - "${SPRINGBOOT_PORT}:10000"
     networks:
