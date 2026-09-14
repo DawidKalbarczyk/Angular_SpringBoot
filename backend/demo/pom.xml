@@ -27,7 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>26</java.version>
+		<java.version>21</java.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -47,6 +47,29 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc</artifactId>
+		</dependency>
+		<!-- Dodaje mechanizmy Spring Security do ochrony endpointów. -->
+		<dependency>
+			<!-- Określa grupę właściciela biblioteki. -->
+			<groupId>org.springframework.boot</groupId>
+			<!-- Wskazuje moduł Spring Security. -->
+			<artifactId>spring-boot-starter-security</artifactId>
+			<!-- Wersję dobiera Spring Boot parent. -->
+		</dependency>
+		<!-- Dodaje serwerowe SDK Firebase do weryfikacji ID tokenów. -->
+		<dependency>
+			<!-- Określa grupę Firebase Admin SDK. -->
+			<groupId>com.google.firebase</groupId>
+			<!-- Wskazuje bibliotekę administracyjną Firebase. -->
+			<artifactId>firebase-admin</artifactId>
+			<!-- Ustala konkretną wersję biblioteki. -->
+			<version>9.7.0</version>
+			<!-- Kończy deklarację zależności. -->
+		</dependency>
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-apache-v2</artifactId>
+			<version>1.44.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
