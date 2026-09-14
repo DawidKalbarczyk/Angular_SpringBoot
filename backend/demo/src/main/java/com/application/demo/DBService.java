@@ -90,6 +90,9 @@ public class DBService {
 
     public boolean updateUserEmail(String userId, String email) throws FirebaseAuthException {
         // Przygotowuje żądanie Firebase dla UID odczytanego z tokenu.
+        if (checkIfEmailTaken(email, userId)) {
+            return true;
+        }; // Sprawdza, czy e-mail jest już zajęty przez innego użytkownika
         UserRecord.UpdateRequest firebaseUpdate = new UserRecord.UpdateRequest(userId)
             // Aktualizuje e-mail w Firebase Authentication.
             .setEmail(email);
