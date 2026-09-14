@@ -19,7 +19,14 @@ div, button {
 
             &:hover {
             background-color: $secondary-color-dark !important;
+            }
         }
+        .second-button {
+            background-color: $secondary-color-dark !important;
+
+            &:hover {
+                background-color: $buttons-color !important;
+            }
         }
     }
 }
