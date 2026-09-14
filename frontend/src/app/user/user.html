@@ -10,29 +10,32 @@
     } @else {
         <div class="user-ui">
             <div class="user-settings">
-                <div><div>Zmień nazwę użytkownika</div></div>
-                <div><div>Zmień e-mail</div></div>
-                <div><div>Zmień hasło</div></div>
-                <div><div>Zmień zdjęcie profilowe</div></div>
-                <div><div>Zapamiętaj wybrany motyw</div></div>
-                <div><div>Usuń zdjęcie profilowe</div></div>
-                <div><div>Usuń na stałe swoje konto</div></div>
+                <div><div>{{ 'USER-SETTINGS.OPTION1' | translate }}</div></div>
+                <div><div>{{ 'USER-SETTINGS.OPTION2' | translate }}</div></div>
+                <div><div>{{ 'USER-SETTINGS.OPTION3' | translate }}</div></div>
+                <div><div>{{ 'USER-SETTINGS.OPTION4' | translate }}</div></div>
+                <div><div>{{ 'USER-SETTINGS.OPTION5' | translate }}</div></div>
+                <div><div>{{ 'USER-SETTINGS.OPTION6' | translate }}</div></div>
+                <div><div>{{ 'USER-SETTINGS.OPTION7' | translate }}</div></div>
             </div>
             <div class="user-info">
                 <div class="user-pic-container">
-                    <div class="user-pic-wrapper">
-                        <img [src]="userData()?.photoURL || './images/icons/user.png'" alt="User" draggable="false"/>
+                    <div class="user-pic-wrapper" 
+                    [class.user-pic-wrapper-photo-existsing]="hasPhoto() === true"
+                    [class.user-pic-wrapper-dark]="darkMode() && (hasPhoto() === false)">
+                        <img [src]="userData()?.photoURL || './images/icons/user.png'" alt="User" draggable="false"
+                        />
                     </div>
                 </div>
                 <div class="user-details">
-                    <p>Nazwa użytkownika</p>
+                    <p>{{ 'USER-SETTINGS.USER-INFO.TITLE1' | translate }}</p>
                     <p>{{ userData()?.displayName }}</p>
-                    <p>E-mail</p>
+                    <p>{{ 'USER-SETTINGS.USER-INFO.TITLE2' | translate }}</p>
                     <p>{{ userData()?.email }}</p>
                 </div>
                 <div class="user-button-container">
                     <button>
-                        Log Out
+                        {{ 'USER-SETTINGS.USER-INFO.BUTTON' | translate }}
                     </button>
                 </div>
                 <!-- Zrób tak, aby wszystko było wkłądane do bazy z opcjonalnym zdjęciem profilowym, 

@@ -67,5 +67,19 @@
     "HEADER-TEXT-LOGIN": "Zaloguj się jednym kliknięciem.",
     "BUTTON-HEADER": "Zarejestruj",
     "BUTTON-HEADER-LOGIN": "Zaloguj się"
+  },
+  "USER-SETTINGS": {
+    "OPTION1": "Zmień nazwę użytkownika",
+    "OPTION2": "Zmień e-mail",
+    "OPTION3": "Zmień hasło",
+    "OPTION4": "Zmień zdjęcie profilowe",
+    "OPTION5": "ZAPAMIETAJ WYBRANY MOTYW DO ZMIANY",
+    "OPTION6": "Usuń zdjęcie profilowe",
+    "OPTION7": "Usuń na stałe swoje konto",
+    "USER-INFO": {
+      "TITLE1": "Nazwa użytkownika",
+      "TITLE2": "E-mail",
+      "BUTTON": "Wyloguj się"
+    }
   }
 }

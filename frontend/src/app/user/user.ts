@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { AuthorBar } from '../global-components/author-bar/author-bar';
 import { LoginCorner } from '../global-components/login-corner/login-corner';
 import { ReturnCorner } from '../global-components/return-corner/return-corner';
@@ -7,11 +7,12 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DarkMode } from '../services/dark-mode/dark-mode';
 import { LoginService } from '../services/login-service/login-service';
 import { HttpClient } from '@angular/common/http';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AuthorBar, LoginCorner, ReturnCorner, MatProgressSpinnerModule],
+  imports: [AuthorBar, LoginCorner, ReturnCorner, MatProgressSpinnerModule, TranslatePipe],
   templateUrl: './user.html',
   styleUrl: './user.scss',
 })
@@ -22,6 +23,8 @@ export class User {
   private router: Router = inject(Router);
   public url: string = this.router.url;
   public redirectUrl: boolean = false;
+  public darkMode = inject(DarkMode).isDarkMode;
+  public hasPhoto = computed(() => !!this.userData()?.photoURL);
   constructor() {
     if (this.isLoggedIn() === true && this.router.url === '/user') {
       return;
@@ -33,5 +36,4 @@ export class User {
     }
   }
 
-  public darkMode = inject(DarkMode).isDarkMode;
 }

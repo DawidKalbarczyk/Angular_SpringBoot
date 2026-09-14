@@ -42,10 +42,15 @@
 
         .user-info {
             .user-pic-container{
-                .user-pic-wrapper{
+                .user-pic-wrapper-dark{
                     border: 5px solid white !important;
                     img {
                         filter: invert(1) !important;
+                    }
+                }
+                .user-pic-wrapper-photo-existsing {
+                    img {
+                        filter: invert(0) !important;
                     }
                 }
             }

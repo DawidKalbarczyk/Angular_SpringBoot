@@ -67,5 +67,19 @@
     "HEADER-TEXT-LOGIN": "Log in with one click.",
     "BUTTON-HEADER": "Sign Up",
     "BUTTON-HEADER-LOGIN": "Log In"
+  },
+  "USER-SETTINGS": {
+    "OPTION1": "Change username",
+    "OPTION2": "Change email",
+    "OPTION3": "Change password",
+    "OPTION4": "Change profile picture",
+    "OPTION5": "ZMEIN",
+    "OPTION6": "Delete profile picture",
+    "OPTION7": "Delete account permanently",
+    "USER-INFO": {
+      "TITLE1": "Username",
+      "TITLE2": "E-mail",
+      "BUTTON": "Log out"
+    }
   }
 }
