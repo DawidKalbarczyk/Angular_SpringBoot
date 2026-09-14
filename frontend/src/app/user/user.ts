@@ -24,7 +24,7 @@ import { CommonModule } from '@angular/common';
 export class User {
   private getUser = inject(GetUser);
   private loginService = inject(LoginService);
-  public isLoggedIn = this.loginService.isLoggedIn;//signal(true); 
+  public isLoggedIn = this.loginService.isLoggedIn //signal(true);;
   public getUserData = this.getUser;
   public userData = this.getUser.userData;
   private router: Router = inject(Router);
@@ -77,8 +77,30 @@ export class User {
   newUserName = '';
   confirmUserName = '';
   newEmail = '';
-  currentEmail = '';
-
+  confirmEmail = '';
   newPassword = '';
   currentPassword = '';
+  currentEmail = '';
+  confirmPassword = '';
+  public resetNgModelVariables() {
+    this.newUserName = '';
+    this.confirmUserName = '';
+    this.newEmail = '';
+    this.confirmEmail = '';
+    this.newPassword = '';
+    this.currentPassword = '';
+    this.currentEmail = '';
+    this.confirmPassword = '';
+  }
+  public resetNgModelVariablesTimeout() {
+    setTimeout(() => {
+      this.resetNgModelVariables();
+    }, 1000);
+  }
+
+  public areVariablesMatching = this.updateUserService.areVariablesMatching;
+  public variablesErrorMessage = this.updateUserService.variablesErrorMessage;
+  public isSuccessful = this.updateUserService.isSuccessful;
+  public resetVariablesMatching = this.updateUserService.resetVariablesMatching;
+  
 }

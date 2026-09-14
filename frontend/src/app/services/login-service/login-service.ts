@@ -127,7 +127,8 @@ export class LoginService implements OnDestroy {
                 return result.user;
             })
             .catch((error) => {
-                console.error('Error during registration:', error);
+               console.error('Error during registration (SERVICE):', error);
+                console.log('SERVICE error.code:', error?.code);
                 throw error;
             });
     }

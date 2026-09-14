@@ -54,23 +54,30 @@ export class Login implements OnInit {
         .catch((error) => this.handleError(error.code));
     }
   }
-  private handleError(error: { code?: string }) {
-    const code = error?.code;
+  private handleError(code: string | undefined) {
+    console.log('Error code:', code);
 
     switch (code) {
-      case 'auth/email-already-in-use':
-        this.errorMessage.set('Ten adres e-mail jest już zajęty.');
-        break;
       case 'auth/invalid-email':
-        this.errorMessage.set('Nieprawidłowy format adresu e-mail.');
+        this.errorMessage.set('LOGIN-PAGE.ERROR-INV-EMAIL');
         break;
       case 'auth/weak-password':
-        this.errorMessage.set('Hasło musi mieć co najmniej 6 znaków.');
+        this.errorMessage.set('LOGIN-PAGE.ERROR-WEAK-PASS');
         break;
       case 'auth/invalid-credential':
+        this.errorMessage.set('LOGIN-PAGE.ERROR-INV-CRED');
+        break;
+      case 'auth/invalid-credentials':
+        this.errorMessage.set('LOGIN-PAGE.ERROR-INV-CRED');
+        break;
+      case 'auth/email-already-in-use':
+        this.errorMessage.set('LOGIN-PAGE.ERROR-EMAIL-TAKEN');
+        break;
       case 'auth/user-not-found':
+        this.errorMessage.set('LOGIN-PAGE.ERROR-USER-NOT-FOUND');
+        break;
       case 'auth/wrong-password':
-        this.errorMessage.set('Nieprawidłowy e-mail lub hasło.');
+        this.errorMessage.set('LOGIN-PAGE.ERROR-WRONG-PASS');
         break;
       default:
         this.errorMessage.set(

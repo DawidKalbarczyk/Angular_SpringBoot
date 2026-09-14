@@ -59,32 +59,87 @@
                 @default {
                     <div class="user-picked-setting">
                         <div class="user-close-setting-wrapper">
-                            <button class="user-close-setting-button" (click)="closeCurrentSetting()">
+                            <button class="user-close-setting-button" (click)="closeCurrentSetting(); resetVariablesMatching(); resetNgModelVariables()">
                                 <mat-icon>close</mat-icon>
                             </button>
                         </div>
                     @switch (wasSettingClicked()) {
                         @case (1) {
                             <div class="user-picked-setting">
+                                @if (areVariablesMatching() === true && isSuccessful() === false) {
+                                    <h1 class="h1-clear">{{ 'USER-SETTINGS.OPTION1-DETAILS.TITLE' | translate }}</h1>
+                                } @else if (areVariablesMatching() === true && isSuccessful() === true) {
+                                    <h1 class="h1-success">{{ 'USER-SETTINGS.OPTION1-DETAILS.TITLE' | translate }}</h1>
+                                } @else {
+                                    <h1 class="h1-error">{{ 'USER-SETTINGS.OPTION1-DETAILS.TITLE' | translate }}</h1>
+                                }
+                                @if (areVariablesMatching() === false) {
+                                    <p class="error-message">{{ variablesErrorMessage() | translate}}</p>
+                                }
+                                @if (isSuccessful() === true) {
+                                    <p class="error-message-success">{{ variablesErrorMessage() | translate}}</p>
+                                }
                                 <form (ngSubmit)="updateUserService.changeUserName(currentPassword, newUserName, confirmUserName)">
-                                    <label>Enter your new username</label>
-                                    <input [(ngModel)]="newUserName" type="text" name="newUserName">
-                                    <label>Confirm your new username</label>
-                                    <input [(ngModel)]="confirmUserName" type="text" name="confirmUserName">
-                                    <label>Enter your password</label>
-                                    <input [(ngModel)]="currentPassword" type="password" name="currentPassword">
-                                    <button type="submit">Submit</button>
+                                    <label>{{ 'USER-SETTINGS.OPTION1-DETAILS.DET1' | translate }}</label>
+                                    <input [(ngModel)]="newUserName" type="text" name="newUserName" [placeholder]="'USER-SETTINGS.OPTION1-DETAILS.DET1-PLACEHOLDER' | translate">
+                                    <label>{{ 'USER-SETTINGS.OPTION1-DETAILS.DET2' | translate }}</label>
+                                    <input [(ngModel)]="confirmUserName" type="text" name="confirmUserName" [placeholder]="'USER-SETTINGS.OPTION1-DETAILS.DET2-PLACEHOLDER' | translate">
+                                    <label>{{ 'USER-SETTINGS.OPTION1-DETAILS.DET3' | translate }}</label>
+                                    <input [(ngModel)]="currentPassword" type="password" name="currentPassword" [placeholder]="'USER-SETTINGS.OPTION1-DETAILS.DET3-PLACEHOLDER' | translate">
+                                    <button type="submit" (click)="resetVariablesMatching(); resetNgModelVariablesTimeout()">Submit</button>
                                 </form>
                             </div>
                         }
                         @case (2) {
                             <div class="user-picked-setting">
-
+                                @if (areVariablesMatching() === true && isSuccessful() === false) {
+                                    <h1 class="h1-clear">{{ 'USER-SETTINGS.OPTION2-DETAILS.TITLE' | translate }}</h1>
+                                } @else if (areVariablesMatching() === true && isSuccessful() === true) {
+                                    <h1 class="h1-success">{{ 'USER-SETTINGS.OPTION2-DETAILS.TITLE' | translate }}</h1>
+                                } @else {
+                                    <h1 class="h1-error">{{ 'USER-SETTINGS.OPTION2-DETAILS.TITLE' | translate }}</h1>
+                                }
+                                @if (areVariablesMatching() === false) {
+                                    <p class="error-message">{{ variablesErrorMessage() | translate}}</p>
+                                }
+                                @if (isSuccessful() === true) {
+                                    <p class="error-message-success">{{ variablesErrorMessage() | translate}}</p>
+                                }
+                                <form (ngSubmit)="updateUserService.changeEmail(currentPassword, newEmail, confirmEmail)">
+                                    <label>{{ 'USER-SETTINGS.OPTION2-DETAILS.DET1' | translate }}</label>
+                                    <input [(ngModel)]="newEmail" type="email" name="newEmail" [placeholder]="'USER-SETTINGS.OPTION2-DETAILS.DET1-PLACEHOLDER' | translate">
+                                    <label>{{ 'USER-SETTINGS.OPTION2-DETAILS.DET2' | translate }}</label>
+                                    <input [(ngModel)]="confirmEmail" type="email" name="confirmEmail" [placeholder]="'USER-SETTINGS.OPTION2-DETAILS.DET2-PLACEHOLDER' | translate">
+                                    <label>{{ 'USER-SETTINGS.OPTION2-DETAILS.DET3' | translate }}</label>
+                                    <input [(ngModel)]="currentPassword" type="password" name="currentPassword" [placeholder]="'USER-SETTINGS.OPTION2-DETAILS.DET3-PLACEHOLDER' | translate">
+                                    <button type="submit" (click)="resetVariablesMatching(); resetNgModelVariablesTimeout()">{{ 'USER-SETTINGS.OPTION2-DETAILS.BTN' | translate }}</button>
+                                </form>
                             </div>
                         }
                         @case (3) {
                             <div class="user-picked-setting">
-
+                                @if (areVariablesMatching() === true && isSuccessful() === false) {
+                                    <h1 class="h1-clear">{{ 'USER-SETTINGS.OPTION3-DETAILS.TITLE' | translate }}</h1>
+                                } @else if (areVariablesMatching() === true && isSuccessful() === true) {
+                                    <h1 class="h1-success">{{ 'USER-SETTINGS.OPTION3-DETAILS.TITLE' | translate }}</h1>
+                                } @else {
+                                    <h1 class="h1-error">{{ 'USER-SETTINGS.OPTION3-DETAILS.TITLE' | translate }}</h1>
+                                }
+                                @if (areVariablesMatching() === false) {
+                                    <p class="error-message">{{ variablesErrorMessage() | translate}}</p>
+                                }
+                                @if (isSuccessful() === true) {
+                                    <p class="error-message-success">{{ variablesErrorMessage() | translate}}</p>
+                                }
+                                <form (ngSubmit)="updateUserService.changePassword(currentPassword, confirmPassword, newPassword)">
+                                    <label>{{ 'USER-SETTINGS.OPTION3-DETAILS.DET1' | translate }}</label>
+                                    <input [(ngModel)]="currentPassword" type="password" name="currentPassword" [placeholder]="'USER-SETTINGS.OPTION3-DETAILS.DET1-PLACEHOLDER' | translate">
+                                    <label>{{ 'USER-SETTINGS.OPTION3-DETAILS.DET2' | translate }}</label>
+                                    <input [(ngModel)]="confirmPassword" type="password" name="confirmPassword" [placeholder]="'USER-SETTINGS.OPTION3-DETAILS.DET2-PLACEHOLDER' | translate">
+                                    <label>{{ 'USER-SETTINGS.OPTION3-DETAILS.DET3' | translate }}</label>
+                                    <input [(ngModel)]="newPassword" type="password" name="newPassword" [placeholder]="'USER-SETTINGS.OPTION3-DETAILS.DET3-PLACEHOLDER' | translate">
+                                    <button type="submit" (click)="resetVariablesMatching(); resetNgModelVariablesTimeout()">{{ 'USER-SETTINGS.OPTION3-DETAILS.BTN' | translate }}</button>
+                                </form>
                             </div>
                         }
                         @case (4) {

@@ -1,7 +1,8 @@
-import { inject, Service } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { getAuth, EmailAuthProvider, PasswordValidationStatus, reauthenticateWithCredential } from 'firebase/auth';
 import { HttpClient } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { GetUser } from '../get-user/get-user';
 
 @Service()
@@ -26,13 +27,31 @@ export class UpdateUser {
         }
     }  
     
+    public areVariablesMatching = signal<boolean>(true);
+    public isSuccessful = signal<boolean>(false);
+    public variablesErrorMessage = signal<string>('');
+    public resetVariablesMatching() {
+        this.areVariablesMatching.set(true);
+        this.variablesErrorMessage.set('');
+        this.isSuccessful.set(false);
+    }
     public async changeUserName(currentPassword: string, newUserName: string, confirmUserName: string): Promise<void> {
+        this.resetVariablesMatching(); // Reset the signals at the start of the method
+        
         if (newUserName !== confirmUserName) {
-            throw new Error('The new username and the confirmation do not match.');
-        }
+            this.areVariablesMatching.set(false);
+            this.variablesErrorMessage.set('USER-SETTINGS.OPTION1-DETAILS.ERROR');
+            throw new Error('New username and confirmation do not match.');
+        } 
         await this.reauthenticate(currentPassword);
         await firstValueFrom(this.http.patch('/pass/update-user-name', { userName: newUserName }, {responseType: 'text'})); 
         await this.getUser.getUserData(); // Refresh user data after updating the username
+
+        if (this.getUser.userData()) {
+            this.isSuccessful.set(true);
+            this.variablesErrorMessage.set('USER-SETTINGS.OPTION1-DETAILS.SUCCESS');
+            
+        }
 
         //Debug do wywalenia potem
         /// Auth po to aby odświeżyć token i mieć aktualne dane lokalnie z Firebase
@@ -43,16 +62,93 @@ export class UpdateUser {
         await this.getUser.getUserDataFirebase(); // Refresh user data from Firebase after updating the username
         console.log('Username updated successfully to:', newUserName);
         console.log('User data in Firebase:', this.getUser.userDataFirebase());
+        /////////////
     }
 
-    public async changeEmail(currentPassword: string, currentEmail: string, newEmail: string): Promise<void> {
+    public async changeEmail(currentPassword: string, confirmEmail: string, newEmail: string): Promise<void> {
+        
+        this.resetVariablesMatching(); // Reset the signals at the start of the method
+        if (newEmail !== confirmEmail) {
+            this.areVariablesMatching.set(false);
+            this.variablesErrorMessage.set('USER-SETTINGS.OPTION2-DETAILS.ERROR');
+            throw new Error('New email and confirmation do not match.');
+        }
+
         await this.reauthenticate(currentPassword);
-        await firstValueFrom(this.http.patch('/pass/update-user-email', { userEmail: newEmail }, {responseType: 'text'})); 
+        try {
+            await firstValueFrom(this.http.patch('/pass/update-user-email', { userEmail: newEmail }, {responseType: 'text'}));
+            await this.getUser.getUserData(); // Refresh user data after updating the email
+        
+            if (this.getUser.userData()) {
+                this.isSuccessful.set(true);
+                this.variablesErrorMessage.set('USER-SETTINGS.OPTION2-DETAILS.SUCCESS');
+            }
+        } catch (error) {
+            this.handleErrorEmail(error);
+        }
+        
+    }
+
+    private handleErrorEmail(error: unknown): void {
+        console.log('Error:', error);
+        this.areVariablesMatching.set(false);
+
+        if (error instanceof HttpErrorResponse && error.error) {
+            switch (error.error) {
+                case 'User email is already taken':
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION2-DETAILS.ERROR-TAKEN');
+                    break;
+                case 'Invalid user email':
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION2-DETAILS.ERROR-INV-EMAIL');
+                    break;
+                default:
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION2-DETAILS.ERROR');
+            }
+            return;
+        }
+
     }
     
-    public async changePassword(currentPassword: string, currentEmail: string, newPassword: string): Promise<void> {
+    public async changePassword(currentPassword: string, confirmPassword: string, newPassword: string): Promise<void> {
+        this.resetVariablesMatching(); // Reset the signals at the start of the method
+
+        if (newPassword !== confirmPassword) {
+            this.areVariablesMatching.set(false);
+            this.variablesErrorMessage.set('USER-SETTINGS.OPTION3-DETAILS.ERROR');
+            throw new Error('New password and confirmation do not match.');
+        }
+
         await this.reauthenticate(currentPassword);
-        await firstValueFrom(this.http.patch('/pass/update-user-password', { userPassword: newPassword }, {responseType: 'text'})); 
+        try {
+            await firstValueFrom(this.http.patch('/pass/update-user-password', { userPassword: newPassword }, {responseType: 'text'})); 
+            await this.getUser.getUserData(); // Refresh user data after updating the password just for checkout
+        
+            if (this.getUser.userData()) {
+                this.isSuccessful.set(true);
+                this.variablesErrorMessage.set('USER-SETTINGS.OPTION3-DETAILS.SUCCESS');
+            }
+        } catch (error) {
+            this.handleErrorPassword(error);
+        }
+
+    }
+    private handleErrorPassword(error: unknown): void {
+        console.log('Error:', error);
+        this.areVariablesMatching.set(false);
+
+        if (error instanceof HttpErrorResponse && error.error) {
+            switch (error.error) {
+                case 'Weak password':
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION3-DETAILS.ERROR-WEAK-PASS');
+                    break;
+                case 'Invalid user password':
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION3-DETAILS.ERROR-INV-PASS');
+                    break;
+                default:
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION3-DETAILS.ERROR');
+            }
+            return;
+        }
 
     }
     
