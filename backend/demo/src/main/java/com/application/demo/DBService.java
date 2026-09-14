@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 // Reprezentuje błąd zwracany przez Firebase podczas aktualizacji użytkownika.
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 // Buduje żądanie aktualizacji danych użytkownika Firebase.
 import com.google.firebase.auth.UserRecord;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -46,6 +47,33 @@ public class DBService {
 
     // Aktualizacja zawsze ma warunek na UID pobrany z tokenu.
     // Zwraca informację, czy dokładnie jeden rekord został zmieniony.
+
+
+
+    private static final long REAUTH_WINDOW_SECONDS = 300;
+    public boolean isTokenFresh(FirebaseToken token) {
+        Object authTimeClaim = token.getClaims().get("auth_time");
+        if (authTimeClaim == null) {
+            return false;
+        }
+        long authTimeSeconds = ((Number) authTimeClaim).longValue();
+        long currentTimeSeconds = System.currentTimeMillis() / 1000;
+        return currentTimeSeconds - authTimeSeconds <= REAUTH_WINDOW_SECONDS;
+    }
+
+    public boolean checkIfUserNameTaken(String userName, String userId) {
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ? AND id != ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userName, userId);
+        return count != null && count > 0;
+    }
+
+    public boolean checkIfEmailTaken(String email, String userId) {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ? AND id != ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email, userId);
+        return count != null && count > 0;
+    }
+
+
     public boolean updateUserName(String userId, String userName) throws FirebaseAuthException {
         // Przygotowuje żądanie Firebase dla UID odczytanego z tokenu.
         UserRecord.UpdateRequest firebaseUpdate = new UserRecord.UpdateRequest(userId)
@@ -55,9 +83,35 @@ public class DBService {
         // Wysyła żądanie zmiany danych do Firebase przed zapisem lokalnym.
         firebaseAuth.updateUser(firebaseUpdate);
         // Aktualizuje nazwę i zdjęcie tylko dla właściwego UID.
-        String sql = "UPDATE users SET username = ? WHERE user_id = ?";
+        String sql = "UPDATE users SET username = ? WHERE id = ?";
         // Wykonuje UPDATE i sprawdza liczbę zmienionych rekordów.
         return jdbcTemplate.update(sql, userName, userId) == 1;
+    }
+
+    public boolean updateUserEmail(String userId, String email) throws FirebaseAuthException {
+        // Przygotowuje żądanie Firebase dla UID odczytanego z tokenu.
+        UserRecord.UpdateRequest firebaseUpdate = new UserRecord.UpdateRequest(userId)
+            // Aktualizuje e-mail w Firebase Authentication.
+            .setEmail(email);
+
+        // Wysyła żądanie zmiany danych do Firebase przed zapisem lokalnym.
+        firebaseAuth.updateUser(firebaseUpdate);
+        // Aktualizuje e-mail tylko dla właściwego UID.
+        String sql = "UPDATE users SET email = ? WHERE id = ?";
+        // Wykonuje UPDATE i sprawdza liczbę zmienionych rekordów.
+        return jdbcTemplate.update(sql, email, userId) == 1;
+    }
+
+    public void updateUserPassword(String userId, String password) throws FirebaseAuthException {
+        // Przygotowuje żądanie Firebase dla UID odczytanego z tokenu.
+        UserRecord.UpdateRequest firebaseUpdate = new UserRecord.UpdateRequest(userId)
+            // Aktualizuje hasło w Firebase Authentication.
+            .setPassword(password);
+
+        // Wysyła żądanie zmiany danych do Firebase przed zapisem lokalnym.
+        firebaseAuth.updateUser(firebaseUpdate);
+        // Aktualizuje hasło tylko dla właściwego UID.
+        firebaseAuth.revokeRefreshTokens(userId);
     }
 
     public boolean updateUserPhotoURL(String userId, String photoURL) throws FirebaseAuthException {
@@ -73,4 +127,5 @@ public class DBService {
         // Wykonuje UPDATE i sprawdza liczbę zmienionych rekordów.
         return jdbcTemplate.update(sql, photoURL, userId) == 1;
     }
+
 }

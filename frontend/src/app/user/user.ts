@@ -9,18 +9,22 @@ import { LoginService } from '../services/login-service/login-service';
 import { HttpClient } from '@angular/common/http';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { GetUser } from '../services/get-user/get-user';
+import { MatIconModule } from '@angular/material/icon';
+import { UpdateUser } from '../services/update-user/update-user';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AuthorBar, LoginCorner, ReturnCorner, MatProgressSpinnerModule, TranslatePipe],
+  imports: [AuthorBar, LoginCorner, ReturnCorner, MatProgressSpinnerModule, MatIconModule, TranslatePipe, FormsModule, CommonModule],
   templateUrl: './user.html',
   styleUrl: './user.scss',
 })
 export class User {
-  private loginService = inject(LoginService);
   private getUser = inject(GetUser);
-  public isLoggedIn = this.loginService.isLoggedIn;
+  private loginService = inject(LoginService);
+  public isLoggedIn = this.loginService.isLoggedIn;//signal(true); 
   public getUserData = this.getUser;
   public userData = this.getUser.userData;
   private router: Router = inject(Router);
@@ -39,5 +43,42 @@ export class User {
       }, 3000); //3s
     }
   }
+  public wasSettingClicked = signal<number>(0);
+  public wasMainSettingClicked = signal<number>(0);
+  public optionsArray = [false, false, false, false, false, false, false];
 
+  public clickSettings(pickedSetting: number) {
+    this.wasSettingClicked.set(pickedSetting);
+    this.checkWhichOption(pickedSetting);
+    setTimeout(() => {
+      this.wasMainSettingClicked.set(1);
+    }, 700);
+  }
+  public closeCurrentSetting() {
+    this.wasSettingClicked.set(0);
+    this.wasMainSettingClicked.set(0);
+    this.optionsArray = [false, false, false, false, false, false, false];
+  }
+  public checkWhichOption(option: number) {
+    this.optionsArray.forEach((value, index) => {
+      if (index !== option - 1) {
+        this.optionsArray[index] = true;
+      }
+    });
+  }
+
+
+
+
+
+  //Handling buttons
+
+  public updateUserService = inject(UpdateUser);
+  newUserName = '';
+  confirmUserName = '';
+  newEmail = '';
+  currentEmail = '';
+
+  newPassword = '';
+  currentPassword = '';
 }

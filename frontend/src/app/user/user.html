@@ -9,15 +9,108 @@
         </div>
     } @else {
         <div class="user-ui">
-            <div class="user-settings">
-                <div><div>{{ 'USER-SETTINGS.OPTION1' | translate }}</div></div>
-                <div><div>{{ 'USER-SETTINGS.OPTION2' | translate }}</div></div>
-                <div><div>{{ 'USER-SETTINGS.OPTION3' | translate }}</div></div>
-                <div><div>{{ 'USER-SETTINGS.OPTION4' | translate }}</div></div>
-                <div><div>{{ 'USER-SETTINGS.OPTION5' | translate }}</div></div>
-                <div><div>{{ 'USER-SETTINGS.OPTION6' | translate }}</div></div>
-                <div><div>{{ 'USER-SETTINGS.OPTION7' | translate }}</div></div>
-            </div>
+            @switch (wasMainSettingClicked()) {
+                @case (0) {
+                    <div class="user-settings">
+                        <div [class.user-setting-1]="wasSettingClicked() === 1"
+                            [class.optionsArrayCheck]="optionsArray[0]">
+                            <div (click)="clickSettings(1)">
+                                {{ 'USER-SETTINGS.OPTION1' | translate }}
+                            </div>
+                        </div>
+                        <div [class.user-setting-2]="wasSettingClicked() === 2"
+                            [class.optionsArrayCheck]="optionsArray[1]">
+                            <div (click)="clickSettings(2)">
+                                {{ 'USER-SETTINGS.OPTION2' | translate }}
+                            </div>
+                        </div>
+                        <div [class.user-setting-3]="wasSettingClicked() === 3"
+                            [class.optionsArrayCheck]="optionsArray[2]">
+                            <div (click)="clickSettings(3)">
+                                {{ 'USER-SETTINGS.OPTION3' | translate }}
+                            </div>
+                        </div>
+                        <div [class.user-setting-4]="wasSettingClicked() === 4"
+                            [class.optionsArrayCheck]="optionsArray[3]">
+                            <div (click)="clickSettings(4)">
+                                {{ 'USER-SETTINGS.OPTION4' | translate }}
+                            </div>
+                        </div>
+                        <div [class.user-setting-5]="wasSettingClicked() === 5"
+                            [class.optionsArrayCheck]="optionsArray[4]">
+                            <div (click)="clickSettings(5)">
+                                {{ 'USER-SETTINGS.OPTION5' | translate }}
+                            </div>
+                        </div>
+                        <div [class.user-setting-6]="wasSettingClicked() === 6"
+                            [class.optionsArrayCheck]="optionsArray[5]">
+                            <div (click)="clickSettings(6)">
+                                {{ 'USER-SETTINGS.OPTION6' | translate }}
+                            </div>
+                        </div>
+                        <div [class.user-setting-7]="wasSettingClicked() === 7"
+                            [class.optionsArrayCheck]="optionsArray[6]">
+                            <div (click)="clickSettings(7)">
+                                {{ 'USER-SETTINGS.OPTION7' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                }
+                @default {
+                    <div class="user-picked-setting">
+                        <div class="user-close-setting-wrapper">
+                            <button class="user-close-setting-button" (click)="closeCurrentSetting()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                    @switch (wasSettingClicked()) {
+                        @case (1) {
+                            <div class="user-picked-setting">
+                                <form (ngSubmit)="updateUserService.changeUserName(currentPassword, newUserName, confirmUserName)">
+                                    <label>Enter your new username</label>
+                                    <input [(ngModel)]="newUserName" type="text" name="newUserName">
+                                    <label>Confirm your new username</label>
+                                    <input [(ngModel)]="confirmUserName" type="text" name="confirmUserName">
+                                    <label>Enter your password</label>
+                                    <input [(ngModel)]="currentPassword" type="password" name="currentPassword">
+                                    <button type="submit">Submit</button>
+                                </form>
+                            </div>
+                        }
+                        @case (2) {
+                            <div class="user-picked-setting">
+
+                            </div>
+                        }
+                        @case (3) {
+                            <div class="user-picked-setting">
+
+                            </div>
+                        }
+                        @case (4) {
+                            <div class="user-picked-setting">
+
+                            </div>
+                        }
+                        @case (5) {
+                            <div class="user-picked-setting">
+
+                            </div>
+                        }
+                        @case (6) {
+                            <div class="user-picked-setting">
+
+                            </div>
+                        }
+                        @case (7) {
+                            <div class="user-picked-setting">
+
+                            </div>
+                        }
+                    }
+                    </div>
+            }
+        }
             <div class="user-info">
                 <div class="user-pic-container">
                     <div class="user-pic-wrapper" 
