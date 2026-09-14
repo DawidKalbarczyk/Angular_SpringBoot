@@ -138,6 +138,9 @@ public class DBController {
             // Informuje klienta, że dane profilu są niepoprawne.
             return ResponseEntity.badRequest().body("Invalid user password");
         }
+        if (request.userPassword().length() < 8) {
+            return ResponseEntity.badRequest().body("Weak password");
+        }
 
         try {
             // Aktualizuje Firebase i rekord wskazany wyłącznie przez UID z tokenu.
