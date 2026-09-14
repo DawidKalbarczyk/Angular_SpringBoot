@@ -1,6 +1,6 @@
 import { Service, signal, effect, OnDestroy, inject} from '@angular/core';
 // Importuje Firebase Authentication oraz obserwowanie stanu sesji.
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, getAdditionalUserInfo, deleteUser, onAuthStateChanged, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, getAdditionalUserInfo, deleteUser, onAuthStateChanged, setPersistence, browserSessionPersistence, updateProfile } from 'firebase/auth';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { firebaseApp } from '../../firebase.config';
 import { GeoserverService } from '../GeoserverService/geoserver-service';

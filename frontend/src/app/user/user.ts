@@ -8,6 +8,7 @@ import { DarkMode } from '../services/dark-mode/dark-mode';
 import { LoginService } from '../services/login-service/login-service';
 import { HttpClient } from '@angular/common/http';
 import { TranslatePipe } from '../pipes/translate.pipe';
+import { GetUser } from '../services/get-user/get-user';
 
 @Component({
   selector: 'app-user',
@@ -18,8 +19,10 @@ import { TranslatePipe } from '../pipes/translate.pipe';
 })
 export class User {
   private loginService = inject(LoginService);
+  private getUser = inject(GetUser);
   public isLoggedIn = this.loginService.isLoggedIn;
-  public userData = this.loginService.userData;
+  public getUserData = this.getUser;
+  public userData = this.getUser.userData;
   private router: Router = inject(Router);
   public url: string = this.router.url;
   public redirectUrl: boolean = false;
@@ -27,6 +30,7 @@ export class User {
   public hasPhoto = computed(() => !!this.userData()?.photoURL);
   constructor() {
     if (this.isLoggedIn() === true && this.router.url === '/user') {
+      this.getUser.getUserData();
       return;
     } else if (this.isLoggedIn() === false && this.router.url === '/user') {
       this.redirectUrl = true;

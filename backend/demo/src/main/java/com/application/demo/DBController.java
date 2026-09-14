@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/pass")
 public class DBController {
     private final DBService dbService;
+    private final JdbcTemplate jdbcTemplate;
 
-    public DBController(DBService dbService) {
+    public DBController(DBService dbService, JdbcTemplate jdbcTemplate) {
         this.dbService = dbService;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     // Mapuje tworzenie użytkownika na metodę HTTP POST.
@@ -37,6 +40,30 @@ public class DBController {
     }
 
     // Mapuje zmianę profilu na metodę HTTP PATCH.
+
+    @GetMapping("/get-user-data")
+    public ResponseEntity<?> getUserData(@AuthenticationPrincipal FirebaseToken token) {
+        boolean userExists = dbService.checkUserExists(token.getUid());
+        if (!userExists) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        String sql = "SELECT id, username, email, \"photoUrl\" FROM users WHERE id = ?";
+        UserGetRequest userData = jdbcTemplate.queryForList(sql, token.getUid())
+                .stream()
+                .findFirst()
+                .map(row -> new UserGetRequest(
+                        (String) row.get("id"),
+                        (String) row.get("username"),
+                        (String) row.get("email"),
+                        (String) row.get("photoUrl")
+                ))
+                .orElse(null);
+        // Zwraca dane użytkownika w formacie JSON.
+        return ResponseEntity.ok(userData);
+    }
+
+
     @PatchMapping("/update-user-name")
     public ResponseEntity<?> updateUser(@AuthenticationPrincipal FirebaseToken token,
                                         @RequestBody UserUpdateRequest request) {
