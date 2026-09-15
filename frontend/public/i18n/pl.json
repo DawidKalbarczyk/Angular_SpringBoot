@@ -119,6 +119,16 @@
       "BTN": "Zmień"
     },
     "OPTION4": "Zmień zdjęcie profilowe",
+    "OPTION4-DETAILS": {
+      "TITLE": "Zmiana zdjęcia profilowego",
+      "ERROR": "Nie udało się zmienić zdjęcia profilowego.",
+      "SUCCESS": "Zdjęcie profilowe zostało pomyślnie zmienione.",
+      "DET1": "Wybierz nowe zdjęcie profilowe",
+      "DET1-PLACEHOLDER": "Wybierz plik...",
+      "DET2": "Wprowadź swoje hasło",
+      "DET2-PLACEHOLDER": "Aktualne hasło...",
+      "BTN": "Zatwierdź"
+    },
     "OPTION5": "ZAPAMIETAJ WYBRANY MOTYW DO ZMIANY",
     "OPTION6": "Usuń zdjęcie profilowe",
     "OPTION7": "Usuń na stałe swoje konto",

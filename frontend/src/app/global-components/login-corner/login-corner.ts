@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DarkMode } from '../../services/dark-mode/dark-mode';
 import { LoginService } from '../../services/login-service/login-service';
 import {Router} from '@angular/router';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { GetUser } from '../../services/get-user/get-user';
 
 @Component({
   selector: 'app-login-corner',
@@ -36,5 +37,12 @@ export class LoginCorner {
 
   logoutWithGoogle() {
     this.loginService.logoutWithGoogle();
+  }
+  private getUserService = inject(GetUser);
+  public userData = this.getUserService.userData;
+  public hasPhoto = computed(() => !!this.userData()?.photoURL);
+
+  constructor() {
+    this.getUserService.getUserData();
   }
 }

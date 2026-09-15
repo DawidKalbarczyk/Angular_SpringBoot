@@ -82,7 +82,7 @@
                         filter: invert(1) !important;
                     }
                 }
-                .user-pic-wrapper-photo-existsing {
+                .user-pic-wrapper-photo-existing {
                     img {
                         filter: invert(0) !important;
                     }
@@ -327,6 +327,33 @@
                         background-color: rgb(108,108,108);
                     }
                 }
+                .profile-picture-container{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    column-gap: 4rem;
+                    border: 1px solid black;
+                    margin-bottom: 1.5rem;
+                    padding: 1rem;
+                    overflow-y: hidden;
+                    input {
+                        width: 100%;
+                    }
+
+                    .profile-picture-preview {
+                        max-width: 200px;
+                        max-height: 200px;
+                        object-fit: cover;
+                    }
+                }
+                .profile-picture-button {
+                    margin-top: 0;
+                }
+                .profile-picture-h1 {
+                    margin-bottom: 0rem !important;
+                }
+                
             }
         }
 
@@ -346,6 +373,11 @@
                     border-radius: 50%;
                     overflow: hidden;
                     transition: border 0.3s ease;
+
+                    &.user-pic-wrapper-photo-existing {
+                        width: 300px !important;
+                        height: 300px !important;       
+                    }
 
 
                     img {

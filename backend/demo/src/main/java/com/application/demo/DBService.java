@@ -126,7 +126,7 @@ public class DBService {
         // Wysyła żądanie zmiany danych do Firebase przed zapisem lokalnym.
         firebaseAuth.updateUser(firebaseUpdate);
         // Aktualizuje zdjęcie tylko dla właściwego UID.
-        String sql = "UPDATE users SET \"photoUrl\" = ? WHERE user_id = ?";
+        String sql = "UPDATE users SET \"photoUrl\" = ? WHERE id = ?";
         // Wykonuje UPDATE i sprawdza liczbę zmienionych rekordów.
         return jdbcTemplate.update(sql, photoURL, userId) == 1;
     }

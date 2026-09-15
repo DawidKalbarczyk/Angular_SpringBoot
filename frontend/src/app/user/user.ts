@@ -22,9 +22,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './user.scss',
 })
 export class User {
+  public logoutWithGoogle = inject(LoginService).logoutWithGoogle;
   private getUser = inject(GetUser);
   private loginService = inject(LoginService);
-  public isLoggedIn = this.loginService.isLoggedIn //signal(true);;
+  public isLoggedIn = this.loginService.isLoggedIn;//signal(true); // 
   public getUserData = this.getUser;
   public userData = this.getUser.userData;
   private router: Router = inject(Router);
@@ -102,5 +103,25 @@ export class User {
   public variablesErrorMessage = this.updateUserService.variablesErrorMessage;
   public isSuccessful = this.updateUserService.isSuccessful;
   public resetVariablesMatching = this.updateUserService.resetVariablesMatching;
-  
+
+
+  public newProfilePicturePreview: string | ArrayBuffer | null = null;
+  public newProfilePictureFile: File | null = null;
+
+  public onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.newProfilePictureFile = input.files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.newProfilePicturePreview = reader.result;
+      };
+      reader.readAsDataURL(this.newProfilePictureFile);
+    }
+  }
+  public onFileReset(): void {
+    this.newProfilePicturePreview = null;
+    this.newProfilePictureFile = null;
+  }
 }

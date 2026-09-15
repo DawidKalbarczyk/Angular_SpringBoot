@@ -5,12 +5,6 @@ div, button {
 }
 
 .login-dark {
-    .img-container {
-        border: 1px solid $secondary-color-light !important;
-        img {
-            filter: invert(1) !important;
-        }   
-    }
     .button-container {
         .first-button {
             color: $text-color-dark !important;
@@ -28,6 +22,15 @@ div, button {
                 background-color: $buttons-color !important;
             }
         }
+    }
+    
+}
+.login-dark-photo {
+    .img-container {
+        border: 1px solid $secondary-color-light !important;
+        img {
+            filter: invert(1) !important;
+        }   
     }
 }
 
@@ -50,6 +53,16 @@ div, button {
         overflow: hidden;
         padding: 0.35rem;
         transition: background-color 0.3s ease, border 0.5s ease, filter 0.5s ease;
+
+        &.login-dark-photo-existing {
+        padding: 0 !important;
+        .img-container {
+            border: 1px solid $secondary-color-light !important;
+            img {
+                filter: invert(0) !important;
+            }   
+        }
+    }
 
         &:hover {
             pointer-events: none;

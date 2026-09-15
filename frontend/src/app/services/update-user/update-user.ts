@@ -151,5 +151,50 @@ export class UpdateUser {
         }
 
     }
+    public async changeProfilePicture(newProfilePicture: File, currentPassword: string): Promise<void> {
+        this.resetVariablesMatching(); // Reset the signals at the start of the method
+
+        if (!newProfilePicture) {
+            this.areVariablesMatching.set(false);
+            this.variablesErrorMessage.set('USER-SETTINGS.OPTION4-DETAILS.ERROR');
+            throw new Error('No profile picture selected.');
+        }
+
+        await this.reauthenticate(currentPassword);
+
+        const formData = new FormData();
+        formData.append('profilePicture', newProfilePicture, newProfilePicture.name);
+
+        try {
+            await firstValueFrom(
+                this.http.patch('/pass/update-user-photo', formData, { responseType: 'text' }));
+            await this.getUser.getUserData(); // Refresh user data after updating the profile picture
+
+            if (this.getUser.userData()) {
+                this.isSuccessful.set(true);
+                this.variablesErrorMessage.set('USER-SETTINGS.OPTION4-DETAILS.SUCCESS');
+            }
+        } catch (error) {
+            this.handleErrorProfilePicture(error);
+        }
     
+    }
+
+    private handleErrorProfilePicture(error: unknown): void {
+        console.log('Error:', error);
+        this.areVariablesMatching.set(false);  
+        
+        if (error instanceof HttpErrorResponse && error.error) {
+            switch (error.error) {
+                case 'Invalid file type':
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION4-DETAILS.ERROR-INV-FILE');
+                    break;
+                case 'File size exceeds limit':
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION4-DETAILS.ERROR-FILE-SIZE');
+                    break;
+                default:
+                    this.variablesErrorMessage.set('USER-SETTINGS.OPTION4-DETAILS.ERROR');
+            }
+        }
+    } 
 }

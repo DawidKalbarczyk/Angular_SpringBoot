@@ -59,7 +59,7 @@
                 @default {
                     <div class="user-picked-setting">
                         <div class="user-close-setting-wrapper">
-                            <button class="user-close-setting-button" (click)="closeCurrentSetting(); resetVariablesMatching(); resetNgModelVariables()">
+                            <button class="user-close-setting-button" (click)="closeCurrentSetting(); resetVariablesMatching(); resetNgModelVariables(); onFileReset();">
                                 <mat-icon>close</mat-icon>
                             </button>
                         </div>
@@ -144,7 +144,32 @@
                         }
                         @case (4) {
                             <div class="user-picked-setting">
-
+                                @if (areVariablesMatching() === true && isSuccessful() === false) {
+                                    <h1 [class.profile-picture-h1]="newProfilePicturePreview" class="h1-clear">{{ 'USER-SETTINGS.OPTION4-DETAILS.TITLE' | translate }}</h1>
+                                } @else if (areVariablesMatching() === true && isSuccessful() === true) {
+                                    <h1 [class.profile-picture-h1]="newProfilePicturePreview" class="h1-success">{{ 'USER-SETTINGS.OPTION4-DETAILS.TITLE' | translate }}</h1>
+                                } @else {
+                                    <h1 [class.profile-picture-h1]="newProfilePicturePreview" class="h1-error">{{ 'USER-SETTINGS.OPTION4-DETAILS.TITLE' | translate }}</h1>
+                                }
+                                @if (areVariablesMatching() === false) {
+                                    <p class="error-message">{{ variablesErrorMessage() | translate}}</p>
+                                }
+                                @if (isSuccessful() === true) {
+                                    <p class="error-message-success">{{ variablesErrorMessage() | translate}}</p>
+                                }
+                                <form (ngSubmit)="updateUserService.changeProfilePicture(newProfilePictureFile!, currentPassword)">
+                                    <label>{{ 'USER-SETTINGS.OPTION4-DETAILS.DET1' | translate }}</label>
+                                    <div [class.profile-picture-container]="newProfilePicturePreview" [class.profile-picture-container-no-preview]="!newProfilePicturePreview">
+                                        <input type="file" name="newProfilePictureFile" accept="image/*"  (change)="onFileSelected($event)" [placeholder]="'USER-SETTINGS.OPTION4-DETAILS.DET1-PLACEHOLDER' | translate">
+                                        @if (newProfilePicturePreview) {
+                                            <img [src]="newProfilePicturePreview" alt="Profile Picture Preview" class="profile-picture-preview">
+                                        }
+                                    </div>
+                                    
+                                    <label>{{ 'USER-SETTINGS.OPTION4-DETAILS.DET2' | translate }}</label>
+                                    <input [(ngModel)]="currentPassword" type="password" name="currentPassword" [placeholder]="'USER-SETTINGS.OPTION4-DETAILS.DET2-PLACEHOLDER' | translate">
+                                    <button [class.profile-picture-button]="newProfilePicturePreview" type="submit" (click)="resetVariablesMatching(); resetNgModelVariablesTimeout()">{{ 'USER-SETTINGS.OPTION4-DETAILS.BTN' | translate }}</button>
+                                </form>
                             </div>
                         }
                         @case (5) {
@@ -169,7 +194,7 @@
             <div class="user-info">
                 <div class="user-pic-container">
                     <div class="user-pic-wrapper" 
-                    [class.user-pic-wrapper-photo-existsing]="hasPhoto() === true"
+                    [class.user-pic-wrapper-photo-existing]="hasPhoto() === true"
                     [class.user-pic-wrapper-dark]="darkMode() && (hasPhoto() === false)">
                         <img [src]="userData()?.photoURL || './images/icons/user.png'" alt="User" draggable="false"
                         />
@@ -182,7 +207,7 @@
                     <p>{{ userData()?.email }}</p>
                 </div>
                 <div class="user-button-container">
-                    <button>
+                    <button routerLink="/" (click)="logoutWithGoogle()">
                         {{ 'USER-SETTINGS.USER-INFO.BUTTON' | translate }}
                     </button>
                 </div>

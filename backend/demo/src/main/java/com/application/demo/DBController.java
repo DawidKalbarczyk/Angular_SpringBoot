@@ -8,6 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
+import java.io.IOException;
+
 
 
 
@@ -16,10 +20,12 @@ import org.springframework.web.bind.annotation.*;
 public class DBController {
     private final DBService dbService;
     private final JdbcTemplate jdbcTemplate;
+    private final FileStorageService fileStorageService;
 
-    public DBController(DBService dbService, JdbcTemplate jdbcTemplate) {
+    public DBController(DBService dbService, JdbcTemplate jdbcTemplate, FileStorageService fileStorageService) {
         this.dbService = dbService;
         this.jdbcTemplate = jdbcTemplate;
+        this.fileStorageService = fileStorageService;
     }
 
     // Mapuje tworzenie użytkownika na metodę HTTP POST.
@@ -154,25 +160,37 @@ public class DBController {
         }
     }
     
-    @PatchMapping ("/update-user-photo")
+    @PatchMapping(value="/update-user-photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserPhoto(@AuthenticationPrincipal FirebaseToken token,
-                                             @RequestBody UserUpdateRequest request) {
-        // Klient może zmienić profil tylko zalogowanego użytkownika.
-        // Odrzuca pusty albo niepoprawny adres URL zdjęcia.
-        if (request.photoURL() == null || request.photoURL().isBlank()) {
-            // Informuje klienta, że dane profilu są niepoprawne.
-            return ResponseEntity.badRequest().body("Invalid photo URL");
+                                             @RequestParam("profilePicture") MultipartFile file) {
+        if (!dbService.isTokenFresh(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Re-authentication required to update user profile");
         }
 
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body("No file uploaded");
+        }
+
+        String contentType = file.getContentType();
+        boolean allowedType = contentType != null && (contentType.equals("image/png") || contentType.equals("image/jpeg") || contentType.equals("image/gif") || contentType.equals("image/webp"));
+        if (!allowedType) {
+            return ResponseEntity.badRequest().body("Invalid file type. Only PNG, JPEG, GIF, and WEBP are allowed.");
+        }
+        if (file.getSize() > 10 * 1024 * 1024) { // 10 MB limit
+            return ResponseEntity.badRequest().body("File size exceeds the maximum limit of 10 MB.");
+        }
         try {
-            // Aktualizuje Firebase i rekord wskazany wyłącznie przez UID z tokenu.
-            boolean updated = dbService.updateUserPhotoURL(token.getUid(), request.photoURL().trim());
-            // Zwraca sukces albo informację, że użytkownik nie istnieje w bazie.
-            return updated ? ResponseEntity.ok("User photo updated successfully") : ResponseEntity.notFound().build();
+            String photoUrl = fileStorageService.storeProfilePicture(token.getUid(), file);
+            boolean updated = dbService.updateUserPhotoURL(token.getUid(), photoUrl);
+            if (updated) {
+                return ResponseEntity.ok("User photo updated successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user photo in database");
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating user photo: " + e.getMessage());
         } catch (FirebaseAuthException e) {
-            // Zwraca kontrolowany błąd, gdy Firebase odrzuci aktualizację profilu.
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                    .body("Firebase user photo update failed: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Firebase user photo update failed: " + e.getMessage());
         }
     }
 }

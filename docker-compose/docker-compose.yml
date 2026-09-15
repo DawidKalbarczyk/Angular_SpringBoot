@@ -60,6 +60,8 @@ services:
       - *env-firebase-service-account-json-base64
     ports:
       - "${SPRINGBOOT_PORT}:10000"
+    volumes:
+      - user-images:/app/images/user
     networks:
       default:
         aliases:
@@ -84,3 +86,4 @@ services:
 volumes:
   geoserver-data:
   postgres-data:
+  user-images:

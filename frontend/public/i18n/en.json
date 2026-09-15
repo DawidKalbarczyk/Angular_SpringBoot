@@ -119,6 +119,16 @@
       "BTN": "Submit"
     },
     "OPTION4": "Change profile picture",
+    "OPTION4-DETAILS": {
+      "TITLE": "Change profile picture",
+      "ERROR": "Failed to change profile picture.",
+      "SUCCESS": "Profile picture changed successfully.",
+      "DET1": "Select a new profile picture",
+      "DET1-PLACEHOLDER": "Choose a file...",
+      "DET2": "Enter your password",
+      "DET2-PLACEHOLDER": "Current password...",
+      "BTN": "Submit"
+    },
     "OPTION5": "ZMEIN",
     "OPTION6": "Delete profile picture",
     "OPTION7": "Delete account permanently",
