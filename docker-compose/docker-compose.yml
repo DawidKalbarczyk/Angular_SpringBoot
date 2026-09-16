@@ -39,7 +39,7 @@ services:
       - *env-geoserver-password
       - *env-geoserver-user
       - *env-geoserver-whitelist
-      - JAVA_OPTS=-Dorg.bouncycastle.native=false
+      - JAVA_OPTS=-Dorg.bouncycastle.native.cpu_variant=java
     ports:
       - "${GEOSERVER_PORT}:8080"
     volumes:
