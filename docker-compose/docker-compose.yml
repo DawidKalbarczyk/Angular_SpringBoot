@@ -5,7 +5,7 @@ x-environment:
  - &env-geoserver-password GEOSERVER_ADMIN_PASSWORD=${GEOSERVER_ADMIN_PASSWORD}
  - &env-geoserver-user GEOSERVER_ADMIN_USER=${GEOSERVER_ADMIN_USER}
  - &env-firebase-service-account-json-base64 FIREBASE_SERVICE_ACCOUNT_JSON_BASE64=${FIREBASE_SERVICE_ACCOUNT_JSON_BASE64}
-
+ - &env-geoserver-whitelist GEOSERVER_CSRF_WHITELIST=152.70.47.18:8000
 
 services:
   postgres:
@@ -19,6 +19,7 @@ services:
       - *env-postgres-db
       - *env-postgres-user
       - *env-postgres-password
+      - *env-geoserver-whitelist
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
