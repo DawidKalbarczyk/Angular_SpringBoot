@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { AuthorBar } from '../global-components/author-bar/author-bar';
 import { LoginCorner } from '../global-components/login-corner/login-corner';
 import { ReturnCorner } from '../global-components/return-corner/return-corner';
@@ -22,7 +22,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './user.scss',
 })
 export class User {
-  public logoutWithGoogle = inject(LoginService).logoutWithGoogle;
+  public logoutWithGoogle() {
+    this.loginService.logoutWithGoogle();
+  }
   private getUser = inject(GetUser);
   private loginService = inject(LoginService);
   public isLoggedIn = this.loginService.isLoggedIn;//signal(true); // 
@@ -107,6 +109,7 @@ export class User {
 
   public newProfilePicturePreview: string | ArrayBuffer | null = null;
   public newProfilePictureFile: File | null = null;
+  private cdr = inject(ChangeDetectorRef);
 
   public onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -116,6 +119,7 @@ export class User {
       const reader = new FileReader();
       reader.onload = () => {
         this.newProfilePicturePreview = reader.result;
+        this.cdr.detectChanges();
       };
       reader.readAsDataURL(this.newProfilePictureFile);
     }

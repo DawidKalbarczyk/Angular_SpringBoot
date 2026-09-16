@@ -1,6 +1,13 @@
 @use '../../variables' as *;
 @use '@angular/material' as mat;
 
+.input-button-dark {
+    background-color: $secondary-color-dark !important;
+
+    &:hover {
+        background-color: $buttons-color !important;
+    }
+} 
 .dark-mode {
     .redirect-container {
         background-color: $secondary-color-dark !important;
@@ -327,7 +334,7 @@
                         background-color: rgb(108,108,108);
                     }
                 }
-                .profile-picture-container{
+                .profile-picture-container, .profile-picture-container-no-preview {
                     display: flex;
                     flex-direction: row;
                     align-items: center;
@@ -337,8 +344,44 @@
                     margin-bottom: 1.5rem;
                     padding: 1rem;
                     overflow-y: hidden;
-                    input {
-                        width: 100%;
+                    
+                    .custom-file-upload-wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 0.5rem;
+
+                        .custom-file-upload {
+                            display: inline-block;
+                            padding: 0.8rem 1.5rem;
+                            background-color: $buttons-color;
+                            color: #F5F5F5;
+                            border-radius: 0.5rem;
+                            cursor: pointer;
+                            font-size: 1rem;
+                            text-align: center;
+                            transition: background-color 0.3s ease;
+                            border: none;
+                            margin-bottom: 0 !important;
+                            width: auto;
+
+                            &:hover {
+                                background-color: rgb(108,108,108);
+                            }
+
+                            input[type="file"] {
+                                display: none !important;
+                            }
+                        }
+
+                        .file-selected-name {
+                            font-size: 0.9rem;
+                            color: inherit;
+                            max-width: 200px;
+                            word-wrap: break-word;
+                            word-break: break-all;
+                        }
                     }
 
                     .profile-picture-preview {

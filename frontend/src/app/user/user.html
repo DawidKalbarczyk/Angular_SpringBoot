@@ -160,7 +160,15 @@
                                 <form (ngSubmit)="updateUserService.changeProfilePicture(newProfilePictureFile!, currentPassword)">
                                     <label>{{ 'USER-SETTINGS.OPTION4-DETAILS.DET1' | translate }}</label>
                                     <div [class.profile-picture-container]="newProfilePicturePreview" [class.profile-picture-container-no-preview]="!newProfilePicturePreview">
-                                        <input type="file" name="newProfilePictureFile" accept="image/*"  (change)="onFileSelected($event)" [placeholder]="'USER-SETTINGS.OPTION4-DETAILS.DET1-PLACEHOLDER' | translate">
+                                        <div class="custom-file-upload-wrapper">
+                                            <label class="custom-file-upload" [class.input-button-dark]="darkMode()">
+                                                <input type="file" name="newProfilePictureFile" accept="image/*" (change)="onFileSelected($event)">
+                                                {{ 'USER-SETTINGS.OPTION4-DETAILS.DET1-PLACEHOLDER' | translate }}
+                                            </label>
+                                            <span class="file-selected-name" [title]="newProfilePictureFile?.name || ''">
+                                                {{ newProfilePictureFile ? newProfilePictureFile.name : '' }}
+                                            </span>
+                                        </div>
                                         @if (newProfilePicturePreview) {
                                             <img [src]="newProfilePicturePreview" alt="Profile Picture Preview" class="profile-picture-preview">
                                         }

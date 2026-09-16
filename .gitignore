@@ -26,3 +26,4 @@ docker-compose/docker
 .env
 notatki.txt
 data/
+ssh-keys/
