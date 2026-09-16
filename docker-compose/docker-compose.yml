@@ -19,7 +19,6 @@ services:
       - *env-postgres-db
       - *env-postgres-user
       - *env-postgres-password
-      - *env-geoserver-whitelist
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
@@ -39,6 +38,7 @@ services:
     environment:
       - *env-geoserver-password
       - *env-geoserver-user
+      - *env-geoserver-whitelist
     ports:
       - "${GEOSERVER_PORT}:8080"
     volumes:
