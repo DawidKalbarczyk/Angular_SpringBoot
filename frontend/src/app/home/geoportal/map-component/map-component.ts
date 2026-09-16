@@ -174,7 +174,6 @@ export class MapComponent implements AfterViewInit {
     });
     
   }
-
   private tileLayer(visibleLayer: LayerKey, layerName: string): TileLayer {
     const visibility = this.mapLayersVisibility.layersVisibility();
     return new TileLayer({
