@@ -39,7 +39,7 @@ services:
     ports:
       - "${GEOSERVER_PORT}:8080"
     volumes:
-      - geoserver-data:/opt/geoserver_data
+      - geoserver-data:/opt/geoserver/data_dir
     networks:
       default:
         aliases:
