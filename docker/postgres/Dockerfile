@@ -1,3 +1,3 @@
-FROM pgrouting/pgrouting:16-3.5-3.7
+FROM postgis/postgis:16-3.4
 LABEL author="Dawid Kalbarczyk"
 COPY ./docker/postgres/init-scripts /docker-entrypoint-initdb.d/
