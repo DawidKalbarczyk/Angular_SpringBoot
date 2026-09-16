@@ -35,6 +35,18 @@
         "LAY3": "Budynki (duża skala)"
     },
     "INFO": "Info",
+    "INFO-DETAILS": {
+      "TITLE": "Informacje dotyczące warstw",
+      "LAYER": "Warstwa: ",
+      "ID": "ID w warstwie: ",
+      "LOCALITY": "Miejscowość: ",
+      "POPULATION": "Liczba mieszkańców: ",
+      "DISTRICT": "Powiat: ",
+      "COMMUNE": "Gmina: ",
+      "CITY": "Miasto: ",
+      "VOIVODESHIP": "Województwo: ",
+      "COUNTRY": "Kraj: "
+    },
     "LAYERS": "Warstwy",
     "INFO-CONTENT": {
         "LAY1": "Miejscowości",
@@ -75,6 +87,7 @@
     "ERROR-INV-CRED": "Nieprawidłowe dane logowania."
   },
   "USER-SETTINGS": {
+    "REDIRECT": "Nie jesteś zalogowany. Przekierowuję...",
     "OPTION1": "Zmień nazwę użytkownika",
     "OPTION1-DETAILS": {
       "TITLE": "Zmiana nazwy użytkownika",

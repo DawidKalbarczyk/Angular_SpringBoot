@@ -35,6 +35,18 @@
         "LAY3": "Buildings (large scale)"
     },
     "INFO": "Info",
+    "INFO-DETAILS": {
+      "TITLE": "Information about layers",
+      "LAYER": "Layer: ",
+      "ID": "ID in layer: ",
+      "LOCALITY": "Locality: ",
+      "POPULATION": "Population: ",
+      "DISTRICT": "District: ",
+      "COMMUNE": "Commune: ",
+      "CITY": "City: ",
+      "VOIVODESHIP": "Voivodeship: ",
+      "COUNTRY": "Country: "
+    },
     "LAYERS": "Layers",
     "INFO-CONTENT": {
         "LAY1": "Localities",
@@ -75,6 +87,7 @@
     "ERROR-INV-CRED": "Invalid credentials."
   },
   "USER-SETTINGS": {
+    "REDIRECT": "You are not logged in. Redirecting...",
     "OPTION1": "Change username",
     "OPTION1-DETAILS": {
       "TITLE": "Change username",

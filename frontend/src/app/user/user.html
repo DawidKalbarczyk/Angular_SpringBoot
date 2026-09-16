@@ -4,7 +4,7 @@
 <div class="user-container" [class.dark-mode]="darkMode()">
     @if (redirectUrl === true) {
         <div class="redirect-container">
-            <p>Nie jesteś zalogowany. Przekierowuję...</p>
+            <p>{{ 'USER-SETTINGS.REDIRECT' | translate }}</p>
             <mat-spinner></mat-spinner>
         </div>
     } @else {
