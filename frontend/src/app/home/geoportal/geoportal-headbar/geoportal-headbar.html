@@ -54,7 +54,7 @@
     </div>
     <div (click)="baseLayerOut()" class="baselayer" [class.active-baselayer]="headbarKeys.baseLayer">
         @if(headbarKeys.baseLayer){
-        <div class="baselayer-container" [class]="headbarKeys.baseLayer ? 'enter-animation-opacity' : 'leave-animation-opacity'" >
+        <div class="baselayer-container" [class]="headbarKeys.baseLayer ? 'enter-animation-opacity' : 'leave-animation-opacity'" (click)="$event.stopPropagation()">
             <div>
                 <p>{{ 'GEOPORTAL.BASEMAP-CONTENT.LAY1' | translate }}</p>
                 <mat-slide-toggle [checked]="mapLayerService.isVisible('osmLayer')"
