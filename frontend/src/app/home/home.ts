@@ -20,6 +20,7 @@ export class Home {
   public isDarkMode = inject(DarkMode).isDarkMode;
   public isLoggedIn = this.loginService.isLoggedIn;
 
+  
   public wasMiddleClicked = signal<boolean>(false);
   public wasPopUpCloseClicked = signal<boolean>(false);
 
