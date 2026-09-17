@@ -51,8 +51,8 @@
     "INFO-CONTENT": {
         "LAY1": "Localities",
         "LAY2": "Cities boundaries",
-        "LAY3": "Municipalities boundaries",
-        "LAY4": "Counties boundaries",
+        "LAY3": "Communes boundaries",
+        "LAY4": "Districts boundaries",
         "LAY5": "Voivodeships boundaries",
         "LAY6": "Country boundaries"
     }

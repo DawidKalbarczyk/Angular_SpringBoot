@@ -77,7 +77,7 @@
         </div>
         {{ 'GEOPORTAL.BASEMAP' | translate }}
     </div>
-    <div (click)="infoOut(); infoToggleService.infoClicked()" class="geoportal-tool"
+    <div (click)="infoOut()" class="geoportal-tool"
         [class.active-info]="headbarKeys.info && (infoFeatures.isCursorDragged() === false)">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/info.png" alt="Info" draggable="false" class="geoportal-tool-icon" />
@@ -93,7 +93,7 @@
         {{ 'GEOPORTAL.INFO' | translate }}
         }
     </div>
-    <div (click)="layersOut()" class="layers" [class.active-layers]="mapLayerService.isLayerClicked()">
+    <div (click)="layersOut()" class="layers" [class.active-layers]="headbarKeys.layers">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/layers.png" alt="Layers" draggable="false" class="geoportal-tool-icon" />
         </div>

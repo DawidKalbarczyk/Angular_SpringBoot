@@ -64,6 +64,8 @@ export class GeoportalHeadbar {
         this.headbarKeys[typedKey] = !this.headbarKeys[typedKey];
       }
     }
+    this.infoToggleService.isInfoClicked.set(this.headbarKeys.info);
+    this.mapLayerService.isLayerClicked.set(this.headbarKeys.layers);
   }
 
   searchOut(): void {

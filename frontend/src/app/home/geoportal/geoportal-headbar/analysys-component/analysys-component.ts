@@ -13,7 +13,7 @@ import { GeoserverService } from '../../../../services/GeoserverService/geoserve
           public analysysPicked = signal<boolean>(false);
 
           public pickAnalysys() {
-            this.analysysPicked.set(true);
+            this.analysysPicked.set(false);
           }   
 
           public GeoserverService = inject(GeoserverService);

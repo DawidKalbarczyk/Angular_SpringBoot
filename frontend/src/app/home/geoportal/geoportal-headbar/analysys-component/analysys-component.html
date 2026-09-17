@@ -1,6 +1,9 @@
 <div class="main" animate.enter="enter-animation">
     <div class="content-wrapper">
         <div class="title">
+            <button class="analysys-return" (click)="pickAnalysys()">
+                &#8635;
+            </button>
             <p>Narzędzie analiz</p>
         </div>
         <section class="content-section">
@@ -16,6 +19,8 @@
                 <div class="info">
                     <p>Analiza testowana</p>
                     <button>createLayer</button>
+                    <!-- Wybierz (obiekty/coś innego) z warstwy... które w kolumnie (wybór kolumn) mają/nie mają itd (wybór 30 tak samo jak w wyszukiwarce)-->
+                    <!-- Wybierz obiekty z warstwy  (warstwa), które (opcje do wybrania) wewnątrz/poza itd (warstwa2) -->
                     <input [value]="inputText()" placeholder="Wpisz nazwę warstwy" (input)="inputText.set($event.target.value)">
                     <button (click)="userCreation(inputText(), 'createWorkspace')">createWorkspace</button>
                     <button (click)="userCreation(inputText(), 'createDatastore')">createDatastore</button>
