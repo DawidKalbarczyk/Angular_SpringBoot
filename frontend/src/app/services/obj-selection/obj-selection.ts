@@ -1,0 +1,225 @@
+import { Service, signal, inject } from '@angular/core';
+import BaseLayer from 'ol/layer/Base';
+import { Collection } from 'ol';
+import { getAuth} from 'firebase/auth';
+import { LayerVisibility } from '../layer-visibility/layer-visibility';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+
+@Service()
+export class ObjSelection {
+    public SLD: string = ``;
+    public getSLD(userId: string, time: string): string {
+        return `
+            <StyledLayerDescriptor version="1.0.0"
+            xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"
+            xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
+            xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+            <NamedLayer>
+                <Name>user_${userId}_temp_table_${time}</Name>
+                <UserStyle>
+                <Title>Selection style for all users</Title>
+                <FeatureTypeStyle>
+                    <Rule>
+                    <Title>Selection polygon</Title>
+                    <PolygonSymbolizer>
+                        <Fill>
+                        <CssParameter name="fill">#ebd834
+                        </CssParameter>
+                        </Fill>
+                        <Stroke>
+                        <CssParameter name="stroke">#000000</CssParameter>
+                        <CssParameter name="stroke-width">0.5</CssParameter>
+                        </Stroke>
+                    </PolygonSymbolizer>
+
+                    </Rule>
+
+                </FeatureTypeStyle>
+                </UserStyle>
+            </NamedLayer>
+            </StyledLayerDescriptor>
+        `
+    }
+
+    private http = inject(HttpClient);
+    public analysysPicked = signal<boolean>(false);
+    public analysisNrPicked = signal<string>('none');
+    public toolPicked = signal<string>('Błąd');
+    public mapLayers = signal<Collection<BaseLayer>>(new Collection<BaseLayer>());   
+    public visibleMapLayers = signal<any[]>([]);
+
+     public async clearAllSelectedVariables(): Promise<void> {
+        this.selectedObjects.set([]);
+        this.selectedNumberOfObjects.set(0);
+
+        // Usuń żółtą warstwę z mapy, jeśli istnieje
+        const layers = this.mapLayers();
+        if (layers) {
+            const existingLayer = layers.getArray().find((l) => l.get('layerKey') === 'highlightedObjectsLayer');
+            if (existingLayer) {
+                layers.remove(existingLayer);
+            }
+        }
+
+        await this.http.delete('/analysys/delete-table-from-selection', {
+        params: {
+            userId: this.userId,
+            time: this.time
+        }
+        }).toPromise().then(() => {
+        console.log('Temporary table ALL VARIABLES CLEAR deleted successfully.');
+        }).catch((error) => {
+        console.error('Error deleting ALL VARIABLES CLEAR temporary table:', error);
+        });
+    }
+
+    private layerVisibility = inject(LayerVisibility);
+    public getMapLayers(layers: Collection<BaseLayer>): void {
+        this.mapLayers.set(layers);
+        let isSelectedLayerStillVisible = false;
+        
+        // ZAWSZE czyścimy listę przed nowym przeliczeniem!
+        this.visibleMapLayers.set([]);
+
+        this.mapLayers().forEach((layer) => {
+            const layerKey = layer.get('layerKey');
+            // Zabezpieczenie: bierzemy pod uwagę tylko warstwy, które mają ustawiony 'layerKey'
+            if (layerKey && this.layerVisibility.isVisible(layerKey)) {
+                this.visibleMapLayers.update((v) => [...v, layer]);
+                if (layerKey === this.selectedSelectOptionLayer()) {
+                    isSelectedLayerStillVisible = true;
+                }
+            }
+        });
+
+        // Zresetuj wybór, jeśli zaznaczona warstwa nagle zniknęła z widocznych
+        if (this.selectedSelectOptionLayer() !== '' && !isSelectedLayerStillVisible) {
+            this.selectedSelectOptionLayer.set('');
+            this.selectedObjects.set([]);
+            this.selectedNumberOfObjects.set(0);
+        }
+    }
+    public resetMapLayers(): void {
+        this.visibleMapLayers.set([]);
+    }
+    public isSelectionPicked = signal<boolean>(false);
+    public resetSelectedOption(): void {
+        this.isSelectionPicked.set(false);
+    }
+
+    public userId: string = '';
+    public getUserId(): string {
+        const auth = getAuth();
+        if (auth.currentUser) {
+            this.userId = auth.currentUser.uid;
+        }
+        return this.userId;
+    }
+    public time: string = '';
+    public getTime(): string {
+        this.time = Date.now().toString();
+        return this.time;
+    }
+
+    public async sqlSelectObjects(layer: string, time: string): Promise<void> {
+        try {
+            const auth = getAuth();
+            
+            // Czekamy ułamek sekundy, aż Firebase zainicjalizuje sesję (inaczej currentUser to null po odświeżeniu)
+            await auth.authStateReady(); 
+
+            let userId: string = '';
+            if (auth.currentUser) {
+                userId = this.getUserId();
+            }
+
+            const ids: string[] = [];
+            this.selectedObjects().forEach((object) => {
+                ids.push(object.features[0].id.split('.')[1]);
+            });
+            const idsString = ids.join(',');
+            console.log('Creating table with query: ', `SELECT * FROM ${layer} WHERE id IN (${idsString})`);
+            const formData = new FormData();
+            formData.append('userId', userId);
+            formData.append('layer', layer);
+            formData.append('ids', `(${idsString})`);
+            formData.append('time', time);
+
+            await firstValueFrom(
+                this.http.post('/analysys/create-table-from-selection', formData, { responseType: 'text' })
+            );
+
+            const tableName = `user_${userId}_temp_table_${time}`;
+            await this.http.post('/analysys/create-layer', {
+                tableName: tableName,
+                title: tableName,
+                sld: this.SLD,
+                userId: userId
+            }).toPromise();
+            
+        } catch (error) {
+            console.error('Error fetching user ID token:', error);
+            throw error;
+        }
+    }
+
+    public selectedSelectOptionLayer = signal<string>('');
+    public selectedObjects = signal<any[]>([]);
+    public selectedNumberOfObjects = signal<number>(0);
+
+    public onLayerSelectChange(newLayer: string): void {
+        if (this.selectedSelectOptionLayer() !== newLayer) {
+            this.selectedSelectOptionLayer.set(newLayer);
+            this.selectedObjects.set([]);
+            this.selectedNumberOfObjects.set(0);
+        }
+    }
+
+    public analysisActive(): void {
+        this.analysysPicked.set(true);
+    }
+    public analysisDeactive(): void {
+        this.analysysPicked.set(false);
+        this.analysisNrPicked.set('none');
+    }
+
+    
+    public pickAnalysys(param: string) {
+        this.analysysPicked.set(!this.analysysPicked());
+        switch (param) {
+            case 'attribute':
+                console.log('Attribute analysis selected');
+                this.analysisNrPicked.set('attribute');
+                this.toolPicked.set(this.changeTitle('attribute'));
+                break;
+            case 'spatial':
+                console.log('Spatial analysis selected');
+                this.analysisNrPicked.set('spatial');
+                this.toolPicked.set(this.changeTitle('spatial'));
+                break;
+            case 'selection':
+                console.log('Object selection selected');
+                this.analysisNrPicked.set('selection');
+                this.toolPicked.set(this.changeTitle('selection'));
+                break;
+            default:
+                this.analysisNrPicked.set('none');
+                this.toolPicked.set(this.changeTitle('error'));
+        }
+    }   
+    public changeTitle(tool: string) {
+        switch (tool) {
+            case 'attribute':
+                return 'Analiza atrybutowa';
+            case 'spatial':
+                return 'Analiza przestrzenna';
+            case 'selection':
+                return 'Zaznaczanie obiektów';
+            default:
+                return 'Błąd';
+        }
+    }
+
+}

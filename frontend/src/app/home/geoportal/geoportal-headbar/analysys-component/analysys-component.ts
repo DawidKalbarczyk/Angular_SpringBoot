@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { GeoserverService } from '../../../../services/GeoserverService/geoserver-service';
+import { ObjSelection } from '../../../../services/obj-selection/obj-selection';
 
 @Component({
   selector: 'app-analysys-component',
@@ -10,14 +11,9 @@ import { GeoserverService } from '../../../../services/GeoserverService/geoserve
         export class AnalysysComponent {
           public inputText = signal<string>('');
 
-          public analysysPicked = signal<boolean>(false);
-
-          public pickAnalysys() {
-            this.analysysPicked.set(false);
-          }   
-
+          
           public GeoserverService = inject(GeoserverService);
-
+          
           public userCreation(userId: string, func: 'createWorkspace' | 'createTempWorkspace' | 'createDatastore' | 'createTempDatastore' ) {
             this.GeoserverService[func](userId).subscribe({
               next: (response) => {
@@ -28,4 +24,12 @@ import { GeoserverService } from '../../../../services/GeoserverService/geoserve
               }
             })
           }
+
+          public objectSelection = inject(ObjSelection);
+          
+          
+          public testFunc(): void {
+            console.log('Selected Layer:', this.objectSelection.selectedSelectOptionLayer());
+          }
+  
         }

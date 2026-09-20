@@ -209,8 +209,9 @@ public class GeoServerService {
     }
 
     public void publishLayer(String tableName, String title, String userId) {
-        String url = geoserverUrl + "/rest/workspaces/user_" + userId
-                + "/datastores/user_" + userId + "/featuretypes";
+        String url = geoserverUrl + "/rest/workspaces/user_" + userId + "_temp"
+                + "/datastores/user_" + userId + "_temp_datastore/featuretypes"
+                + "?recalculate=nativebbox,latlonbbox";
 
         String body = """
                 {
@@ -218,11 +219,12 @@ public class GeoServerService {
                     "name": "%s",
                     "nativeName": "%s",
                     "title": "%s",
-                    "srs": "EPSG:4326",
+                    "srs": "EPSG:3857",
+                    "nativeCRS": "EPSG:3857",
                     "enabled": true
                   }
                 }
-                """.formatted(tableName, tableName, title);
+                """.formatted(tableName, tableName.toLowerCase(), title);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -234,6 +236,23 @@ public class GeoServerService {
 
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new RuntimeException("GeoServer error: " + response.getStatusCode());
+        }
+    }
+    public void deleteLayer(String tableName, String userId) {
+        String url = geoserverUrl + "/rest/workspaces/user_" + userId + "_temp"
+                + "/datastores/user_" + userId + "_temp_datastore/featuretypes/" + tableName + "?recurse=true";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(username, password);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
+            logger.info("Deleted layer from GeoServer: {}", tableName);
+        } catch (HttpClientErrorException.NotFound e) {
+            logger.info("Layer not found in GeoServer (already deleted): {}", tableName);
+        } catch (Exception e) {
+            logger.error("Error deleting layer from GeoServer: {}", e.getMessage());
         }
     }
 }

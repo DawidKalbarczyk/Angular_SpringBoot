@@ -3,7 +3,7 @@ import Map from 'ol/Map';
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat, get } from 'ol/proj';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
@@ -15,6 +15,10 @@ import { InfoToggle } from '../../../services/info-toggle/info-toggle';
 import { InfoComponent } from '../geoportal-headbar/info-component/info-component';
 import { InfoFeatures } from '../../../services/info-features/info-features';
 import { ZoomToObject } from '../../../services/zoom-to-object/zoom-to-object';
+import { ObjSelection } from '../../../services/obj-selection/obj-selection';
+import { getAuth } from 'firebase/auth';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 
 
 @Component({
@@ -42,6 +46,8 @@ export class MapComponent implements AfterViewInit {
   public vectorResults = inject(LayerVisibility).vectorResults;
 
   constructor() {
+    
+
     effect(() => {
       const visibility = this.mapLayersVisibility.layersVisibility();
       this.vectorLayer?.setVisible(visibility.vectorLayer);
@@ -54,8 +60,19 @@ export class MapComponent implements AfterViewInit {
       this.boundsLayerWojewodz?.setVisible(visibility.boundsLayerWojewodz);
       this.boundsLayerPanstwo?.setVisible(visibility.boundsLayerPanstwo);
     });
+
+    // Handling for analysis selection and map layers visibility
+    effect(() => {
+      this.mapLayersVisibility.layersVisibility();
+      if (this.map) {
+        this.objectSelection.resetMapLayers();
+        this.objectSelection.getMapLayers(this.map.getLayers());
+      }
+    });
   }
 
+
+  private objectSelection = inject(ObjSelection);
   ngAfterViewInit(): void {
     this.osmLayer = new TileLayer({
       source: new OSM({attributions:[]}),
@@ -71,7 +88,6 @@ export class MapComponent implements AfterViewInit {
     this.vectorLayer = this.buildVectorLayer();
 
     this.zoomToObject.vectorLayer(this.vectorLayer);
-
     this.map = new Map({
       target: 'map',
       controls: [],
@@ -92,9 +108,10 @@ export class MapComponent implements AfterViewInit {
       }),
     });
     this.zoomToObject.setMap(this.map);
-
-
+    this.objectSelection.getMapLayers(this.map.getLayers());
+    
     this.map.on('singleclick', (event) => {
+      this.objectSelection.isSelectionPicked.set(true);
       if (this.infoToggleService.isInfoClicked()) {
         this.infoProperties.clear(); // Reset properties before fetching new data
         this.infoProperties.isInfoReady.set(false); // Reset info ready state before fetching new data
@@ -168,18 +185,164 @@ export class MapComponent implements AfterViewInit {
         Promise.all(requests).then(() => {
           this.infoProperties.isInfoReady.set(true); // Set the info ready state after fetching data
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      } else if (this.objectSelection.analysisNrPicked() === 'selection' && this.objectSelection.selectedSelectOptionLayer() !== '' && this.objectSelection.isSelectionPicked()) {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+        console.log('YuupiCayo! Works for now');
+        this.objectSelection.resetSelectedOption();
+        const viewResolution = this.map.getView().getResolution();
+        if (!viewResolution) return;
+        // Widzialne warstwy:
+        this.objectSelection.visibleMapLayers().forEach((layer) => {
+          if (layer instanceof TileLayer && layer.getVisible()) {
+            const source = layer.getSource();
+            if (source instanceof TileWMS && this.objectSelection.selectedSelectOptionLayer() === layer.get('layerKey')) {
+              const url = source.getFeatureInfoUrl(
+                event.coordinate,
+                viewResolution,
+                'EPSG:3857',
+                { INFO_FORMAT: 'application/json' }
+                
+            )
+
+            //Dodać to gdyby było potrzebne sprawdzenie czy dane są gotowe do wyświetlenia
+            const requests: Promise<void>[] = [];
+
+            if (url) {
+                fetch(url)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.features && data.features.length > 0) {``
+                      for (const obj of this.objectSelection.selectedObjects()) {
+                        if (obj.features[0].id === data.features[0].id) {
+                          console.log('Object already selected, skipping addition.');
+                          return; // Exit the function if the object is already selected
+                        }
+                      }
+                      this.objectSelection.selectedObjects.update((arr) => [...arr, data]);
+                      this.objectSelection.selectedNumberOfObjects.set(this.objectSelection.selectedObjects().length);
+                      this.highlightSelectedObjectsTileLayer().then((layer) => {
+                        this.addOrReplaceHighlightedLayer(layer);
+                      });
+                    }
+                    //highlightSelectedObjects(); // Call the function to highlight selected objects
+                    console.log('WMS Feature Info for SELECTION:', data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching WMS Feature Info for SELECTION:', error);
+                });
+            }
+          };
+          }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       } else {
-        console.log('Info toggle is not active. Click ignored.');
+        console.log('Info and selection by hand are not active, no action taken.');
       }
     });
     
   }
 
+  private addOrReplaceHighlightedLayer(newLayer: TileLayer): void {
+    const existing = this.map.getLayers().getArray().find((l) => l.get('layerKey') === 'highlightedObjectsLayer');
+    if (existing) {
+      this.map.removeLayer(existing);
+    }
+    this.map.addLayer(newLayer);
+  }
+
+  private http = inject(HttpClient);
+  private async highlightSelectedObjectsTileLayer(): Promise<TileLayer> {
+    const auth = getAuth();
+    //Tutaj stworzyć nową warstwę i wbić ją do temp usera
+    let userId: string = '';
+    if (auth.currentUser) {
+      userId = auth.currentUser.uid;
+    }
+
+    // Usuń poprzednią tabelę tylko jeśli już istnieje (time nie jest pustym stringiem)
+    if (this.objectSelection.time !== '') {
+      await firstValueFrom(
+        this.http.delete('/analysys/delete-table-from-selection', {
+          params: {
+            userId: userId,
+            time: this.objectSelection.time
+          }
+        })
+      );
+    }
+    
+
+    await this.objectSelection.sqlSelectObjects(this.objectSelection.selectedSelectOptionLayer(), this.objectSelection.getTime());
+
+    return new TileLayer({
+      properties: { layerKey: 'highlightedObjectsLayer' },
+      source: new TileWMS({
+        url: `${window.location.origin}/geoserver/user_${userId}_temp/wms?`,
+        params: {
+          'LAYERS': `user_${userId}_temp:user_${userId}_temp_table_${this.objectSelection.time}`, //tutaj specjalnie time zamiast getTime
+          'TILED': true,
+          'VERSION': '1.1.1',
+          'SLD_BODY': this.objectSelection.getSLD(userId, this.objectSelection.time) //tutaj specjalnie time zamiast getTime
+        },
+        serverType: 'geoserver',
+        transition: 300,
+        crossOrigin: 'anonymous',
+      }),
+      visible: true,
+    })
+
+  }
+
+  
+
   private tileLayer(visibleLayer: LayerKey, layerName: string): TileLayer {
     const visibility = this.mapLayersVisibility.layersVisibility();
     return new TileLayer({
+      properties: { layerKey: visibleLayer },
       source: new TileWMS({
-        url: `${window.location.origin}/geoserver/AngularAppSpring/wms?`,
+        url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
         // url: `${window.location.origin}/geoserver/AngularLocal/wms?`,
         params: {
           //'LAYERS': `AngularAppSpring:${layerName}`,
@@ -197,7 +360,7 @@ export class MapComponent implements AfterViewInit {
 
   private buildVectorLayer(): VectorImageLayer {
     const wfsUrl =
-      `${window.location.origin}/geoserver/AngularAppSpring/ows?` +
+      `${window.location.origin}/geoserver/AngularLocal/ows?` +
       `service=WFS&version=1.0.0&request=GetFeature` +
       `&typeName=AngularLocal:sql_data` +
       `&outputFormat=application/json&srsname=EPSG:3857`;
@@ -231,6 +394,34 @@ export class MapComponent implements AfterViewInit {
 
   private isHighlightedService = this.zoomToObject.isHighlightedService;
   private readonly ALWAYS_SHOW_TOP_N = 60;
+
+  private SelectedObjectsVectorLayer(): VectorImageLayer { 
+    const wfsUrl = `${window.location.origin}/geoserver/AngularLocal/ows?` +
+      `service=WFS&version=1.0.0&request=GetFeature` +
+      `&typeName=AngularLocal:${this.objectSelection.selectedSelectOptionLayer()}` +
+      `&outputFormat=application/json&srsname=EPSG:3857`;
+
+    const vectorSource = new VectorSource({
+      format: new GeoJSON(),
+      url: wfsUrl,
+    });
+
+    return new VectorImageLayer({
+      source: vectorSource,
+      visible: true,
+      style: (feature) => {
+        return new Style({
+          image: new CircleStyle({
+            radius: 25,
+            fill: new Fill({ color: 'orange' }),
+            stroke: new Stroke({ color: '#000', width: 3 }),
+          })
+        })
+      },
+      declutter: false,
+    });
+  }
+
   private decimatedStyle(feature: FeatureLike, resolution: number): Style | undefined {
     const idx = feature.get('__idx') ?? 0;
     const isHighlighted = feature.get('highlighted') === true;
