@@ -68,6 +68,9 @@ public class AnalysysController {
                 case "boundsLayerCities":
                     layerMapComponentName = "boundscities";
                     break;
+                case "vectorLayer":
+                    layerMapComponentName = "sql_data";
+                    break;
                 default:
                     layerMapComponentName = layer;
             }
@@ -80,7 +83,7 @@ public class AnalysysController {
             // żeby ALTER TABLE trafił w tabelę o właściwej nazwie.
             String tableNameLower = tableName.toLowerCase();
             jdbcTemplate.execute(
-                "ALTER TABLE " + tableNameLower + " ALTER COLUMN wkb_geometry TYPE geometry(Polygon, 3857) USING ST_Transform(ST_SetSRID(wkb_geometry, 2180), 3857)"
+                "ALTER TABLE " + tableNameLower + " ALTER COLUMN wkb_geometry TYPE geometry(Geometry, 3857) USING ST_Transform(ST_SetSRID(wkb_geometry, 2180), 3857)"
             );
             return ResponseEntity.ok(Map.of("message", "Table created successfully"));
         } catch (Exception e) {

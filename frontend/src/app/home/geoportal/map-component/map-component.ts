@@ -8,7 +8,7 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Style, Text, Fill, Stroke, Circle as CircleStyle } from 'ol/style';
-import { FeatureLike } from 'ol/Feature';
+import Feature, { FeatureLike } from 'ol/Feature';
 import TileWMS from 'ol/source/TileWMS';
 import { LayerVisibility, LayerKey } from '../../../services/layer-visibility/layer-visibility';
 import { InfoToggle } from '../../../services/info-toggle/info-toggle';
@@ -210,6 +210,13 @@ export class MapComponent implements AfterViewInit {
         if (!viewResolution) return;
         // Widzialne warstwy:
         this.objectSelection.visibleMapLayers().forEach((layer) => {
+
+
+
+
+
+
+
           if (layer instanceof TileLayer && layer.getVisible()) {
             const source = layer.getSource();
             if (source instanceof TileWMS && this.objectSelection.selectedSelectOptionLayer() === layer.get('layerKey')) {
@@ -249,6 +256,50 @@ export class MapComponent implements AfterViewInit {
                 });
             }
           };
+          }
+          if (layer instanceof VectorImageLayer && layer.getVisible() && this.objectSelection.selectedSelectOptionLayer() === 'vectorLayer') {
+            // Szukamy czy cokolwiek mieści się w tolerancji kliknięcia
+            const hitFeatures = this.map.getFeaturesAtPixel(event.pixel, {
+              layerFilter: (l) => l === layer,
+              hitTolerance: 50
+            });
+
+            if (hitFeatures && hitFeatures.length > 0) {
+              // Pobierz z warstwy obiekt, który znajduje się centralnie najbliżej punktu kliknięcia
+              const clickedFeature = layer.getSource().getClosestFeatureToCoordinate(event.coordinate) as Feature;
+              
+              if (clickedFeature) {
+                // Pobieramy ID w formacie 'layer.id' (np. 'sql_data.123') lub wyciągamy z właściwości
+                let featureId = clickedFeature.getId() as string;
+                if (!featureId) {
+                   featureId = 'vectorLayer.' + clickedFeature.get('id'); // Próba ratunku, jeśli getId() jest puste
+                }
+
+              // Tworzymy mock-obiekt, by upodobnić odpowiedź do WMS GetFeatureInfo
+              const mockData = {
+                features: [
+                  {
+                    id: featureId,
+                    properties: clickedFeature.getProperties()
+                  }
+                ]
+              };
+
+              for (const obj of this.objectSelection.selectedObjects()) {
+                if (obj.features[0].id === mockData.features[0].id) {
+                  console.log('Object already selected, skipping addition.');
+                  return; 
+                }
+              }
+
+              this.objectSelection.selectedObjects.update((arr) => [...arr, mockData]);
+              this.objectSelection.selectedNumberOfObjects.set(this.objectSelection.selectedObjects().length);
+              
+              this.highlightSelectedObjectsTileLayer().then((newLayer) => {
+                this.addOrReplaceHighlightedLayer(newLayer);
+              });
+              }
+            }
           }
         });
 
@@ -385,6 +436,7 @@ export class MapComponent implements AfterViewInit {
     });
 
     return new VectorImageLayer({
+      properties: { layerKey: 'vectorLayer' },
       source: this.vectorSource,
       visible: this.mapLayersVisibility.isVisible('vectorLayer'),
       style: (feature, resolution) => this.decimatedStyle(feature, resolution),

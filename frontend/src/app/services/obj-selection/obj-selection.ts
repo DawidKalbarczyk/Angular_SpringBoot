@@ -25,14 +25,29 @@ export class ObjSelection {
                     <Title>Selection polygon</Title>
                     <PolygonSymbolizer>
                         <Fill>
-                        <CssParameter name="fill">#ebd834
-                        </CssParameter>
+                        <CssParameter name="fill">#ebd834</CssParameter>
                         </Fill>
                         <Stroke>
                         <CssParameter name="stroke">#000000</CssParameter>
                         <CssParameter name="stroke-width">0.5</CssParameter>
                         </Stroke>
                     </PolygonSymbolizer>
+                    
+                    <PointSymbolizer>
+                        <Graphic>
+                            <Mark>
+                                <WellKnownName>circle</WellKnownName>
+                                <Fill>
+                                    <CssParameter name="fill">#ebd834</CssParameter>
+                                </Fill>
+                                <Stroke>
+                                    <CssParameter name="stroke">#000000</CssParameter>
+                                    <CssParameter name="stroke-width">2</CssParameter>
+                                </Stroke>
+                            </Mark>
+                            <Size>25</Size>
+                        </Graphic>
+                    </PointSymbolizer>
 
                     </Rule>
 
