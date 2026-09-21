@@ -4,6 +4,7 @@ import { DarkMode } from '../../services/dark-mode/dark-mode';
 import { GeoserverService } from '../../services/GeoserverService/geoserver-service';
 import { LanguageService } from '../../services/language/language-service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { AMService } from '../../services/a-m-service/a-m-service';
 
 @Component({
   selector: 'app-return-corner',
@@ -18,6 +19,7 @@ export class ReturnCorner {
   private GeoserverService = inject(GeoserverService);
   public languageService = inject(LanguageService);
   public userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  public amService = inject(AMService);
 
 
   constructor() {
@@ -39,6 +41,7 @@ export class ReturnCorner {
     const lastUrl = localStorage.getItem('lastUrl') || this.router.url;
     const userDataLocal = JSON.parse(localStorage.getItem('userDataLocal') || '{}');
     const userId = userDataLocal.uid;
+    this.amService.resetAMServiceVariables();
     localStorage.setItem('lastUrl', lastUrl);
     if (this.url === '/geoportal') {
       this.router.navigate(['/']);
