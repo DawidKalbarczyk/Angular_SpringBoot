@@ -10,7 +10,7 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 export class ObjSelection {
     public SLD: string = ``;
     public getSLD(userId: string, time: string): string {
-        return `
+        const sld: string = `
             <StyledLayerDescriptor version="1.0.0"
             xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"
             xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
@@ -45,9 +45,42 @@ export class ObjSelection {
                                     <CssParameter name="stroke-width">2</CssParameter>
                                 </Stroke>
                             </Mark>
-                            <Size>25</Size>
+                            <Size>30</Size>
                         </Graphic>
                     </PointSymbolizer>
+                    <TextSymbolizer>
+                        <Label>
+                            <ogc:PropertyName>nazwa</ogc:PropertyName>
+                        </Label>
+                        <Font>
+                            <CssParameter name="font-family">Arial</CssParameter>
+                            <CssParameter name="font-size">35</CssParameter>
+                            <CssParameter name="font-weight">bold</CssParameter>
+                        </Font>
+                        <LabelPlacement>
+                            <PointPlacement>
+                                <AnchorPoint>
+                                    <AnchorPointX>0.5</AnchorPointX>
+                                    <AnchorPointY>0.0</AnchorPointY>
+                                </AnchorPoint>
+                                <Displacement>
+                                    <DisplacementX>0</DisplacementX>
+                                    <DisplacementY>35</DisplacementY>
+                                </Displacement>
+                            </PointPlacement>
+                        </LabelPlacement>
+                        <Fill>
+                            <CssParameter name="fill">#000000</CssParameter>
+                        </Fill>
+                        <Halo>
+                            <Radius>2</Radius>
+                            <Fill>
+                                <CssParameter name="fill">#ebd834</CssParameter>
+                            </Fill>
+                        </Halo>
+                        <VendorOption name="conflictResolution">false</VendorOption>
+                        <VendorOption name="partials">true</VendorOption>
+                    </TextSymbolizer>
 
                     </Rule>
 
@@ -55,7 +88,8 @@ export class ObjSelection {
                 </UserStyle>
             </NamedLayer>
             </StyledLayerDescriptor>
-        `
+        `;
+        return sld.replace(/>\s+</g, '><').trim();
     }
 
     private http = inject(HttpClient);

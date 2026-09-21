@@ -69,6 +69,12 @@ export class MapComponent implements AfterViewInit {
         this.objectSelection.getMapLayers(this.map.getLayers());
       }
     });
+    effect(() => {
+      this.objectSelection.selectedObjects();
+      if (this.vectorLayer) {
+        this.vectorLayer.changed();
+      }
+    });
   }
 
 
@@ -236,19 +242,8 @@ export class MapComponent implements AfterViewInit {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.features && data.features.length > 0) {``
-                      for (const obj of this.objectSelection.selectedObjects()) {
-                        if (obj.features[0].id === data.features[0].id) {
-                          console.log('Object already selected, skipping addition.');
-                          return; // Exit the function if the object is already selected
-                        }
-                      }
-                      this.objectSelection.selectedObjects.update((arr) => [...arr, data]);
-                      this.objectSelection.selectedNumberOfObjects.set(this.objectSelection.selectedObjects().length);
-                      this.highlightSelectedObjectsTileLayer().then((layer) => {
-                        this.addOrReplaceHighlightedLayer(layer);
-                      });
+                      this.toggleSelection(data, event.originalEvent.ctrlKey || event.originalEvent.metaKey);
                     }
-                    //highlightSelectedObjects(); // Call the function to highlight selected objects
                     console.log('WMS Feature Info for SELECTION:', data);
                 })
                 .catch((error) => {
@@ -284,6 +279,7 @@ export class MapComponent implements AfterViewInit {
                   }
                 ]
               };
+              this.toggleSelection(mockData, event.originalEvent.ctrlKey || event.originalEvent.metaKey);
 
               for (const obj of this.objectSelection.selectedObjects()) {
                 if (obj.features[0].id === mockData.features[0].id) {
@@ -343,6 +339,60 @@ export class MapComponent implements AfterViewInit {
     this.map.addLayer(newLayer);
   }
 
+private toggleSelection(featureData: any, isMultiSelect: boolean): void {
+    let isAlreadySelected = false;
+    const currentSelected = this.objectSelection.selectedObjects();
+    let newSelected = [...currentSelected];
+
+    const newIdNum = featureData.features[0].id.split('.')[1];
+
+    // Sprawdź czy kliknięty obiekt jest już zaznaczony (niezależnie od prefiksu warstwy)
+    for (let i = 0; i < currentSelected.length; i++) {
+        const currentIdNum = currentSelected[i].features[0].id.split('.')[1];
+        if (currentIdNum === newIdNum) {
+            isAlreadySelected = true;
+            if (isMultiSelect) {
+                // Jeśli CTRL i był zaznaczony -> odznaczamy
+                newSelected.splice(i, 1);
+                console.log('Obiekt odznaczony.');
+            }
+            break;
+        }
+    }
+
+    if (!isMultiSelect && !isAlreadySelected) {
+        // Jeśli brak CTRL i nie był zaznaczony -> zaznacz tylko jego
+        newSelected = [featureData];
+        console.log('Zaznaczanie pojedyncze - czyszczenie poprzednich.');
+    } else if (!isMultiSelect && isAlreadySelected) {
+        // Jeśli brak CTRL i był zaznaczony -> zostawiamy tylko jego
+        newSelected = [featureData];
+    } else if (isMultiSelect && !isAlreadySelected) {
+        // Jeśli CTRL i nie był zaznaczony -> dodajemy do grupy
+        newSelected.push(featureData);
+        console.log('Obiekt dodany do multi-selekcji.');
+    }
+
+    if (newSelected.length === 0) {
+        // Jeśli odznaczyliśmy ostatni obiekt, usuwamy całą tabelę/warstwę
+        this.objectSelection.clearAllSelectedVariables();
+    } else {
+        // Aktualizujemy zaznaczone obiekty i wywołujemy GeoServer
+        this.objectSelection.selectedObjects.set(newSelected);
+        this.objectSelection.selectedNumberOfObjects.set(newSelected.length);
+        this.highlightSelectedObjectsTileLayer().then((layer) => {
+            this.addOrReplaceHighlightedLayer(layer);
+        });
+    }
+
+    // Wymuszamy natychmiastowe odświeżenie oryginalnej warstwy punktowej, by ukryć/pokazać punkty
+    if (this.vectorLayer) {
+        this.vectorLayer.changed();
+    }
+  }
+
+
+
   private http = inject(HttpClient);
   private async highlightSelectedObjectsTileLayer(): Promise<TileLayer> {
     const auth = getAuth();
@@ -375,6 +425,7 @@ export class MapComponent implements AfterViewInit {
           'LAYERS': `user_${userId}_temp:user_${userId}_temp_table_${this.objectSelection.time}`, //tutaj specjalnie time zamiast getTime
           'TILED': true,
           'VERSION': '1.1.1',
+          'BUFFER': 100,
           'SLD_BODY': this.objectSelection.getSLD(userId, this.objectSelection.time) //tutaj specjalnie time zamiast getTime
         },
         serverType: 'geoserver',
