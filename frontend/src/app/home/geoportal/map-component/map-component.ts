@@ -396,11 +396,9 @@ private toggleSelection(featureData: any, isMultiSelect: boolean): void {
   private http = inject(HttpClient);
   private async highlightSelectedObjectsTileLayer(): Promise<TileLayer> {
     const auth = getAuth();
+    await auth.authStateReady();
+    const userId = auth.currentUser?.uid ?? '';
     //Tutaj stworzyć nową warstwę i wbić ją do temp usera
-    let userId: string = '';
-    if (auth.currentUser) {
-      userId = auth.currentUser.uid;
-    }
 
     // Usuń poprzednią tabelę tylko jeśli już istnieje (time nie jest pustym stringiem)
     if (this.objectSelection.time !== '') {
@@ -426,7 +424,7 @@ private toggleSelection(featureData: any, isMultiSelect: boolean): void {
           'TILED': true,
           'VERSION': '1.1.1',
           'BUFFER': 100,
-          'SLD_BODY': this.objectSelection.getSLD(userId, this.objectSelection.time) //tutaj specjalnie time zamiast getTime
+          'SLD_BODY': this.objectSelection.getSLD(userId, this.objectSelection.time, this.objectSelection.selectedSelectOptionLayer()) //tutaj specjalnie time zamiast getTime
         },
         serverType: 'geoserver',
         transition: 300,
@@ -495,7 +493,7 @@ private toggleSelection(featureData: any, isMultiSelect: boolean): void {
     });
   }
 
-  private isHighlightedService = this.zoomToObject.isHighlightedService;
+
   private readonly ALWAYS_SHOW_TOP_N = 60;
 
   private SelectedObjectsVectorLayer(): VectorImageLayer { 
@@ -527,24 +525,6 @@ private toggleSelection(featureData: any, isMultiSelect: boolean): void {
 
   private decimatedStyle(feature: FeatureLike, resolution: number): Style | undefined {
     const idx = feature.get('__idx') ?? 0;
-    const isHighlighted = feature.get('highlighted') === true;
-
-    if (isHighlighted && this.isHighlightedService()) {
-      return new Style({
-        image: new CircleStyle({
-          radius: 10,
-          fill: new Fill({ color: 'red' }),
-          stroke: new Stroke({ color: '#fff', width: 3 }),
-        }),
-        text: new Text({
-          text: feature.get('nazwa'),
-          offsetY: -35,
-          font: 'bold 35px Roboto Flex',
-          stroke: new Stroke ({ color: '#fff', width: 5 }),
-        }),
-        zIndex: 9999
-      })
-    }
 
     const skip = this.getSkipFactor(resolution);
     const isGuaranteed = idx < this.ALWAYS_SHOW_TOP_N;

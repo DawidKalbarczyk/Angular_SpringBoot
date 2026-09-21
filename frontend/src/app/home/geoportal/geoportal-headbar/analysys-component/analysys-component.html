@@ -40,17 +40,36 @@
                 <div class="info">
                     <p>Kliknij na mapę, aby zaznaczyć obiekt</p>
                     <p>Warstwa do zaznaczenia: </p>
-                    <select (change)="objectSelection.onLayerSelectChange($any($event.target).value)" [value]="objectSelection.selectedSelectOptionLayer()">
+                    <select (change)="objectSelection.onLayerSelectChange($any($event.target).value); objectSelection.clearAllSelectedVariables()" [value]="objectSelection.selectedSelectOptionLayer()">
                         <option value="" disabled selected>Wybierz warstwę</option>
                         @for (layer of objectSelection.visibleMapLayers(); track layer) {
-                            <option value="{{layer.values_.layerKey}}">{{layer.values_.layerKey}}</option>
+                            <option value="{{layer.values_.layerKey}}">{{ 'GEOPORTAL.INFO-CONTENT.' + objectSelection.layerTranslations[layer.values_.layerKey] | translate }}</option>
                         }
                     </select>
                     <p>Zaznaczono: {{objectSelection.selectedNumberOfObjects()}}</p>
                     @for (object of objectSelection.selectedObjects(); track object) {
-                        <p>{{object.features[0].properties.jpt_nazwa_}}</p>
+                        @if (object.features[0].properties.jpt_nazwa_ !== undefined) {
+                            @switch (object.features[0].properties.jpt_sjr_ko) {
+                                @case ('PAN') {
+                                    <p>Państwo: {{object.features[0].properties.jpt_nazwa_}}</p>
+                                } @case ('WOJ') {
+                                    <p>Województwo: {{object.features[0].properties.jpt_nazwa_}}</p>
+                                } @case ('POW') {
+                                    <p>Powiat: {{object.features[0].properties.jpt_nazwa_}}</p>
+                                } @case ('GMI') {
+                                    <p>Gmina: {{object.features[0].properties.jpt_nazwa_}}</p>
+                                } @case ('JEW') {
+                                    <p>Miasto: {{object.features[0].properties.jpt_nazwa_}}</p>
+                                }
+                            }
+                            
+                        } @else {
+                            <p>{{object.features[0].properties.nazwa}} &#8212; {{object.features[0].properties.rodzaj}} </p>
+                        }
+                        
                     }
                     <button (click)="objectSelection.clearAllSelectedVariables()">Wyczyść</button>
+                    <button (click)="zoomToObject.setHighlightedService(false)">Wylacz search</button>
                     
                 </div>
             }

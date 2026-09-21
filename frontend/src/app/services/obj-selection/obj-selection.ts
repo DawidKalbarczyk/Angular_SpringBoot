@@ -9,9 +9,10 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 @Service()
 export class ObjSelection {
     public SLD: string = ``;
-    public getSLD(userId: string, time: string): string {
-        const sld: string = `
-            <StyledLayerDescriptor version="1.0.0"
+    public getSLD(userId: string, time: string, layer: string): string {
+        let sld: string = ``;
+        if (layer === 'vectorLayer') {
+            sld = `<StyledLayerDescriptor version="1.0.0"
             xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"
             xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -23,16 +24,6 @@ export class ObjSelection {
                 <FeatureTypeStyle>
                     <Rule>
                     <Title>Selection polygon</Title>
-                    <PolygonSymbolizer>
-                        <Fill>
-                        <CssParameter name="fill">#ebd834</CssParameter>
-                        </Fill>
-                        <Stroke>
-                        <CssParameter name="stroke">#000000</CssParameter>
-                        <CssParameter name="stroke-width">0.5</CssParameter>
-                        </Stroke>
-                    </PolygonSymbolizer>
-                    
                     <PointSymbolizer>
                         <Graphic>
                             <Mark>
@@ -87,8 +78,36 @@ export class ObjSelection {
                 </FeatureTypeStyle>
                 </UserStyle>
             </NamedLayer>
-            </StyledLayerDescriptor>
-        `;
+            </StyledLayerDescriptor>`;
+        } else {
+            sld = `<StyledLayerDescriptor version="1.0.0"
+            xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"
+            xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
+            xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+            <NamedLayer>
+                <Name>user_${userId}_temp_table_${time}</Name>
+                <UserStyle>
+                <Title>Selection style for all users</Title>
+                <FeatureTypeStyle>
+                    <Rule>
+                    <Title>Selection polygon</Title>
+                    <PolygonSymbolizer>
+                        <Fill>
+                        <CssParameter name="fill">#ebd834</CssParameter>
+                        </Fill>
+                        <Stroke>
+                        <CssParameter name="stroke">#000000</CssParameter>
+                        <CssParameter name="stroke-width">0.5</CssParameter>
+                        </Stroke>
+                    </PolygonSymbolizer>
+                    </Rule>
+                </FeatureTypeStyle>
+                </UserStyle>
+            </NamedLayer>
+            </StyledLayerDescriptor>`;
+        }
+        
         return sld.replace(/>\s+</g, '><').trim();
     }
 
@@ -125,6 +144,18 @@ export class ObjSelection {
     }
 
     private layerVisibility = inject(LayerVisibility);
+    
+    // Słownik mapujący klucze warstw na końcówki kluczy tłumaczeń (np. LAY1, LAY2)
+    public layerTranslations: Record<string, string> = {
+        'vectorLayer': 'LAY1',
+        'boundsLayerCities': 'LAY2',
+        'boundsLayerGminy': 'LAY3',
+        'boundsLayerPowiaty': 'LAY4',
+        'boundsLayerWojewodz': 'LAY5',
+        'boundsLayerPanstwo': 'LAY6',
+        'excludedObjectsLayer': 'LAY1' // Ta warstwa zastępuje vectorLayer, więc tłumaczymy ją tak samo
+    };
+
     public getMapLayers(layers: Collection<BaseLayer>): void {
         this.mapLayers.set(layers);
         let isSelectedLayerStillVisible = false;
@@ -204,7 +235,7 @@ export class ObjSelection {
             await this.http.post('/analysys/create-layer', {
                 tableName: tableName,
                 title: tableName,
-                sld: this.SLD,
+                sld: this.getSLD(userId, time, layer),
                 userId: userId
             }).toPromise();
             
