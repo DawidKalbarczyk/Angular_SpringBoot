@@ -1,4 +1,4 @@
-import { Service, signal, inject } from '@angular/core';
+import { Service, signal, inject, effect } from '@angular/core';
 import BaseLayer from 'ol/layer/Base';
 import { Collection } from 'ol';
 import { getAuth} from 'firebase/auth';
@@ -117,7 +117,6 @@ export class ObjSelection {
     public toolPicked = signal<string>('Błąd');
     public mapLayers = signal<Collection<BaseLayer>>(new Collection<BaseLayer>());   
     public visibleMapLayers = signal<any[]>([]);
-
      public async clearAllSelectedVariables(): Promise<void> {
         this.selectedObjects.set([]);
         this.selectedNumberOfObjects.set(0);
