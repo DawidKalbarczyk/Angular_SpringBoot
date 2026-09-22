@@ -38,38 +38,59 @@
                 </div>
             } @else if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() === 'selection') {
                 <div class="info">
-                    <p>Kliknij na mapę, aby zaznaczyć obiekt</p>
-                    <p>Warstwa do zaznaczenia: </p>
-                    <select (change)="objectSelection.onLayerSelectChange($any($event.target).value); objectSelection.clearAllSelectedVariables()" [value]="objectSelection.selectedSelectOptionLayer()">
-                        <option value="" disabled selected>Wybierz warstwę</option>
+                    <p class="hand-info">Kliknij na mapę, aby zaznaczyć obiekt</p>
+                    <p class="hand-layer-info">Warstwa do zaznaczenia: </p>
+                    <select class="hand-select" (change)="objectSelection.onLayerSelectChange($any($event.target).value); objectSelection.clearAllSelectedVariables()" [value]="objectSelection.selectedSelectOptionLayer()">
+                        <option value="" disabled selected>-- Wybierz warstwę --</option>
                         @for (layer of objectSelection.visibleMapLayers(); track layer) {
                             <option value="{{layer.values_.layerKey}}">{{ 'GEOPORTAL.INFO-CONTENT.' + objectSelection.layerTranslations[layer.values_.layerKey] | translate }}</option>
+                        
                         }
                     </select>
-                    <p>Zaznaczono: {{objectSelection.selectedNumberOfObjects()}}</p>
-                    @for (object of objectSelection.selectedObjects(); track object) {
-                        @if (object.features[0].properties.jpt_nazwa_ !== undefined) {
-                            @switch (object.features[0].properties.jpt_sjr_ko) {
-                                @case ('PAN') {
-                                    <p>Państwo: {{object.features[0].properties.jpt_nazwa_}}</p>
-                                } @case ('WOJ') {
-                                    <p>Województwo: {{object.features[0].properties.jpt_nazwa_}}</p>
-                                } @case ('POW') {
-                                    <p>Powiat: {{object.features[0].properties.jpt_nazwa_}}</p>
-                                } @case ('GMI') {
-                                    <p>Gmina: {{object.features[0].properties.jpt_nazwa_}}</p>
-                                } @case ('JEW') {
-                                    <p>Miasto: {{object.features[0].properties.jpt_nazwa_}}</p>
-                                }
-                            }
-                            
-                        } @else {
-                            <p>{{object.features[0].properties.nazwa}} &#8212; {{object.features[0].properties.rodzaj}} </p>
+                    <p class="hand-selected-nr">Zaznaczono: <span class="hand-selected-nr-span">{{objectSelection.selectedNumberOfObjects()}}</span></p>
+                    <div class="hand-selected-all-obj">
+                        @for (object of objectSelection.selectedObjects(); track object) {
+                            <div class="hand-selected-obj-con">
+                                <div class="hand-selected-obj-text">
+                                    @if (object.features[0].properties.jpt_nazwa_ !== undefined) {
+                                        @switch (object.features[0].properties.jpt_sjr_ko) {
+                                            @case ('PAN') {
+                                                <p class="hand-selected-obj-title">Państwo</p>
+                                                <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
+                                            } @case ('WOJ') {
+                                                <p class="hand-selected-obj-title">Województwo</p>
+                                                <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
+                                            } @case ('POW') {
+                                                <p class="hand-selected-obj-title">Powiat</p>
+                                                <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
+                                            } @case ('GMI') {
+                                                <p class="hand-selected-obj-title">Gmina</p>
+                                                <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
+                                            } @case ('JEW') {
+                                                <p class="hand-selected-obj-title">Miasto</p>
+                                                <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
+                                            }
+                                        }
+                                    } @else {
+                                        <p class="hand-selected-obj-title">Miejscowość</p>
+                                        <p class="hand-selected-obj">{{object.features[0].properties.nazwa}} &#8212; {{object.features[0].properties.rodzaj}} </p>
+                                    }
+                                </div>
+                                <div class="hand-selected-obj-del">
+                                    <button class="hand-selected-obj-del-butt">
+                                        <img src="/images/icons/decline.png" alt="Delete" draggable="false" (click)="deleteObjFromSelection(object.features[0].id)"/>
+                                    </button>
+                                </div>
+                            </div>
                         }
-                        
-                    }
-                    <button (click)="objectSelection.clearAllSelectedVariables()">Wyczyść</button>
-                    <button (click)="zoomToObject.setHighlightedService(false)">Wylacz search</button>
+                    </div>
+                            
+                    
+                    <div class="hand-buttons">
+                        <button (click)="objectSelection.clearAllSelectedVariables()">Wyczyść wybrane</button>
+                        <!-- dodaj handling zapisu analizy - później przechodzi do user data z home -->
+                        <button>Zapisz analizę</button>
+                    </div>
                     
                 </div>
             }

@@ -3,6 +3,7 @@ import { GeoserverService } from '../../../../services/GeoserverService/geoserve
 import { ObjSelection } from '../../../../services/obj-selection/obj-selection';
 import { TranslatePipe } from '../../../../pipes/translate.pipe';
 import { ZoomToObject } from '../../../../services/zoom-to-object/zoom-to-object';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-analysys-component',
@@ -32,6 +33,20 @@ import { ZoomToObject } from '../../../../services/zoom-to-object/zoom-to-object
           
           public testFunc(): void {
             console.log('Selected Layer:', this.objectSelection.selectedSelectOptionLayer());
+          }
+
+
+          public async deleteObjFromSelection(objectId: string): Promise<void> {
+            for (let i = 0; i < this.objectSelection.selectedObjects().length; i++) {
+              const obj = this.objectSelection.selectedObjects()[i];
+              if (obj.features[0].id === objectId) {
+                //Obsluga http rquest do backendu w celu usuniecia obiektu z bazy danych
+                this.objectSelection.selectedNumberOfObjects.update(n => n - 1);
+                this.objectSelection.selectedObjects.update(objects => {
+                  return objects.filter(ob => ob.features[0].id !== objectId);
+                })
+              }
+            }
           }
   
         }
