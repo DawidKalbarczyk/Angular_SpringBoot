@@ -51,7 +51,7 @@ export class GeoportalHeadbar {
     baseLayer: false,
     info: false,
     layers: false,
-  }
+  };
   public infoFeatures = inject(InfoFeatures);
 
 

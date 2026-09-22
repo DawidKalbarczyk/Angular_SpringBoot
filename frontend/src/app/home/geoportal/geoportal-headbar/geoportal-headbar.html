@@ -18,17 +18,16 @@
         </div>
         {{'GEOPORTAL.SAVE' | translate}}
     </div>
-    <div (click)="searchOut(); zoomToObject.setHighlightedService(); zoomToObject.isListRendered.set(true)"
+    <div (click)="searchOut(); zoomToObject.setHighlightedService(false); zoomToObject.isListRendered.set(true);"
         class="search" [class.active-search]="headbarKeys.search && (infoFeatures.isCursorDragged() === false)">
         <div class="geoportal-tool-icon-container">
             <img src="/images/icons/loupe.png" alt="Search" draggable="false" class="geoportal-tool-icon" />
         </div>
         @if(headbarKeys.search){
-        <div class="search-container-wrapper" [class]="headbarKeys.search ? 'enter-animation-opacity' : 'leave-animation-opacity'">
+        <div class="search-container-wrapper" (click)="$event.stopPropagation()" [class]="headbarKeys.search ? 'enter-animation-opacity' : 'leave-animation-opacity'">
             <div class="search-container " (click)="$event.stopPropagation()">
                 <input [value]="inputValue()" 
-                    (keyup.enter)="searchItems((inputValue().toLowerCase()).charAt(0).toUpperCase() + inputValue().slice(1)); 
-                    wasSearchResultClicked.set(false);"
+                    (keyup.enter)="searchItems(inputValue()); wasSearchResultClicked.set(false);"
                     (input)="inputValue.set($event.target.value)" type="text"
                     [placeholder]="'GEOPORTAL.BROWSER-CONTENT.TEXT' | translate" />
                 <button (click)="searchItems(inputValue()); wasSearchResultClicked.set(false);">

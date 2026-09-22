@@ -10,11 +10,13 @@ import { GeoserverService } from '../../services/GeoserverService/geoserver-serv
 import { HttpClient } from '@angular/common/http';
 import { ObjSelection } from '../../services/obj-selection/obj-selection';
 import { getAuth } from 'firebase/auth';
+import { ZoomToObject } from '../../services/zoom-to-object/zoom-to-object';
+import { SearchClose } from './geoportal-headbar/search-close/search-close';
 
 
 @Component({
   selector: 'app-geoportal',
-  imports: [GeoportalHeadbar, ReturnCorner, MapComponent, AuthorBar, MeasureComponent, AnalysysComponent],
+  imports: [GeoportalHeadbar, ReturnCorner, MapComponent, AuthorBar, MeasureComponent, AnalysysComponent, SearchClose],
   templateUrl: './geoportal.html',
   styleUrl: './geoportal.scss',
 })
@@ -24,6 +26,7 @@ export class Geoportal implements OnDestroy, OnInit {
   private objectSelection = inject(ObjSelection);
   private http = inject(HttpClient);
   private currentToken = '';
+  public zoomService = inject(ZoomToObject);
 
   constructor() {
     const auth = getAuth();

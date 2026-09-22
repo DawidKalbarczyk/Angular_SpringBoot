@@ -8,4 +8,9 @@
 @if (AMservice.headbarKeys.measure) {
     <app-measure-component></app-measure-component>
 }
-
+@if (zoomService.isHighlightedService()) {
+    <app-search-close></app-search-close>
+}
+    <!-- @if (true) {
+        <app-search-close></app-search-close>
+    } -->
