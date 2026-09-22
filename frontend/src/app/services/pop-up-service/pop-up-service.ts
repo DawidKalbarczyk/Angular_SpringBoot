@@ -2,7 +2,7 @@ import { Service, signal } from '@angular/core';
 
 @Service()
 export class PopUpService {
-    public popUpOn = signal<boolean>(true);
+    public popUpOn = signal<boolean>(false);
 
     public didUserAgree = signal<boolean>(false);
 

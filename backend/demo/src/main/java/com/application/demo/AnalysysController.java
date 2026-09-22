@@ -108,5 +108,8 @@ public class AnalysysController {
                     .body(Map.of("error", "Error deleting table: " + e.getMessage()));
         }
     }
+
+    //Kolejny PostMapping do updatu selection
+
 }
 
