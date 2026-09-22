@@ -1,5 +1,4 @@
 create extension postgis;
-create extension pgrouting;
 
 create table if not exists users (
 	id varchar(128) primary key,
