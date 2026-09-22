@@ -3,7 +3,11 @@
 #map {
     width: 100%;
     height: calc(100vh - $basic-padding-top);
+
+    &.selection-active {
+        cursor: cell;
+    } 
     &:active {
-        cursor: grabbing;
+        cursor: grabbing !important;
     }
 }

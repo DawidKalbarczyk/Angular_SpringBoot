@@ -45,6 +45,7 @@ export class MapComponent implements AfterViewInit {
   private zoomToObject = inject(ZoomToObject);
   public vectorResults = inject(LayerVisibility).vectorResults;
 
+
   constructor() {
     
 
@@ -78,7 +79,7 @@ export class MapComponent implements AfterViewInit {
   }
 
 
-  private objectSelection = inject(ObjSelection);
+  public objectSelection = inject(ObjSelection);
   ngAfterViewInit(): void {
     this.osmLayer = new TileLayer({
       source: new OSM({attributions:[]}),
