@@ -12,11 +12,13 @@ import { ObjSelection } from '../../services/obj-selection/obj-selection';
 import { getAuth } from 'firebase/auth';
 import { ZoomToObject } from '../../services/zoom-to-object/zoom-to-object';
 import { SearchClose } from './geoportal-headbar/search-close/search-close';
+import { PopUp } from './pop-up/pop-up';
+import { PopUpService } from '../../services/pop-up-service/pop-up-service';
 
 
 @Component({
   selector: 'app-geoportal',
-  imports: [GeoportalHeadbar, ReturnCorner, MapComponent, AuthorBar, MeasureComponent, AnalysysComponent, SearchClose],
+  imports: [GeoportalHeadbar, ReturnCorner, MapComponent, AuthorBar, MeasureComponent, AnalysysComponent, SearchClose, PopUp],
   templateUrl: './geoportal.html',
   styleUrl: './geoportal.scss',
 })
@@ -27,6 +29,8 @@ export class Geoportal implements OnDestroy, OnInit {
   private http = inject(HttpClient);
   private currentToken = '';
   public zoomService = inject(ZoomToObject);
+  private popUpService = inject(PopUpService);
+  public popUpOn = this.popUpService.popUpOn;
 
   constructor() {
     const auth = getAuth();

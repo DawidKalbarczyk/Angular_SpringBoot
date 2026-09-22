@@ -1,0 +1,84 @@
+@use '../../../../variables' as *;
+
+:host {
+    position: fixed;
+    z-index: 1000000;
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    align-items: center;
+    pointer-events: all;
+    //background-color: rgba(0,0,0,0.5);
+    
+    .pop-up-con {
+        background-color: $secondary-color-light;
+        padding: 2.5rem 4rem;
+        border: 1px solid $secondary-color-dark;
+        border-radius: 0.5rem;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
+        .pop-up-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            .pop-up-title {
+                font-size: 1.3rem;
+                font-weight: bold;
+                text-transform: uppercase;
+                text-align: center;
+                line-height: 2;
+            }
+
+            .pop-up-butt-con {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 2rem;
+                align-items: center;
+
+                button {
+                    font-size: 1.1rem;
+                    padding: 0.75rem 2.75rem;
+                    cursor: pointer;
+                    border: 1px solid $secondary-color-dark;
+                    border-radius: 0.5rem;
+                    text-transform: uppercase;
+                    transition: background-color 0.3s, color 0.3s, opacity 0.3s;
+                }
+
+                .pop-up-yes-butt {
+                    background-color: $buttons-color;
+                    color: $login-button-2nd-color-light;
+
+                    &:hover {
+                        background-color: white;
+                        color: $buttons-color;
+                    }
+                }
+
+                .pop-up-no-butt {
+                    background-color: white;
+                    color: $login-button-1st-color-light;
+
+                    &:hover {
+                        background-color: $buttons-color !important;
+                        color: white !important;
+                    }
+                }
+                &:has(.pop-up-yes-butt:hover) {
+                    .pop-up-no-butt {
+                        opacity: 0.25;
+                        border-color: white;
+                    }
+                } 
+
+                &:has(.pop-up-no-butt:hover) {
+                    .pop-up-yes-butt {
+                        opacity: 0.25;
+                    }
+                }
+            }
+        }
+    }
+}
