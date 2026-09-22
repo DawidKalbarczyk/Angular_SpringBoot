@@ -6,7 +6,6 @@
     bottom: calc(#{$basic-padding-bottom} + 2rem);
     right: 3rem;
     z-index: 1000;
-    
 
     div {
         background-color: $secondary-color-light;
@@ -18,28 +17,12 @@
         border-radius: 12px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         border: 1px solid rgba(0, 0, 0, 0.05);
-        border: 1px solid $secondary-color-dark;
-
-        &.enter-animation {
-            animation: slide-side 0.5s;
-        }
-
-        @keyframes slide-side {
-            from {
-                transform: translateX(200px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
 
         p {
             margin: 0;
             font-weight: 600;
             font-size: 0.95rem;
-            color: $text-color-light;
+            color: $secondary-color-dark;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -47,7 +30,7 @@
         button {
             cursor: pointer;
             border: none;
-            background-color: #ef4444; /* Ładny, nowoczesny czerwony kolor */
+            background-color: #ef4444; 
             color: white;
             font-weight: bold;
             font-size: 1rem;
