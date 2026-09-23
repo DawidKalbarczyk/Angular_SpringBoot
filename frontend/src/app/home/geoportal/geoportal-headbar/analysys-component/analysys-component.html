@@ -12,7 +12,7 @@
         <section class="content-section">
             @if (objectSelection.analysysPicked() === false && objectSelection.analysisNrPicked() === 'none') {
                 <div class="info">
-                    <p>{{ 'GEOPORTAL.ANALYSIS-CONTENT.TEXT' | translate }}</p>
+                    <p class="main-menu-text">{{ 'GEOPORTAL.ANALYSIS-CONTENT.TEXT' | translate }}</p>
                 </div>
                 <section class="butt-section">
                     <button (click)="objectSelection.pickAnalysys('attribute'); objectSelection.analysisActive();">{{ 'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE' | translate }}</button>
