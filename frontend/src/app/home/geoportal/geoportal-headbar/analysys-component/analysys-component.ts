@@ -4,6 +4,7 @@ import { ObjSelection } from '../../../../services/obj-selection/obj-selection';
 import { TranslatePipe } from '../../../../pipes/translate.pipe';
 import { ZoomToObject } from '../../../../services/zoom-to-object/zoom-to-object';
 import { CommonModule } from '@angular/common';
+import { PopUpService } from '../../../../services/pop-up-service/pop-up-service';
 
 @Component({
   selector: 'app-analysys-component',
@@ -48,5 +49,7 @@ import { CommonModule } from '@angular/common';
               }
             }
           }
-  
+          
+
+          public popUpService = inject(PopUpService);
         }

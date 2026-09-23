@@ -1,5 +1,6 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { PopUpService } from '../../../services/pop-up-service/pop-up-service';
+import { ObjSelection } from '../../../services/obj-selection/obj-selection';
 
 @Component({
   selector: 'app-pop-up',
@@ -9,5 +10,6 @@ import { PopUpService } from '../../../services/pop-up-service/pop-up-service';
 })
 export class PopUp {
   private popUpService = inject(PopUpService);
+  public objectSelection = inject(ObjSelection);
   public resetPopUp = this.popUpService.resetPopUp;
 }
