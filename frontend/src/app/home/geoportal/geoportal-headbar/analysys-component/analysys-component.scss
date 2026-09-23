@@ -176,6 +176,10 @@
                                         object-fit: contain;
                                         display: block;
                                         cursor: pointer;
+
+                                        &:hover {
+                                            filter: brightness(0.8);
+                                        }
                                     }
                                 }
                             }
@@ -213,11 +217,17 @@
                     grid-template-columns: 1fr 1fr;
                     gap: 0.5rem;
                     justify-content: center;
-                    align-items: center;
+                    align-items: stretch;
                     margin: 0rem 1rem;
 
-                    button {
-                        display: inline-block;
+                    > button {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        min-height: 3.5rem;
+                        justify-content: center;
+                        align-items: center;
                         word-break: break-word;
                         padding: 0.5rem 1rem;
                         border: 1px solid rgba(0,0,0,0.3);

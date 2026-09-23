@@ -21,6 +21,42 @@
   },
   "GEOPORTAL": {
     "ANALYSIS": "Analizy",
+    "ANALYSIS-CONTENT": {
+      "TITLE": "Narzędzie analiz",
+      "TEXT": "Wybierz typ analizy",
+      "ATTRIBUTE": "Analiza atrybutowa",
+      "ATTRIBUTE-CONTENT": {
+        "TITLE": "Analiza atrybutowa"
+      },
+      "SPATIAL": "Analiza przestrzenna",
+      "SPATIAL-CONTENT": {
+        "TITLE": "Analiza przestrzenna"
+      },
+      "SELECTION": "Zaznaczanie obiektów",
+      "SELECTION-CONTENT": {
+        "TITLE": "Zaznaczanie obiektów",
+        "TEXT1": "Kliknij na mapę, aby zaznaczyć obiekt",
+        "TEXT2": "Warstwa do zaznaczenia: ",
+        "SELECT": "Wybierz warstwę",
+        "SELECT-TITLES": {
+          "PAN": "Państwo",
+          "WOJ": "Województwo",
+          "POW": "Powiat",
+          "GMI": "Gmina",
+          "JEW": "Miasto",
+          "LOCALITY": "Miejscowość"
+        },
+        "WARNING-CONTENT": {
+          "TITLE": "Wybrane obiekty zostaną utracone<br>Czy chcesz kontynuować?",
+          "BUTT1": "Tak",
+          "BUTT2": "Nie"
+        },
+        "POPULATION": "Liczba mieszkańców: ",
+        "PICKED": "Zaznaczono: ",
+        "BUTT1": "Wyczyść wybrane",
+        "BUTT2": "Zapisz wybrane"
+      }
+    },
     "MEASURE": "Mierzenie",
     "SAVE": "Zapis analizy",
     "BROWSER": "Wyszukiwarka",

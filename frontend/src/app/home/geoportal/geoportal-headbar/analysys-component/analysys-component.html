@@ -7,17 +7,17 @@
                 <button class="analysys-return" (click)="objectSelection.analysisDeactive();" [style.display]="objectSelection.analysysPicked() ? 'block' : 'none'">&#8635;</button>
             }
             
-            <p>{{objectSelection.toolPicked() !== 'Błąd' ? objectSelection.toolPicked() : 'Narzędzie analiz'}}</p>
+            <p>{{ objectSelection.toolPicked() !== 'Błąd' ? (objectSelection.toolPicked() | translate) : ('GEOPORTAL.ANALYSIS-CONTENT.TITLE' | translate) }}</p>
         </div>
         <section class="content-section">
             @if (objectSelection.analysysPicked() === false && objectSelection.analysisNrPicked() === 'none') {
                 <div class="info">
-                    <p>Wybierz typ analiz:</p>
+                    <p>{{ 'GEOPORTAL.ANALYSIS-CONTENT.TEXT' | translate }}</p>
                 </div>
                 <section class="butt-section">
-                    <button (click)="objectSelection.pickAnalysys('attribute'); objectSelection.analysisActive();">Analiza atrybutowa</button>
-                    <button (click)="objectSelection.pickAnalysys('spatial'); objectSelection.analysisActive();">Analiza przestrzenna</button>
-                    <button (click)="objectSelection.pickAnalysys('selection'); objectSelection.analysisActive();" class="selection-button">Zaznaczanie obiektów</button>
+                    <button (click)="objectSelection.pickAnalysys('attribute'); objectSelection.analysisActive();">{{ 'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE' | translate }}</button>
+                    <button (click)="objectSelection.pickAnalysys('spatial'); objectSelection.analysisActive();">{{ 'GEOPORTAL.ANALYSIS-CONTENT.SPATIAL' | translate }}</button>
+                    <button (click)="objectSelection.pickAnalysys('selection'); objectSelection.analysisActive();" class="selection-button">{{ 'GEOPORTAL.ANALYSIS-CONTENT.SELECTION' | translate }}</button>
                 </section>
             } @else if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() === 'attribute') {
                 <div class="info">
@@ -38,16 +38,17 @@
                 </div>
             } @else if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() === 'selection') {
                 <div class="info">
-                    <p class="hand-info">Kliknij na mapę, aby zaznaczyć obiekt</p>
-                    <p class="hand-layer-info">Warstwa do zaznaczenia: </p>
+                    <p class="hand-info">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.TEXT1' | translate}}</p>
+                    <p class="hand-layer-info">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.TEXT2' | translate}}</p>
                     <select class="hand-select" (change)="objectSelection.onLayerSelectChange($any($event.target).value); objectSelection.clearAllSelectedVariables()" [value]="objectSelection.selectedSelectOptionLayer()">
-                        <option value="" disabled selected>-- Wybierz warstwę --</option>
+                        <option value="" disabled selected>-- {{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT' | translate}} --</option>
                         @for (layer of objectSelection.visibleMapLayers(); track layer) {
-                            <option value="{{layer.values_.layerKey}}">{{ 'GEOPORTAL.INFO-CONTENT.' + objectSelection.layerTranslations[layer.values_.layerKey] | translate }}</option>
-                        
+                            @if (objectSelection.layerTranslations[layer.values_.layerKey]) {
+                                <option value="{{layer.values_.layerKey}}">{{ 'GEOPORTAL.INFO-CONTENT.' + objectSelection.layerTranslations[layer.values_.layerKey] | translate }}</option>
+                            }
                         }
                     </select>
-                    <p class="hand-selected-nr">Zaznaczono: <span class="hand-selected-nr-span">{{objectSelection.selectedNumberOfObjects()}}</span></p>
+                    <p class="hand-selected-nr">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.PICKED' | translate}}<span class="hand-selected-nr-span">{{objectSelection.selectedNumberOfObjects()}}</span></p>
                     <div class="hand-selected-all-obj">
                         @for (object of objectSelection.selectedObjects(); track object) {
                             <div class="hand-selected-obj-con">
@@ -55,26 +56,26 @@
                                     @if (object.features[0].properties.jpt_nazwa_ !== undefined) {
                                         @switch (object.features[0].properties.jpt_sjr_ko) {
                                             @case ('PAN') {
-                                                <p class="hand-selected-obj-title">Państwo</p>
+                                                <p class="hand-selected-obj-title">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-TITLES.PAN' | translate}}</p>
                                                 <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
                                             } @case ('WOJ') {
-                                                <p class="hand-selected-obj-title">Województwo</p>
+                                                <p class="hand-selected-obj-title">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-TITLES.WOJ' | translate}}</p>
                                                 <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
                                             } @case ('POW') {
-                                                <p class="hand-selected-obj-title">Powiat</p>
+                                                <p class="hand-selected-obj-title">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-TITLES.POW' | translate}}</p>
                                                 <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
                                             } @case ('GMI') {
-                                                <p class="hand-selected-obj-title">Gmina</p>
+                                                <p class="hand-selected-obj-title">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-TITLES.GMI' | translate}}</p>
                                                 <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
                                             } @case ('JEW') {
-                                                <p class="hand-selected-obj-title">Miasto</p>
+                                                <p class="hand-selected-obj-title">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-TITLES.JEW' | translate}}</p>
                                                 <p class="hand-selected-obj">{{object.features[0].properties.jpt_nazwa_}}</p>
                                             }
                                         }
                                     } @else {
-                                        <p class="hand-selected-obj-title">Miejscowość</p>
+                                        <p class="hand-selected-obj-title">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-TITLES.LOCALITY' | translate}}</p>
                                         <p class="hand-selected-obj">{{object.features[0].properties.nazwa}} &#8212; {{object.features[0].properties.rodzaj}} </p>
-                                        <p class="hand-selected-population">Liczba mieszkańców: {{object.features[0].properties.liczbamies}}</p>
+                                        <p class="hand-selected-population">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.POPULATION' | translate}}{{object.features[0].properties.liczbamies}}</p>
                                     }   
                                 </div>
                                 <div class="hand-selected-obj-del">
@@ -88,9 +89,9 @@
                             
                     
                     <div class="hand-buttons">
-                        <button (click)="popUpService.showPopUp()">Wyczyść wybrane</button>
+                        <button (click)="popUpService.showPopUp()">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.BUTT1' | translate}}</button>
                         <!-- dodaj handling zapisu analizy - później przechodzi do user data z home -->
-                        <button>Zapisz analizę</button>
+                        <button>{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.BUTT2' | translate}}</button>
                     </div>
                     
                 </div>

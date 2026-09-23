@@ -21,8 +21,44 @@
   },
   "GEOPORTAL": {
     "ANALYSIS": "Analysis",
+    "ANALYSIS-CONTENT": {
+      "TITLE": "Analysis tool",
+      "TEXT": "Choose analysis type",
+      "ATTRIBUTE": "Attribute analysis",
+      "ATTRIBUTE-CONTENT": {
+        "TITLE": "Attribute analysis"
+      },
+      "SPATIAL": "Spatial analysis",
+      "SPATIAL-CONTENT": {
+        "TITLE": "Spatial analysis"
+      },
+      "SELECTION": "Object selection",
+      "SELECTION-CONTENT": {
+        "TITLE": "Object selection",
+        "TEXT1": "Click on the map to select an object",
+        "TEXT2": "Layer to select from: ",
+        "SELECT": "Choose layer",
+        "SELECT-TITLES": {
+          "PAN": "Country",
+          "WOJ": "Voivodeship",
+          "POW": "District",
+          "GMI": "Commune",
+          "JEW": "City",
+          "LOCALITY": "Locality"
+        },
+        "WARNING-CONTENT": {
+          "TITLE": "Selected object will be lost<br>Do you wish to continue?",
+          "BUTT1": "Yes",
+          "BUTT2": "No"
+        },
+        "POPULATION": "Population: ",
+        "PICKED": "Picked: ",
+        "BUTT1": "Clear selected",
+        "BUTT2": "Save selected"
+      }
+    },
     "MEASURE": "Measure",
-    "SAVE": "Save analisys",
+    "SAVE": "Save analysis",
     "BROWSER": "Browser",
     "BROWSER-CONTENT": {
         "TEXT": "Search...",
