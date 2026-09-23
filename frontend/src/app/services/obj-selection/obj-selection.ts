@@ -266,6 +266,7 @@ export class ObjSelection {
     public analysisDeactive(): void {
         this.analysysPicked.set(false);
         this.analysisNrPicked.set('none');
+        this.toolPicked.set('Błąd');
     }
 
     
@@ -295,11 +296,11 @@ export class ObjSelection {
     public changeTitle(tool: string) {
         switch (tool) {
             case 'attribute':
-                return 'Analiza atrybutowa';
+                return 'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.TITLE';
             case 'spatial':
-                return 'Analiza przestrzenna';
+                return 'GEOPORTAL.ANALYSIS-CONTENT.SPATIAL-CONTENT.TITLE';
             case 'selection':
-                return 'Zaznaczanie obiektów';
+                return 'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.TITLE';
             default:
                 return 'Błąd';
         }
