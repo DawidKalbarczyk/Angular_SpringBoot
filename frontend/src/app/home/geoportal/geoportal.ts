@@ -14,11 +14,12 @@ import { ZoomToObject } from '../../services/zoom-to-object/zoom-to-object';
 import { SearchClose } from './geoportal-headbar/search-close/search-close';
 import { PopUp } from './pop-up/pop-up';
 import { PopUpService } from '../../services/pop-up-service/pop-up-service';
+import { GeoportalCorner } from '../../global-components/geoportal-corner/geoportal-corner';
 
 
 @Component({
   selector: 'app-geoportal',
-  imports: [GeoportalHeadbar, ReturnCorner, MapComponent, AuthorBar, MeasureComponent, AnalysysComponent, SearchClose, PopUp],
+  imports: [GeoportalHeadbar, ReturnCorner, MapComponent, AuthorBar, MeasureComponent, AnalysysComponent, SearchClose, PopUp, GeoportalCorner],
   templateUrl: './geoportal.html',
   styleUrl: './geoportal.scss',
 })

@@ -1,0 +1,39 @@
+@use '../../../variables.scss' as *;
+
+
+.container {
+    position: fixed;
+    bottom: $basic-padding-bottom;
+    left: 0;
+    padding: 1.15rem 2rem 1.15rem 2rem;
+    display: flex;
+    flex-direction: row;
+    column-gap: 1.5rem;
+    z-index: 1000;
+
+    div {
+        width: 40px;
+        height: 40px;
+        border: 1px solid black;
+        border-radius: 50%;
+        padding: 0.35rem;
+        background-color: white;
+        transition:
+            transform 0.3s ease,
+            background-color 0.3s ease;
+
+        &:hover {
+            cursor: pointer;
+            background-color: $secondary-color-light;
+            transform: scale(1.05);
+        }
+
+        img {
+            display: block;
+            width: 100%;
+        }
+        .help-button, .language-button {
+            transform: scale(0.8);
+        }
+    }
+}
