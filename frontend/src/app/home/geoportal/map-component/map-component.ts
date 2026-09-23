@@ -47,7 +47,17 @@ export class MapComponent implements AfterViewInit {
 
 
   constructor() {
-    
+    effect(() => {
+      if (this.objectSelection.passedId()) {
+        const existing = this.map.getLayers().getArray().find((l) => l.get('layerKey') === 'highlightedObjectsLayer');
+        if (existing) {
+          this.map.removeLayer(existing);
+        }
+        this.objectSelection.deleteObjFromSelection(this.objectSelection.passedId()).then((newLayer) => {
+          this.map.addLayer(newLayer);
+        });
+      }
+    });
 
     effect(() => {
       const visibility = this.mapLayersVisibility.layersVisibility();
@@ -76,6 +86,9 @@ export class MapComponent implements AfterViewInit {
         this.vectorLayer.changed();
       }
     });
+    effect(() => {
+
+    })
   }
 
 

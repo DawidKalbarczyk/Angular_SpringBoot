@@ -5,6 +5,8 @@ import { getAuth} from 'firebase/auth';
 import { LayerVisibility } from '../layer-visibility/layer-visibility';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+import TileLayer from 'ol/layer/Tile';
+import TileWMS from 'ol/source/TileWMS';
 
 @Service()
 export class ObjSelection {
@@ -301,4 +303,75 @@ export class ObjSelection {
         }
     }
 
+    public futon = signal<boolean>(false);
+    public testFuton(): void {
+
+        
+    }
+
+    public async deleteObjFromSelection(objectId: string): Promise<TileLayer> {
+        for (let i = 0; i < this.selectedObjects().length; i++) {
+            const obj = this.selectedObjects()[i];
+            if (obj.features[0].id === objectId) {
+                this.selectedNumberOfObjects.update(n => n - 1);
+                this.selectedObjects.update(objects => {
+                    return objects.filter(ob => ob.features[0].id !== objectId);
+                })
+
+                await firstValueFrom(
+                    this.http.delete('/analysys/delete-table-from-selection', {
+                    params: {
+                        userId: this.userId,
+                        time: this.time,
+                    }
+                    })
+                ).catch((error) => {
+                    console.error('Error deleting object from selection:', error);
+                });
+                
+
+                const idsString = this.selectedObjects().map(obj => obj.features[0].id.split('.')[1]).join(',');
+                const newUserId = this.getUserId();
+                const newTime = this.getTime();
+                const formData = new FormData();
+                formData.append('userId', newUserId);
+                formData.append('layer', this.selectedSelectOptionLayer());
+                formData.append('ids', `(${idsString})`);
+                formData.append('time', newTime);
+                await firstValueFrom(
+                    this.http.post('/analysys/create-table-from-selection', formData, {responseType: 'text'})
+                );
+
+                const tableName = `user_${newUserId}_temp_table_${newTime}`;
+                await this.http.post('/analysys/create-layer', {
+                    tableName: tableName,
+                    title: tableName,
+                    sld: this.getSLD(newUserId, newTime, this.selectedSelectOptionLayer()),
+                    userId: newUserId,
+                }).toPromise();
+                //Obsluga http rquest do backendu w celu usuniecia obiektu z bazy danych
+                return new TileLayer({
+                    properties: { layerKey: 'highlightedObjectsLayer' },
+                    source: new TileWMS({
+                        url: `${window.location.origin}/geoserver/user_${newUserId}_temp/wms?`,
+                        params: {
+                        'LAYERS': `user_${newUserId}_temp:user_${newUserId}_temp_table_${newTime}`, //tutaj specjalnie time zamiast getTime
+                        'TILED': true,
+                        'VERSION': '1.1.1',
+                        'BUFFER': 100,
+                        'SLD_BODY': this.getSLD(newUserId, newTime, this.selectedSelectOptionLayer()) //tutaj specjalnie time zamiast getTime
+                        },
+                        serverType: 'geoserver',
+                        transition: 300,
+                        crossOrigin: 'anonymous',
+                    }),
+                    visible: true,
+                })
+            } else {
+                continue;
+            }
+        }
+        throw new Error(`Object with ID ${objectId} not found in selectedObjects.`); 
+    }
+    public passedId = signal<string>('');
 }

@@ -41,13 +41,14 @@ public class AnalysysController {
     public ResponseEntity<?> createLayer(@RequestBody LayerRequest layerRequest) {
         try {
             geoServerService.publishLayer(layerRequest.tableName(), layerRequest.title(), layerRequest.userId());
+
             return ResponseEntity.ok(Map.of("message", "Layer created successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Error creating layer: " + e.getMessage()));
         }
     }
-    
+
     @PostMapping("/create-table-from-selection")
     public ResponseEntity<?> createTableFromSelection(@RequestParam String userId, @RequestParam String layer, @RequestParam String ids, @RequestParam String time) {
         try {

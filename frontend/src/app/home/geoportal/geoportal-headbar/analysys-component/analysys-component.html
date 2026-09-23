@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="hand-selected-obj-del">
                                     <button class="hand-selected-obj-del-butt">
-                                        <img src="/images/icons/decline.png" alt="Delete" draggable="false" (click)="deleteObjFromSelection(object.features[0].id)"/>
+                                        <img src="/images/icons/decline.png" alt="Delete" draggable="false" (click)="objectSelection.passedId.set(object.features[0].id)"/>
                                     </button>
                                 </div>
                             </div>

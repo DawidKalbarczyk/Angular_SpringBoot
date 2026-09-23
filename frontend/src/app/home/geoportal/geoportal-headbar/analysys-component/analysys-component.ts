@@ -40,50 +40,7 @@ import { firstValueFrom } from 'rxjs';
 
 
           private http = inject(HttpClient);
-          public async deleteObjFromSelection(objectId: string): Promise<void> {
-            for (let i = 0; i < this.objectSelection.selectedObjects().length; i++) {
-              const obj = this.objectSelection.selectedObjects()[i];
-              if (obj.features[0].id === objectId) {
-                this.objectSelection.selectedNumberOfObjects.update(n => n - 1);
-                this.objectSelection.selectedObjects.update(objects => {
-                  return objects.filter(ob => ob.features[0].id !== objectId);
-                })
-                await firstValueFrom(
-                  this.http.delete('/analysys/delete-table-from-selection', {
-                    params: {
-                      userId: this.objectSelection.userId,
-                      time: this.objectSelection.time,
-                    }
-                  })
-                ).catch((error) => {
-                  console.error('Error deleting object from selection:', error);
-                });
-                
-
-                const idsString = this.objectSelection.selectedObjects().map(obj => obj.features[0].id.split('.')[1]).join(',');
-                const newUserId = this.objectSelection.getUserId();
-                const newTime = this.objectSelection.getTime();
-                const formData = new FormData();
-                formData.append('userId', newUserId);
-                formData.append('layer', this.objectSelection.selectedSelectOptionLayer());
-                formData.append('ids', `(${idsString})`);
-                formData.append('time', newTime);
-                await firstValueFrom(
-                  this.http.post('/analysys/create-table-from-selection', formData, {responseType: 'text'})
-                );
-
-                const tableName = `user_${newUserId}_temp_table_${newTime}`;
-                await this.http.post('/analysys/create-layer', {
-                  tableName: tableName,
-                  title: tableName,
-                  sld: this.objectSelection.getSLD(newUserId, newTime, this.objectSelection.selectedSelectOptionLayer()),
-                  userId: newUserId,
-                }).toPromise();
-                //Obsluga http rquest do backendu w celu usuniecia obiektu z bazy danych
-                
-              }
-            }
-          }
+          
           
 
           public popUpService = inject(PopUpService);
