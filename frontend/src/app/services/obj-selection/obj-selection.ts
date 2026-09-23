@@ -132,16 +132,19 @@ export class ObjSelection {
             }
         }
 
-        await this.http.delete('/analysys/delete-table-from-selection', {
-        params: {
-            userId: this.userId,
-            time: this.time
+        if (this.time !== '') {
+            await this.http.delete('/analysys/delete-table-from-selection', {
+                params: {
+                    userId: this.userId,
+                    time: this.time
+                }
+            }).toPromise().then(() => {
+                console.log('Temporary table ALL VARIABLES CLEAR deleted successfully.');
+                this.time = '';
+            }).catch((error) => {
+                console.error('Error deleting ALL VARIABLES CLEAR temporary table:', error);
+            });
         }
-        }).toPromise().then(() => {
-        console.log('Temporary table ALL VARIABLES CLEAR deleted successfully.');
-        }).catch((error) => {
-        console.error('Error deleting ALL VARIABLES CLEAR temporary table:', error);
-        });
     }
 
     private layerVisibility = inject(LayerVisibility);
@@ -178,8 +181,7 @@ export class ObjSelection {
         // Zresetuj wybór, jeśli zaznaczona warstwa nagle zniknęła z widocznych
         if (this.selectedSelectOptionLayer() !== '' && !isSelectedLayerStillVisible) {
             this.selectedSelectOptionLayer.set('');
-            this.selectedObjects.set([]);
-            this.selectedNumberOfObjects.set(0);
+            this.clearAllSelectedVariables();
         }
     }
     public resetMapLayers(): void {
