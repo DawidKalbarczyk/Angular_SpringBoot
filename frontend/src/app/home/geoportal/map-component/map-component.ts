@@ -295,19 +295,7 @@ export class MapComponent implements AfterViewInit {
               };
               this.toggleSelection(mockData, event.originalEvent.ctrlKey || event.originalEvent.metaKey);
 
-              for (const obj of this.objectSelection.selectedObjects()) {
-                if (obj.features[0].id === mockData.features[0].id) {
-                  console.log('Object already selected, skipping addition.');
-                  return; 
-                }
-              }
 
-              this.objectSelection.selectedObjects.update((arr) => [...arr, mockData]);
-              this.objectSelection.selectedNumberOfObjects.set(this.objectSelection.selectedObjects().length);
-              
-              this.highlightSelectedObjectsTileLayer().then((newLayer) => {
-                this.addOrReplaceHighlightedLayer(newLayer);
-              });
               }
             }
           }
@@ -538,6 +526,18 @@ private toggleSelection(featureData: any, isMultiSelect: boolean): void {
   }
 
   private decimatedStyle(feature: FeatureLike, resolution: number): Style | undefined {
+    // Sprawdź czy obiekt jest zaznaczony (aby ukryć go pod "żółtym" podświetleniem WMS)
+    const featureIdStr = String(feature.getId());
+    const featureIdNum = featureIdStr.includes('.') ? featureIdStr.split('.')[1] : featureIdStr;
+    const isSelected = this.objectSelection.selectedSelectOptionLayer() === 'vectorLayer' && this.objectSelection.selectedObjects().some(obj => {
+      const selectedIdNum = obj.features[0].id.split('.')[1];
+      return selectedIdNum === featureIdNum;
+    });
+    
+    if (isSelected) {
+      return undefined; // Obiekt zaznaczony -> ukrywamy z oryginalnej warstwy!
+    }
+
     const idx = feature.get('__idx') ?? 0;
 
     const skip = this.getSkipFactor(resolution);
