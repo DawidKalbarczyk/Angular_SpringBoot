@@ -11,5 +11,5 @@ import { ObjSelection } from '../../../services/obj-selection/obj-selection';
 export class PopUp {
   private popUpService = inject(PopUpService);
   public objectSelection = inject(ObjSelection);
-  public resetPopUp = this.popUpService.resetPopUp;
+  public resetPopUp = (val: boolean) => this.popUpService.resetPopUp(val);
 }

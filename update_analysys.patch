@@ -1,0 +1,90 @@
+--- frontend/src/app/home/geoportal/geoportal-headbar/analysys-component/analysys-component.ts
++++ frontend/src/app/home/geoportal/geoportal-headbar/analysys-component/analysys-component.ts
+@@ -41,39 +41,29 @@
+ 
+           private http = inject(HttpClient);
+           public async deleteObjFromSelection(objectId: string): Promise<void> {
+-            for (let i = 0; i < this.objectSelection.selectedObjects().length; i++) {
+-              const obj = this.objectSelection.selectedObjects()[i];
+-              if (obj.features[0].id === objectId) {
+-                this.objectSelection.selectedNumberOfObjects.update(n => n - 1);
+-                this.objectSelection.selectedObjects.update(objects => {
+-                  return objects.filter(ob => ob.features[0].id !== objectId);
+-                })
+-                await firstValueFrom(
+-                  this.http.delete('/analysys/delete-table-from-selection', {
+-                    params: {
+-                      userId: this.objectSelection.userId,
+-                      time: this.objectSelection.time,
+-                    }
+-                  })
+-                )
+-                
+-
+-                const idsString = this.objectSelection.selectedObjects().map(obj => obj.features[0].id.split('.')[1]).join(',');
+-                const newUserId = this.objectSelection.getUserId();
+-                const newTime = this.objectSelection.getTime();
+-                const formData = new FormData();
+-                formData.append('userId', newUserId);
+-                formData.append('layer', this.objectSelection.selectedSelectOptionLayer());
+-                formData.append('ids', `(${idsString})`);
+-                formData.append('time', newTime);
+-                await firstValueFrom(
+-                  this.http.post('/analysys/create-table-from-selection', formData, {responseType: 'text'})
+-                );
+-
+-                const tableName = `user_${newUserId}_temp_table_${newTime}`;
+-                await this.http.post('/analysys/create-layer', {
+-                  tableName: tableName,
+-                  title: tableName,
+-                  sld: this.objectSelection.getSLD(newUserId, newTime, this.objectSelection.selectedSelectOptionLayer()),
+-                  userId: newUserId,
+-                }).toPromise();
+-                //Obsluga http rquest do backendu w celu usuniecia obiektu z bazy danych
+-                
+-              }
+-            }
++            const currentSelected = this.objectSelection.selectedObjects();
++            const remainingObjects = currentSelected.filter(ob => ob.features[0].id !== objectId);
++
++            if (remainingObjects.length === 0) {
++              await this.objectSelection.clearAllSelectedVariables();
++              return;
++            }
++
++            // Usunięcie poprzedniej tabeli
++            if (this.objectSelection.time !== '') {
++              await firstValueFrom(
++                this.http.delete('/analysys/delete-table-from-selection', {
++                  params: { userId: this.objectSelection.userId, time: this.objectSelection.time }
++                })
++              );
++            }
++
++            // Aktualizacja sygnałów
++            this.objectSelection.selectedObjects.set(remainingObjects);
++            this.objectSelection.selectedNumberOfObjects.set(remainingObjects.length);
++
++            const layerName = this.objectSelection.selectedSelectOptionLayer();
++            const newTime = this.objectSelection.getTime(); // Generuje nowy czas
++
++            // Odtworzenie nowej tabeli na bazie przefiltrowanych obiektów
++            await this.objectSelection.sqlSelectObjects(layerName, newTime);
++
++            // Odświeżenie na mapie OpenLayers!
++            const layers = this.objectSelection.mapLayers();
++            if (layers) {
++              const existingLayer = layers.getArray().find((l) => l.get('layerKey') === 'highlightedObjectsLayer');
++              if (existingLayer) {
++                const wmsSource = (existingLayer as any).getSource();
++                if (wmsSource && typeof wmsSource.updateParams === 'function') {
++                  wmsSource.updateParams({
++                    'LAYERS': `user_${this.objectSelection.userId}_temp:user_${this.objectSelection.userId}_temp_table_${newTime}`,
++                    'SLD_BODY': this.objectSelection.getSLD(this.objectSelection.userId, newTime, layerName)
++                  });
++                }
++              }
++            }
+           }
+           
+ 
