@@ -34,6 +34,32 @@ div, button {
     }  
 }
 
+.login-dark-history {
+    background-color: $background-color-dark !important;
+    border: 1px solid rgba(255,255,255, 1);
+    border-top: none;
+    border-right: none;
+    border-radius: 0rem 0rem 0rem 0.5rem;
+    .img-container {
+        background-color: $secondary-color-dark !important;
+        filter: invert(0.9) !important;
+    }
+}
+
+.headbar-history {
+    background-color: $background-color-light !important;
+    border: 1px solid rgba(0,0,0, 1);
+    border-top: none;
+    border-right: none;
+    border-radius: 0rem 0rem 0rem 0.5rem;
+
+    .img-container {
+        background-color: $secondary-color-light !important;
+        
+    }
+}
+
+
 .headbar {
     display: flex;
     flex-direction: row;
@@ -43,7 +69,11 @@ div, button {
     position: fixed;
     right: 0;
     top: 0;
+    z-index: 1000;
     padding: 1.15rem 2rem 1.15rem 2rem;
+    transition: 
+        background-color 0.3s ease,
+        border 0.3s ease;
 
     .img-container {
         width: 40px;
@@ -55,14 +85,12 @@ div, button {
         transition: background-color 0.3s ease, border 0.5s ease, filter 0.5s ease;
 
         &.login-dark-photo-existing {
-        padding: 0 !important;
-        .img-container {
+            padding: 0 !important;
             border: 1px solid $secondary-color-light !important;
             img {
                 filter: invert(0) !important;
             }   
         }
-    }
 
         &:hover {
             pointer-events: none;
@@ -98,7 +126,9 @@ div, button {
             color: $login-button-1st-color-light;
             background-color: transparent;
             border: none;
-            transition: background-color 0.3s ease !important;
+            transition: 
+                color 0.3s ease,
+                background-color 0.3s ease !important;
 
             &:hover {
                 background-color: $secondary-color-light;

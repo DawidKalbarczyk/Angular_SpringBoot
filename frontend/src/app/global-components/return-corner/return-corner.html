@@ -1,4 +1,7 @@
-<div class="container" [class.mode-dark]="isDarkMode() && url !== '/geoportal'">
+<div class="container" [class.mode-dark]="isDarkMode() && url !== '/geoportal'"
+[class.mode-dark-history]="isDarkMode() && url.startsWith('/history')"
+[class.container-history]="url.startsWith('/history') && (isDarkMode() === false)"
+>
     @if(url !== '/') {
         <div (click)="goBack()">
             <img class="return-button" src="./images/icons/return.png" alt="Return" draggable="false"/>

@@ -1,4 +1,6 @@
-<div class="headbar" [class.login-dark]="isDarkMode()">
+<div class="headbar" [class.login-dark]="isDarkMode()"
+[class.login-dark-history]="isDarkMode() && url.startsWith('/history')"
+[class.headbar-history]="url.startsWith('/history') && (isDarkMode() === false)">
     <div class="img-container" [class.login-dark-photo]="isDarkMode() && (hasPhoto() === false)"
     [class.login-dark-photo-existing]="hasPhoto() === true">
         <img [src]="isLoggedIn() ? userData()?.photoURL : './images/icons/user.png'" alt="User" draggable="false"/>
