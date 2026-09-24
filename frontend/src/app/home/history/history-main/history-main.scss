@@ -1,0 +1,48 @@
+@use '../../../../variables' as *;
+
+.history-main-container {
+    margin-bottom: 5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-top: $basic-padding-top;
+    padding: 
+        2.5rem
+        12.5rem 
+        0rem
+        12.5rem;
+
+    > div {
+        background-color: $secondary-color-light;
+        height: 20rem;
+        border-radius: 1rem;
+        overflow: hidden;
+        display: grid;
+        grid-template-rows: 2fr 1fr;
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+        cursor: pointer;
+
+        &:hover {
+            .text {
+                background-color: $background-color-light;
+            }
+        }
+
+        div {
+            overflow: hidden;
+        }
+
+        .template {
+            border-bottom: 2px solid rgba(0,0,0,0.3);
+        }
+        .text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+
+        }
+    }
+}
