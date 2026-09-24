@@ -21,6 +21,16 @@ export const routes: Routes = [
     {
         path: 'history',
         loadComponent: () => import('./home/history/history').then(m => m.History),
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./home/history/history-main/history-main').then(m => m.HistoryMain)
+            },
+            {
+                path: 'saved/:innerId',
+                loadComponent: () => import('./home/history/history-inner/history-inner').then(m => m.HistoryInner)
+            }
+        ]
     },
     {
         path: 'search',
