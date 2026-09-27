@@ -1,4 +1,13 @@
 <div class="history-main-container">
+    @for (thumbnail of thumbnailArray(); track thumbnail) {
+        <div>
+            <div class="template">
+                <img [src]="thumbnail[0]" [alt]="thumbnail[1]" />
+            </div>
+            <div class="text">{{ transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</div>
+        </div>
+
+    }
     <div routerLink="/history/saved/1">
         <div class="template">MIniatura</div>
         <div class="text">Text</div>

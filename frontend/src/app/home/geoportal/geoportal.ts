@@ -30,8 +30,7 @@ export class Geoportal implements OnDestroy, OnInit {
   private http = inject(HttpClient);
   private currentToken = '';
   public zoomService = inject(ZoomToObject);
-  private popUpService = inject(PopUpService);
-  public popUpOn = this.popUpService.popUpOn;
+  public popUpService = inject(PopUpService);
 
   constructor() {
     const auth = getAuth();

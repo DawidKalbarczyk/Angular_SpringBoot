@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { PopUpService } from '../../../../services/pop-up-service/pop-up-service';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { AMService } from '../../../../services/a-m-service/a-m-service';
 
 @Component({
   selector: 'app-analysys-component',
@@ -33,10 +34,6 @@ import { firstValueFrom } from 'rxjs';
 
           public objectSelection = inject(ObjSelection);
           
-          
-          public testFunc(): void {
-            console.log('Selected Layer:', this.objectSelection.selectedSelectOptionLayer());
-          }
 
 
           private http = inject(HttpClient);
@@ -44,4 +41,6 @@ import { firstValueFrom } from 'rxjs';
           
 
           public popUpService = inject(PopUpService);
+          public AMService = inject(AMService);
+          
         }

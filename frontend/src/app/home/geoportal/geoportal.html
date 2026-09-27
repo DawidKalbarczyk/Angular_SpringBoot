@@ -14,7 +14,7 @@
     <!-- @if (true) {
         <app-search-close></app-search-close>
     } -->
-@if (popUpOn()) {
+@if (popUpService.typeOfPopUp() !== '') {
     <app-pop-up></app-pop-up>
 }
 <app-geoportal-corner></app-geoportal-corner>

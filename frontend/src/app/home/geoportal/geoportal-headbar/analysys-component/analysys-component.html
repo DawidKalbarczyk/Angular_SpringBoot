@@ -32,10 +32,23 @@
                     <button (click)="userCreation(inputText(), 'createTempDatastore')">createTempDatastore</button>
                     <p>`{{ inputText() }}`</p>
                 </div>
+
+
+
+
+
+
             } @else if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() === 'spatial') {
                 <div class="info">
                     Spatial
                 </div>
+
+
+
+
+
+
+
             } @else if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() === 'selection') {
                 <div class="info">
                     <p class="hand-info">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.TEXT1' | translate}}</p>
@@ -89,9 +102,10 @@
                             
                     
                     <div class="hand-buttons">
-                        <button (click)="popUpService.showPopUp()">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.BUTT1' | translate}}</button>
+                        <button (click)="popUpService.showPopUpDelete()">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.BUTT1' | translate}}</button>
                         <!-- dodaj handling zapisu analizy - później przechodzi do user data z home -->
-                        <button>{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.BUTT2' | translate}}</button>
+                        <button (click)="popUpService.typeOfPopUp.set('save')">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.BUTT2' | translate}}</button>
+                        <button (click)="AMService.getJson()">Get JSON</button>
                     </div>
                     
                 </div>

@@ -3,15 +3,25 @@ import { ObjSelection } from '../obj-selection/obj-selection';
 
 @Service()
 export class PopUpService {
-    public popUpOn = signal<boolean>(false);
     private objectSelection = inject(ObjSelection);
+    public typeOfPopUp = signal<'' | 'save' | 'delete' | 'info'>('');
 
-    public showPopUp = (): void  => {
-        this.popUpOn.set(true);
+    public showPopUpSave = (): void  => {
+        this.typeOfPopUp.set('save');
+    }
+
+    public showPopUpDelete = (): void  => {
+        this.typeOfPopUp.set('delete');
+    }
+
+    public showPopUpInfo = (): void  => {
+        this.typeOfPopUp.set('info');
     }
 
     public resetPopUp = (agree: boolean): void => {
-        this.popUpOn.set(false);
+        this.typeOfPopUp.set('');
         agree ? this.objectSelection.clearAllSelectedVariables() : null;
     }
+
+    
 }
