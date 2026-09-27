@@ -1,12 +1,32 @@
+
 <div class="pop-up-con">
-    <div class="pop-up-content">
-        <p class="pop-up-title">
-            Wybrane obiekty zostaną usunięte<br>Kontynuować?
-        </p>
-        <div class="pop-up-butt-con">
-            <button class="pop-up-yes-butt" (click)="resetPopUp(true)">Tak</button>
-            <button class="pop-up-no-butt" (click)="resetPopUp(false)">Nie</button>    
+    @if (typeOfPopUp === 'delete') {
+        <div class="pop-up-content">
+            <p class="pop-up-title">
+                Wybrane obiekty zostaną usunięte<br>Kontynuować?
+            </p>
+            <div class="pop-up-butt-con">
+                <button class="pop-up-yes-butt" (click)="resetPopUp(true)">Tak</button>
+                <button class="pop-up-no-butt" (click)="resetPopUp(false)">Nie</button>    
+            </div>
+            
         </div>
-        
-    </div>
+    } @else if (typeOfPopUp === 'save') {
+        <div class="pop-up-content">
+            <p class="pop-up-title">
+                Zapisanie wybranych obiektów
+            </p>
+            <p class="pop-up-subtitle">
+                Wpisz nazwę nowej warstwy, aby zapisać wybrane obiekty
+            </p>
+            <div class="user-layer-name-con">
+                <input [(ngModel)]="userLayerName" type="text" placeholder="Nazwa zapisanych obiektów..." class="user-layer-name">
+            </div>
+            <div class="pop-up-butt-con">
+                <button class="pop-up-yes-butt" (click)="AMService.saveSelectedObjects(userLayerName)">Zapisz</button>
+                <button class="pop-up-no-butt" (click)="resetPopUp(false)">Anuluj</button>    
+            </div>
+            
+        </div>
+    }
 </div>
