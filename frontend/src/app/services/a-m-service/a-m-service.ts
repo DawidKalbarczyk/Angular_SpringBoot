@@ -1,4 +1,4 @@
-import { inject, Service } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { ObjSelection } from '../obj-selection/obj-selection';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -53,11 +53,7 @@ export class AMService {
         let bboxArray: any[] = [];
         await Promise.all(jsonResponse.json.map(async (item: any) => {
             const workspace = `user_${item.userId}`;
-            
-            const store = `user_${item.userId}`;
             const layer = `user_${item.userId}_perm_table_${item.time}`;
-
-
 
             const url = `http://geoserver:8080/geoserver/rest/workspaces/${workspace}/featuretypes/${layer}.json`;
             const response = await firstValueFrom(this.http.get<any>('/save/get-xml-as-json?url=' + url));
@@ -74,6 +70,31 @@ export class AMService {
         }));
         return bboxArray;
     }
+
+    // Ta funkcja nie zwraca danych tylko metadane warstwy z Geoservera. 5
+    // Zrobić Rest API do zapytania do bazy
+    public async getLayerData(routerUserId: string, routerTime: string): Promise<any> {
+        const jsonResponse = await this.getJson();
+        let dataArray: any = [];
+        await Promise.all(jsonResponse.json.map(async (item: any) => {
+            const workspace = `user_${item.userId}`;
+            const layer = `user_${item.userId}_perm_table_${item.time}`;
+
+            const url = `http://geoserver:8080/geoserver/rest/workspaces/${workspace}/featuretypes/${layer}.json`;
+            const response = await firstValueFrom(this.http.get<any>('/save/get-xml-as-json?url=' + url));
+            
+            const argumentName = `user_${routerUserId}_perm_table_${routerTime}`;
+            if (response?.featureType?.name === argumentName) {
+                dataArray = response;
+            }
+        }));
+        return dataArray;
+    }
+
+
+
+
+    
 
     public async saveSelectedObjects(
         title: string,
@@ -109,7 +130,10 @@ export class AMService {
             const response = await firstValueFrom(this.http.post('/save/selected-objects', formData, {responseType: 'text'}));
             if (response) {
                 this.popUpService.resetPopUp(true);
+                this.savePopUpOn();
                 console.log('Response from saveSelectedObjects:', response);
+            } else {
+                console.error('No response from saveSelectedObjects');
             }
 
             await firstValueFrom(this.http.post(`/save/publish-layer?userId=${userId}&time=${time}`, {}));
@@ -127,5 +151,13 @@ export class AMService {
             console.error('Error fetching JSON:', error);
             throw error;
         }   
+    }
+
+    public wasSaved = signal<boolean>(false);
+    public savePopUpOn(): void {
+        this.wasSaved.set(true);
+    }
+    public savePopUpOff(): void {
+        this.wasSaved.set(false);
     }
 }
