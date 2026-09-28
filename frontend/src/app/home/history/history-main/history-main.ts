@@ -18,5 +18,16 @@ export class HistoryMain {
 
   constructor() {
     this.historyService.setThumbnails();
+    setInterval(() => {
+      this.toggleArrows();
+    }, 2500);
   }
+
+  public jumpingArrows = signal<boolean>(false);
+
+  private toggleArrows(): void {
+    this.jumpingArrows.set(!this.jumpingArrows());
+  }
+
+
 }
