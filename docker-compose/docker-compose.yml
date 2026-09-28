@@ -36,11 +36,12 @@ services:
     environment:
       - *env-geoserver-password
       - *env-geoserver-user
-      - GETMAP=100
-      - SINGLE_USER=100
+      - REQUEST_TIMEOUT=180
+      - SINGLE_USER=300
+      - GETMAP=300
       - THROTTLE_REQUEST_PER_IP=1000
       - USER_WMS_REQUEST=1000/s
-      - PARALLEL_REQUEST=1000
+      - PARALLEL_REQUEST=300
     ports:
       - "${GEOSERVER_PORT}:8080"
     volumes:

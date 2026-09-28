@@ -429,6 +429,7 @@ private toggleSelection(featureData: any, isMultiSelect: boolean): void {
           'SLD_BODY': this.objectSelection.getSLD(userId, this.objectSelection.time, this.objectSelection.selectedSelectOptionLayer()) //tutaj specjalnie time zamiast getTime
         },
         serverType: 'geoserver',
+        hidpi: false,
         transition: 300,
         crossOrigin: 'anonymous',
       }),
@@ -453,6 +454,7 @@ private toggleSelection(featureData: any, isMultiSelect: boolean): void {
           'VERSION': '1.1.1',
         },
         serverType: 'geoserver',
+        hidpi: false,
         transition: 300,
         crossOrigin: 'anonymous',
       }),
