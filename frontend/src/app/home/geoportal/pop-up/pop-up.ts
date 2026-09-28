@@ -3,10 +3,12 @@ import { PopUpService } from '../../../services/pop-up-service/pop-up-service';
 import { ObjSelection } from '../../../services/obj-selection/obj-selection';
 import { FormsModule } from '@angular/forms';
 import { AMService } from '../../../services/a-m-service/a-m-service';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-pop-up',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './pop-up.html',
   styleUrl: './pop-up.scss',
 })

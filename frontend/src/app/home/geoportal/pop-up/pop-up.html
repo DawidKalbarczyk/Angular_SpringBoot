@@ -1,5 +1,17 @@
 
 <div class="pop-up-con">
+    @if (AMService.wasSaved()) {
+        <div class="pop-up-content">
+            <p class="pop-up-title">
+                Wybrane obiekty zostały zapisane
+            </p>
+            <div class="pop-up-butt-con">
+                <button class="pop-up-yes-butt" (click)="AMService.savePopUpOff()">Zamknij</button>  
+                <button class="pop-up-no-butt" routerLink="/history">Przejdź do zapisanych</button>    
+            </div>
+
+        </div>
+    }
     @if (typeOfPopUp === 'delete') {
         <div class="pop-up-content">
             <p class="pop-up-title">
