@@ -1,49 +1,42 @@
-<div class="history-main-container">
-    @for (thumbnail of thumbnailArray(); track thumbnail) {
-        <div>
-            <div class="template">
-                <img [src]="thumbnail[0]" [alt]="thumbnail[1]" />
-            </div>
-            <div class="text">{{ transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</div>
-        </div>
 
-    }
-    <div routerLink="/history/saved/1">
-        <div class="template">MIniatura</div>
-        <div class="text">Text</div>
+
+@if (historyService.thumbnailArray().length === 0 && historyService.isLoading() == false) {
+    <div class="no-content">
+        <img src="/images/icons/bored.png" alt="Bored icon" />
+        <p>Brak zapisanych obiektów</p>
     </div>
-    <div>
-        <div class="template">MIniatura</div>
-        <div class="text">Text</div>
+} @else if (historyService.thumbnailArray().length === 0 && historyService.isLoading() == true) {
+    <div class="no-content progress-spinner-con">
+        <p>Ładowanie zapisanych obiektów...</p>
+        <mat-spinner [diameter]="250"></mat-spinner>
+        <button routerLink="/history/saved/123/456">
+            Click
+        </button>
     </div>
-    <div>
-        <div class="template">MIniatura</div>
-        <div class="text">Text</div>
+} @else {
+    <div class="saved-obj-con">
+        <p>Zapisane obiekty</p>
     </div>
-    <div>
-        <div class="template">MIniatura</div>
-        <div class="text">
-            <p>Typ Operacji: Nazwa Zapisanej Analizy</p>
-        </div>
+    <div class="history-main-container">
+        @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
+            <div class="template-con" 
+            [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]"
+            [queryParams]="{userId: thumbnail[3], time: [thumbnail[4]]}">
+                <div class="template">
+                    <img [src]="thumbnail[0].src" [alt]="thumbnail[1]" />
+                    <div class="text">
+                        <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+                    </div>
+                </div>
+                
+            </div>
+        }
     </div>
-    <div>
-        <div class="template">MIniatura</div>
-        <div class="text">Text</div>
-    </div>
-    <div>
-        <div class="template">MIniatura</div>
-        <div class="text">Text</div>
-    </div>
-    <div>
-        <div class="template">MIniatura</div>
-        <div class="text">Text</div>
-    </div>
-    <div>
-        <div class="template">MIniatura</div>
-        <div class="text">Text</div>
-    </div>
-    <div>
-        <div class="template">MIniatura</div>
-        <div class="text">Text</div>
-    </div>
+}
+
+
+<div class="add-content-con">
+    <p>&#8594;</p>
+    <button routerLink="/geoportal">Dodaj więcej warstw</button>
+    <p>&#8592;</p>
 </div>
