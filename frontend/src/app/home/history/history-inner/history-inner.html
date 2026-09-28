@@ -1,1 +1,52 @@
-<div class="history-inner-container">history-inner works!</div>
+<div class="history-inner-container">
+    <div class="content">
+        <div class="left-content">
+            @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
+                <div class="left-row"
+                [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]">
+                    <img alt="Thumbnail" [src]="thumbnail[0].src">
+                    <div>
+                        <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+                    </div>
+                </div>
+            }
+            <!-- <div class="left-row">
+                <img alt="Thumbnail" [src]>
+                <div>
+                    <p>Text</p>
+                </div>
+            </div>
+            <div class="left-row">
+                <img alt="Thumbnail" [src]>
+                <div>
+                    <p>Text</p>
+                </div>
+            </div>
+            <div class="left-row">
+                <img alt="Thumbnail" [src]>
+                <div>
+                    <p>Text</p>
+                </div>
+            </div>
+            <div class="left-row">
+                <img alt="Thumbnail" [src]>
+                <div>
+                    <p>Text</p>
+                </div>
+            </div> -->
+        </div>
+        <div class="right-content">
+            <div class="right-data">
+
+            </div>
+            <div class="right-thumbnail">
+                <div class="right-thumbnail-this">
+                    <img alt="Thumbnail-BIG" [src]>
+                </div>
+                <div class="right-thumbnail-export">
+                    <button>Export layer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

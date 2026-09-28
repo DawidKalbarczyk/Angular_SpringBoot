@@ -3,11 +3,119 @@
 .history-inner-container {
     box-sizing: border-box;
     display: flex;
+    justify-content: center;
     height: calc(100vh - $basic-padding-bottom - $basic-padding-top);
     margin-top: $basic-padding-top;
     padding: 
-        2.5rem
-        0rem 
         5rem
-        0rem;
+        12.5rem 
+        5rem
+        12.5rem;
+
+    .content {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        column-gap: 1.5rem;
+        width: 100%;
+
+        .left-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            row-gap: 1rem;
+            background-color: red;
+            border-radius: 1rem 0rem 0rem 1rem;
+            overflow: hidden;
+            overflow-y: auto;
+            align-content: start;
+            
+            
+
+            .left-row {
+                position: relative;
+                height: 15rem;
+                background-color: blue;
+                cursor: pointer;
+                transition: filter 0.3s ease;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+                div {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 1.3rem;
+                    font-weight: 600;
+                    transition: background-color 0.3s ease;
+                    position: absolute;
+                    bottom: 1.5rem;
+                    left: 0;
+                    right: 0;
+
+                    p {
+                        background-color: white;
+                        padding: 0.25rem 1rem;
+                        border-radius: 0.5rem;
+                    }
+                }
+                
+
+                &:hover {
+                    filter: brightness(0.8);
+                }
+            }
+        }
+        .right-content {
+            background-color: green;
+            border-radius: 0rem 1rem 1rem 0rem;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 5fr 4fr;
+
+            .right-data {
+                background-color: yellow;
+            }
+            .right-thumbnail {
+                background-color: purple;
+                display: grid;
+                grid-template-rows: 7fr 3fr;
+
+                .right-thumbnail-this {
+                    background-color: orange;
+                    padding: 1.5rem;
+
+                    img {
+                        background-color: white;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+                .right-thumbnail-export {
+                    background-color: pink;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    
+                    button {
+                        border: none;
+                        padding: 1.5rem 3rem;
+                        font-size: 1.5rem;
+                        border-radius: 0.5rem;
+                        background-color: $background-color-light;
+                        cursor: pointer;
+                        transition: 
+                            background-color 0.3s ease;
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, 0.1);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
