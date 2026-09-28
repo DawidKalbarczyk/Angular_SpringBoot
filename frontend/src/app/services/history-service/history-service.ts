@@ -35,7 +35,8 @@ export class HistoryService {
       thumbnailArrayTemp.push([Img, title, type, item.userId, item.time]);
     });
 
-    this.thumbnailArray.set(thumbnailArrayTemp.reverse());
+    thumbnailArrayTemp.sort((a, b) => Number(b[4]) - Number(a[4]))
+    this.thumbnailArray.set(thumbnailArrayTemp);
     this.isLoading.set(false);
   }
 
