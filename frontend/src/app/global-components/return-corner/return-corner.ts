@@ -1,14 +1,13 @@
-import { Component, inject, signal} from '@angular/core';
+import { Component, inject} from '@angular/core';
 import { Router } from '@angular/router';
 import { DarkMode } from '../../services/dark-mode/dark-mode';
 import { GeoserverService } from '../../services/GeoserverService/geoserver-service';
 import { LanguageService } from '../../services/language/language-service';
-import { TranslatePipe } from '../../pipes/translate.pipe';
 import { AMService } from '../../services/a-m-service/a-m-service';
 
 @Component({
   selector: 'app-return-corner',
-  imports: [TranslatePipe],
+  imports: [],
   templateUrl: './return-corner.html',
   styleUrl: './return-corner.scss',
 })
