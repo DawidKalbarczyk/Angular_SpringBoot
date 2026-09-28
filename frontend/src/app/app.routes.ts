@@ -27,7 +27,7 @@ export const routes: Routes = [
                 loadComponent: () => import('./home/history/history-main/history-main').then(m => m.HistoryMain)
             },
             {
-                path: 'saved/:innerId',
+                path: 'saved/:userId/:time',
                 loadComponent: () => import('./home/history/history-inner/history-inner').then(m => m.HistoryInner)
             }
         ]
