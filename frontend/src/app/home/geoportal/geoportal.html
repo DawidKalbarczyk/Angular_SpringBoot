@@ -11,10 +11,7 @@
 @if (zoomService.isHighlightedService()) {
     <app-search-close></app-search-close>
 }
-    <!-- @if (true) {
-        <app-search-close></app-search-close>
-    } -->
-@if (popUpService.typeOfPopUp() !== '') {
+@if (popUpService.typeOfPopUp() !== '' || AMservice.wasSaved()) {
     <app-pop-up></app-pop-up>
 }
 <app-geoportal-corner></app-geoportal-corner>
