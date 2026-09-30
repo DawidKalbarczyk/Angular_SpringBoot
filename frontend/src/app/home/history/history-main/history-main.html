@@ -21,7 +21,7 @@
         @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
             <div class="template-con" 
             [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]"
-            [queryParams]="{userId: thumbnail[3], time: [thumbnail[4]]}">
+            (click)="historyService.selectThumbnail(thumbnail[0])">
                 <div class="template">
                     <img [src]="thumbnail[0].src" [alt]="thumbnail[1]" />
                     <div class="text">

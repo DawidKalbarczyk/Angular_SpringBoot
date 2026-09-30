@@ -1,7 +1,17 @@
 import { inject, Service, signal } from '@angular/core';
 import { AMService } from '../a-m-service/a-m-service';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 type Thumbnail = [HTMLImageElement, string, string, string, string];
+interface LayerRow {
+  ogc_fid: number;
+  wkb_geometry: {
+    type: string;
+    coordinates: any;
+  } | null;
+  [key: string]: unknown;
+}
 
 @Service()
 export class HistoryService {
@@ -48,5 +58,24 @@ export class HistoryService {
       default:
         return 'Nieznany typ';
     }
+  }
+
+  private http = inject(HttpClient);
+  public async getLayerSQLData(tableName: string): Promise<LayerRow[]> {
+    try {
+      const responseData = await firstValueFrom(this.http.get<{ data: LayerRow[] }>((`/history-service/get-history?tableName=${tableName}`)));
+      console.log('Response from getLayerSQLData:', responseData);
+      return responseData.data;
+        
+    } catch (error) {
+      console.error('Error fetching layer SQL data:', error);
+      throw error;
+    }
+  }
+
+  public selectedThumbnail = signal<any | null>(null);
+
+  public selectThumbnail(thumbnailSrc: any): void {
+    this.selectedThumbnail.set(thumbnailSrc);
   }
 }

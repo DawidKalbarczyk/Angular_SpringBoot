@@ -131,7 +131,7 @@
         cursor: pointer;
         transform: translateY(0);
         transition:
-            filter 0.3s ease
+            filter 0.3s ease,
             transform 0.3s ease;
 
         &:hover {
