@@ -20,6 +20,8 @@
     "@angular/platform-browser": "^22.0.0",
     "@angular/router": "^22.0.0",
     "firebase": "^12.18.0",
+    "geojson2shape": "^0.2.4",
+    "ogr2ogr": "^7.0.1",
     "ol": "^10.10.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
