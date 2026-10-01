@@ -1,11 +1,18 @@
 @use '../../../../variables' as *;
 
+:host {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
 .history-inner-container {
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     height: calc(100vh - $basic-padding-bottom - $basic-padding-top);
     margin-top: $basic-padding-top;
+    width: 100%;
     padding: 
         4rem
         10rem 
@@ -17,6 +24,16 @@
         grid-template-columns: 1fr 3fr;
         column-gap: 1.5rem;
         width: 100%;
+        height: 100%;
+
+        &.content-none {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        
 
         .left-content {
             display: grid;
@@ -138,7 +155,7 @@
                 }
                 .data-names {
                     display: grid;
-                    grid-template-columns: repeat(5, 1fr);
+                    grid-template-columns: repeat(3, 1fr);
                     box-sizing: border-box;
                     padding: 0 0.5rem;
                     gap: 0.5rem;
@@ -194,13 +211,14 @@
                         align-items: center;
                         height: 3rem;
                         background-color: $background-color-light;
-                        border-radius: 0rem 0.5rem 0.5rem 0rem;
+                        border-radius: 0rem 0.5rem 0rem 0rem;
                         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
                     }
 
                     #thumbnail-map {
                         width: 100%;
                         height: calc(100% - 5rem);
+                        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 
                         &:active {
                             cursor: grabbing !important;

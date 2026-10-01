@@ -13,11 +13,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { UpdateUser } from '../services/update-user/update-user';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Redirect } from '../global-components/redirect/redirect';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AuthorBar, LoginCorner, ReturnCorner, MatProgressSpinnerModule, MatIconModule, TranslatePipe, FormsModule, CommonModule],
+  imports: [AuthorBar, LoginCorner, ReturnCorner, MatProgressSpinnerModule, MatIconModule, TranslatePipe, FormsModule, CommonModule, Redirect],
   templateUrl: './user.html',
   styleUrl: './user.scss',
 })

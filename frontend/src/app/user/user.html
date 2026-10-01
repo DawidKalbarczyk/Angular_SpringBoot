@@ -3,10 +3,7 @@
 <app-return-corner></app-return-corner>
 <div class="user-container" [class.dark-mode]="darkMode()">
     @if (redirectUrl === true) {
-        <div class="redirect-container">
-            <p>{{ 'USER-SETTINGS.REDIRECT' | translate }}</p>
-            <mat-spinner></mat-spinner>
-        </div>
+        <app-redirect></app-redirect>
     } @else {
         <div class="user-ui">
             @switch (wasMainSettingClicked()) {

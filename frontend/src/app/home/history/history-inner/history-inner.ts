@@ -13,16 +13,19 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import { ObjSelection } from '../../../services/obj-selection/obj-selection';
 import { fromLonLat, transformExtent } from 'ol/proj';
 import { ActivatedRoute } from '@angular/router';
+import { Redirect } from '../../../global-components/redirect/redirect';
+import { LoginService } from '../../../services/login-service/login-service';
 
 @Component({
   selector: 'app-history-inner',
-  imports: [RouterLink, MatProgressSpinnerModule],
+  imports: [RouterLink, MatProgressSpinnerModule, Redirect],
   templateUrl: './history-inner.html',
   styleUrl: './history-inner.scss',
 })
 export class HistoryInner implements OnInit, AfterViewInit {
   public historyService = inject(HistoryService);
-
+  public objectSelection = inject(ObjSelection);
+  public loginService = inject(LoginService);
   private route = inject(ActivatedRoute);
   public userId = '';
   public time = '';
@@ -65,9 +68,6 @@ export class HistoryInner implements OnInit, AfterViewInit {
       minute: '2-digit'
     });
   }
-
-  
-  private objectSelection = inject(ObjSelection);
   
   public translateLayerName(func: string, text: string): string {
     if (func === 'layerType') {
@@ -81,7 +81,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
       }
     } else if (func === 'selectionType') {
       switch (text) {
-        case 'Ręcznie wybrane':
+        case 'selectedObjByHand':
           return 'ręcznie przez użytkownika';
         case 'Analiza atrybutowa':
           return 'na podstawie analizy atrybutowej';
@@ -111,6 +111,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
   private objectLayerPoint!: VectorImageLayer;
 
   public title = signal<string>('');
+  public type = signal<string>('');
   public async refreshMap(geometryType: string): Promise<void> {
     if (!this.thumbnailMap) return;
 
@@ -123,6 +124,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
       const item = bboxArray.find(item => item.time === this.time && item.userId === this.userId);
       if (item) {
         this.title.set(item.title);
+        this.type.set(item.type);
         const extent = transformExtent(
           [item.bbox.minx, item.bbox.miny, item.bbox.maxx, item.bbox.maxy], 
           'EPSG:4326', 'EPSG:3857');
@@ -182,6 +184,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
     const item = bboxArray.find(item => item.time === this.time && item.userId === this.userId);
     if (item) {
       this.title.set(item.title);
+      this.type.set(item.type);
       const extent = transformExtent(
         [item.bbox.minx, item.bbox.miny, item.bbox.maxx, item.bbox.maxy], 
         'EPSG:4326', 'EPSG:3857');

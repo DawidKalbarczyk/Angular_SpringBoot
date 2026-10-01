@@ -1,116 +1,82 @@
 <div class="history-inner-container">
-    <div class="content">
-        <div class="left-content">
-            @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
-                <div class="left-row"
-                [class.active]="historyService.selectedThumbnail() === thumbnail"
-                (click)="historyService.selectThumbnail(thumbnail[0]);
-                responseDataPresent.set(false);"
-                [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]">
-                    <img alt="Thumbnail" [src]="thumbnail[0].src">
-                    <div>
-                        <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+    <div class="content" [class.content-none]="loginService.isLoggedIn() === false">
+        @if (loginService.isLoggedIn() === false) {
+            <app-redirect></app-redirect>
+        } @else {
+            <div class="left-content">
+                @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
+                    <div class="left-row"
+                    [class.active]="historyService.selectedThumbnail() === thumbnail"
+                    (click)="historyService.selectThumbnail(thumbnail[0]);
+                    responseDataPresent.set(false);"
+                    [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]">
+                        <img alt="Thumbnail" [src]="thumbnail[0].src">
+                        <div>
+                            <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+                <div class="right-content-loading" [style.display]="responseDataPresent() === false ? 'flex' : 'none'">
+                    <p>Loading layer data...</p>
+                    <mat-spinner diameter="100" strokeWidth="5"></mat-spinner>
+                </div>
+
+            
+                <div class="right-content" [style.display]="responseDataPresent() === true ? 'grid' : 'none'">
+                    <div class="right-data">
+                        <div class="right-data-title">
+                            <h2>{{title() || 'Error title'}}</h2>
+                        </div>
+                        <div>
+                            <img alt="Data-Img" src="/images/icons/calendar.png">
+                            <p>Data utworzenia: <span>{{getDate()}}</span></p>
+                        </div>
+                        <div>
+                            <img alt="Data-Img" src="/images/icons/layers.png">
+                            <p>Warstwa 
+                                <span>{{translateLayerName('layerType', responseData()?.[0]?.featureType?.name || 'Brak typu')}}</span>
+                                stworzona <span>{{translateLayerName('selectionType', type())}}</span></p>
+                        </div>
+                        <div>
+                            <img alt="Data-Img" src="/images/icons/quantity.png">
+                            <p>Ilość obiektów w warstwie: <span>{{responseData()?.length || 'Null'}}</span></p>
+                        </div>
+                        @if (responseData()?.[0]?.wkb_geometry?.type === 'Polygon') {
+                        <!-- @if (true ) { -->
+                            <div>
+                                <img alt="Data-Img" src="/images/icons/place.png">
+                                <p>Łączna liczba miejscowości w obiektach: <span>{{'Null'}}</span></p>
+                            </div>
+                            <div>
+                                <img alt="Data-Img" src="/images/icons/crowd.png">
+                                <p>Łączna liczba mieszkańców w obiektach: <span>{{'Null'}}</span></p>
+                            </div>
+                        
+                            <div>
+                                <img alt="Data-Img" src="/images/icons/object.png">
+                                <p>Nazwy obiektów:</p>
+                            </div>
+                            <div class="data-names">
+                                @for (res of responseData(); track res) {
+                                    <div>{{ res?.jpt_nazwa_ || 'Brak nazwy' }}</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="right-thumbnail">
+                        <div class="right-thumbnail-this">
+                            <div class="right-thumbnail-title">
+                                <h3>Interaktywny podgląd mapowy obiektów</h3>
+                            </div>
+                            <div id="thumbnail-map"></div>
+                        </div>
+                        <div class="right-thumbnail-export">
+                            <button>Export layer</button>
+                        </div>
                     </div>
                 </div>
             }
-            <div class="left-row">
-                <img alt="Thumbnail" [src]>
-                <div>
-                    <p>Text</p>
-                </div>
-            </div>
-            <div class="left-row">
-                <img alt="Thumbnail" [src]>
-                <div>
-                    <p>Text</p>
-                </div>
-            </div>
-            <div class="left-row">
-                <img alt="Thumbnail" [src]>
-                <div>
-                    <p>Text</p>
-                </div>
-            </div>
-            <div class="left-row">
-                <img alt="Thumbnail" [src]>
-                <div>
-                    <p>Text</p>
-                </div>
-            </div>
-        </div>
-        
-            <div class="right-content-loading" [style.display]="responseDataPresent() === false ? 'flex' : 'none'">
-                <p>Loading layer data...</p>
-                <mat-spinner diameter="100" strokeWidth="5"></mat-spinner>
-            </div>
-
-        
-            <div class="right-content" [style.display]="responseDataPresent() === true ? 'grid' : 'none'">
-                <div class="right-data">
-                    <div class="right-data-title">
-                        <h2>{{title() || 'Error title'}}</h2>
-                    </div>
-                    <div>
-                        <img alt="Data-Img" src="/images/icons/calendar.png">
-                        <p>Data utworzenia: <span>{{getDate()}}</span></p>
-                    </div>
-                    <div>
-                        <img alt="Data-Img" src="/images/icons/layers.png">
-                        <p>Warstwa 
-                            <span>{{translateLayerName('layerType', responseData()?.[0]?.featureType?.name || 'Brak typu')}}</span>
-                             stworzona <span>{{translateLayerName('selectionType', title())}}</span></p>
-                    </div>
-                    <div>
-                        <img alt="Data-Img" src="/images/icons/quantity.png">
-                        <p>Ilość obiektów w warstwie: <span>{{responseData()?.length || 'Null'}}</span></p>
-                    </div>
-                    <!-- @if (responseData()[0]?.wkb_geometry?.type === 'Polygon') { -->
-                     @if (true ) {
-                         <div>
-                            <img alt="Data-Img" src="/images/icons/place.png">
-                            <p>Łączna liczba miejscowości w obiektach: <span>{{responseData()?.length || 'Null'}}</span></p>
-                        </div>
-                        <div>
-                            <img alt="Data-Img" src="/images/icons/crowd.png">
-                            <p>Łączna liczba mieszkańców w obiektach: <span>{{responseData()?.length || 'Null'}}</span></p>
-                        </div>
-                       
-                        <div>
-                            <img alt="Data-Img" src="/images/icons/object.png">
-                            <p>Nazwy obiektów:</p>
-                        </div>
-                        <div class="data-names">
-                            @for (res of responseData(); track res) {
-                                <div>{{ res?.jpt_nazwa_ || 'Brak nazwy' }}</div>
-                            }
-                            <div>Abraham</div>
-                            <div>Eugeniusz</div>
-                            <div>Nowicjusz</div>
-                            <div>Kridiusz</div>
-                            <div>Abraham</div>
-                            <div>Eugeniusz</div>
-                            <div>Nowicjusz</div>
-                            <div>Kridiusz</div>
-                            <div>Abraham</div>
-                            <div>Eugeniusz</div>
-                            <div>Nowicjusz</div>
-                            <div>Kridiusz</div>
-                        </div>
-                    }
-                </div>
-                <div class="right-thumbnail">
-                    <div class="right-thumbnail-this">
-                        <div class="right-thumbnail-title">
-                            <h3>Interaktywny podgląd mapowy obiektów</h3>
-                        </div>
-                        <div id="thumbnail-map"></div>
-                        <!-- <img alt="Thumbnail-BIG" [src]="historyService.selectedThumbnail().src"> -->
-                    </div>
-                    <div class="right-thumbnail-export">
-                        <button>Export layer</button>
-                    </div>
-                </div>
-            </div>
-        
     </div>
 </div>
