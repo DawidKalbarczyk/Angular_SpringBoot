@@ -18,7 +18,7 @@ export class PopUp {
   userLayerName = '';
   public resetPopUp = (val: boolean) => this.popUpService.resetPopUp(val);
 
-  public typeOfPopUp = this.popUpService.typeOfPopUp();
+  public typeOfPopUp = this.popUpService.typeOfPopUp;  // signal, nie wywołanie
 
   public AMService = inject(AMService);
 }

@@ -12,7 +12,7 @@
 
         </div>
     }
-    @if (typeOfPopUp === 'delete') {
+    @if (typeOfPopUp() === 'delete') {
         <div class="pop-up-content">
             <p class="pop-up-title">
                 Wybrane obiekty zostaną usunięte<br>Kontynuować?
@@ -23,7 +23,7 @@
             </div>
             
         </div>
-    } @else if (typeOfPopUp === 'save') {
+    } @else if (typeOfPopUp() === 'save') {
         <div class="pop-up-content">
             <p class="pop-up-title">
                 Zapisanie wybranych obiektów
