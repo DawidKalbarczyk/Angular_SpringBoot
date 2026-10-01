@@ -2,6 +2,7 @@ import { inject, Service, signal } from '@angular/core';
 import { AMService } from '../a-m-service/a-m-service';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { fromLonLat } from 'ol/proj';
 
 type Thumbnail = [HTMLImageElement, string, string, string, string];
 interface LayerRow {
@@ -26,10 +27,27 @@ export class HistoryService {
     const thumbnailArrayTemp: Thumbnail[] = [];
     
     bboxArray.forEach((item) => {
-      const WMSurl = `/geoserver/wms?service=WMS&version=1.1.0
-      &request=GetMap&layers=AngularLocal:OSM-WMS,user_${item.userId}:user_${item.userId}_perm_table_${item.time}
-      &bbox=${item.bbox.minx - 0.5},${item.bbox.miny - 0.5},${item.bbox.maxx + 0.5},${item.bbox.maxy + 0.5}&width=500
-      &height=500&srs=EPSG:4326&format=image/png`
+      const [minX3857, minY3857] = fromLonLat([item.bbox.minx, item.bbox.miny]);
+      const [maxX3857, maxY3857] = fromLonLat([item.bbox.maxx, item.bbox.maxy]);
+
+      const midX = (minX3857 + maxX3857) / 2;
+      const midY = (minY3857 + maxY3857) / 2;
+
+      const spanX = Math.max(maxX3857 - minX3857, 1000);
+      const spanY = Math.max(maxY3857 - minY3857, 1000);
+      const maxSpan = Math.max(spanX, spanY) * 1.3;
+      const halfSpan = maxSpan / 2;
+
+      const minX = Math.round(midX - halfSpan);
+      const maxX = Math.round(midX + halfSpan);
+      const minY = Math.round(midY - halfSpan);
+      const maxY = Math.round(midY + halfSpan);
+
+      const layers = `AngularLocal:OSM-WMS,user_${item.userId}:user_${item.userId}_perm_table_${item.time}`;
+      const WMSurl = `/geoserver/wms?service=WMS&version=1.1.0`
+        + `&request=GetMap&layers=${layers}`
+        + `&bbox=${minX},${minY},${maxX},${maxY}`
+        + `&width=500&height=500&srs=EPSG:3857&format=image/png`;
 
       const title = item.title;
       const type = item.type; 
