@@ -52,30 +52,29 @@
                     </div>
                     <div>
                         <img alt="Data-Img" src="/images/icons/calendar.png">
-                        <p>Data utworzenia: {{getDate()}}</p>
+                        <p>Data utworzenia: <span>{{getDate()}}</span></p>
                     </div>
                     <div>
                         <img alt="Data-Img" src="/images/icons/layers.png">
                         <p>Warstwa 
-                            {{translateLayerName('layerType', responseData()?.[0]?.featureType?.name || 'Brak typu')}}
-                             stworzona {{translateLayerName('selectionType', title())}}</p>
+                            <span>{{translateLayerName('layerType', responseData()?.[0]?.featureType?.name || 'Brak typu')}}</span>
+                             stworzona <span>{{translateLayerName('selectionType', title())}}</span></p>
                     </div>
                     <div>
                         <img alt="Data-Img" src="/images/icons/quantity.png">
-                        <p>Ilość obiektów w warstwie: {{responseData()?.length || 'Null'}}</p>
+                        <p>Ilość obiektów w warstwie: <span>{{responseData()?.length || 'Null'}}</span></p>
                     </div>
                     <!-- @if (responseData()[0]?.wkb_geometry?.type === 'Polygon') { -->
                      @if (true ) {
-                        <!-- NA PRZYSZŁOŚĆ ANALIZY PRZESTRZENNE AUTOMATYCZNE
                          <div>
-                            <img alt="Data-Img" src="/images/icons/quantity.png">
-                            <p>Łączna liczba miejscowości w obiektach: {{responseData()?.length || 'Null'}}</p>
+                            <img alt="Data-Img" src="/images/icons/place.png">
+                            <p>Łączna liczba miejscowości w obiektach: <span>{{responseData()?.length || 'Null'}}</span></p>
                         </div>
                         <div>
-                            <img alt="Data-Img" src="/images/icons/quantity.png">
-                            <p>Łączna liczba mieszkańców w obiektach: {{responseData()?.length || 'Null'}}</p>
+                            <img alt="Data-Img" src="/images/icons/crowd.png">
+                            <p>Łączna liczba mieszkańców w obiektach: <span>{{responseData()?.length || 'Null'}}</span></p>
                         </div>
-                        -->
+                       
                         <div>
                             <img alt="Data-Img" src="/images/icons/object.png">
                             <p>Nazwy obiektów:</p>
@@ -102,7 +101,7 @@
                 <div class="right-thumbnail">
                     <div class="right-thumbnail-this">
                         <div class="right-thumbnail-title">
-                            <h2>Interaktywny podgląd mapowy obiektów</h2>
+                            <h3>Interaktywny podgląd mapowy obiektów</h3>
                         </div>
                         <div id="thumbnail-map"></div>
                         <!-- <img alt="Thumbnail-BIG" [src]="historyService.selectedThumbnail().src"> -->
