@@ -39,7 +39,7 @@ public class DBService {
         // Rekord jest powiązany z UID Firebase zapisanym jako user_id.
         // ON CONFLICT chroni przed błędem przy ponownym tworzeniu tego samego konta.
         // E-mail jest zwykłą daną profilu; hasło pozostaje wyłącznie w Firebase.
-        String sql = "INSERT INTO users (id, username, email, \"photoUrl\") VALUES (?, ?, ?, ?) "
+        String sql = "INSERT INTO users (id, username, email, \"photoUrl\", json) VALUES (?, ?, ?, ?, NULL) "
                 + "ON CONFLICT (id) DO NOTHING";
         // Wykonuje bezpieczny parametryzowany INSERT.
         jdbcTemplate.update(sql, userId, userName, userEmail, photoURLString);
