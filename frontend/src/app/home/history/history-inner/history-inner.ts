@@ -77,7 +77,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
         case 'Point':
           return 'punktowa';
         default:
-          return 'Nieznany typ';
+          return 'Nieznany typ: ' + func + ': ' + text;
       }
     } else if (func === 'selectionType') {
       switch (text) {
@@ -88,7 +88,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
         case 'Analiza przestrzenna':
           return 'na podstawie analizy przestrzennej';
         default:
-          return 'Nieznany typ';
+          return 'Nieznany typ: ' + func + ': ' + text;
       }
     }
     return 'Nieznany typ';
