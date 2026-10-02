@@ -93,6 +93,34 @@
         "LAY6": "Granice państwa"
     }
   },
+
+
+  "HISTORY": {
+    "ADD-MORE": "Add more data",
+    "NO-DATA": "You don't have any saved data yet",
+    "LOADING": "Loading saved data...",
+    "MAIN": {
+      "TITLE": "Saved data",
+      "TILE-TITLE-SELECTION": "Selected: ",
+      "TILE-TITLE-ANALYSIS": "Attribute analysis: ",
+      "TILE-TITLE-SPATIAL": "Spatial analysis"
+    },
+    "INNER": {
+      "LEFT-SECTION": {
+        "CREATION-DATE": "Date of creation: ",
+        "LAYER": "Layer ",
+        "CREATED": "created with",
+        "NR-OBJ": "Number of objects in the layer: ",
+        "ALL-LOCALITIES": "Localities in the whole layer: ",
+        "ALL-POPULATION": "Population in the whole layer: ",
+        "OBJ-NAMES": "Names of objects in the layer: "
+      },
+      "RIGHT-SECTION": {
+        "MAP-TITLE": "Interactive map preview",
+        "EXPORT-BUTTON": "Export data"
+      }
+    }
+  },
   "LOGIN-PAGE": {
     "TITLE": "Zarejestruj się",
     "TITLE2": "Zaloguj się",

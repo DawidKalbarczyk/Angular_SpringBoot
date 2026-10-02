@@ -6,11 +6,11 @@
     @if (historyService.thumbnailArray().length === 0 && historyService.isLoading() == false) {
         <div class="no-content">
             <img src="/images/icons/bored.png" alt="Bored icon" />
-            <p>Brak zapisanych obiektów</p>
+            <p>{{ 'HISTORY.NO-DATA' | translate }}</p>
         </div>
     } @else if (historyService.thumbnailArray().length === 0 && historyService.isLoading() == true) {
         <div class="no-content progress-spinner-con">
-            <p>Ładowanie zapisanych obiektów...</p>
+            <p>{{ 'HISTORY.LOADING' | translate }}</p>
             <mat-spinner [diameter]="250"></mat-spinner>
             <button routerLink="/history/saved/123/456">
                 Click
@@ -19,7 +19,7 @@
         <!-- Jezeli jest history i JESZCZE wczesniejszy to geoportal to cofnij do geoportalu -->
     } @else {
         <div class="saved-obj-con">
-            <p>Zapisane obiekty</p>
+            <p>{{ 'HISTORY.MAIN.TITLE' | translate }}</p>
         </div>
         <div class="history-main-container">
             @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
@@ -41,7 +41,7 @@
 
     <div class="add-content-con">
         <p [class.arrow]="jumpingArrows()">&#8594;</p>
-        <button routerLink="/geoportal">Dodaj więcej warstw</button>
+        <button routerLink="/geoportal">{{ 'HISTORY.MAIN.ADD-MORE' | translate }}</button>
         <p [class.arrow]="jumpingArrows()">&#8592;</p>
     </div>
 

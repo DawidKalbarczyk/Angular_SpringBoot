@@ -6,10 +6,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { HistoryService } from '../../../services/history-service/history-service';
 import { LoginService } from '../../../services/login-service/login-service';
 import { Redirect } from '../../../global-components/redirect/redirect';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-history-main',
-  imports: [RouterLink, MatProgressSpinnerModule, Redirect],
+  imports: [RouterLink, MatProgressSpinnerModule, Redirect, TranslatePipe],
   templateUrl: './history-main.html',
   styleUrl: './history-main.scss',
 })

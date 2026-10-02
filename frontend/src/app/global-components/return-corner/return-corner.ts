@@ -23,20 +23,28 @@ export class ReturnCorner {
 
 
   constructor() {
+    this.updateRouteHistory(this.url);
+
     // Aktualizuj url przy każdej zmianie trasy
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event) => {
       this.url = (event as NavigationEnd).urlAfterRedirects;
       console.log('Current URL:', this.url);
-      if (this.url !== '/user' && this.url !== '/login?type=signin' && this.url !== '/login?type=login') {
-        localStorage.setItem('lastUrl', this.url);
-      }
+      this.updateRouteHistory(this.url);
     });
+  }
 
-    // Inicjalizacja dla pierwszego załadowania
-    if (this.url !== '/user' && this.url !== '/login?type=signin' && this.url !== '/login?type=login') {
-      localStorage.setItem('lastUrl', this.url);
+  private updateRouteHistory(newUrl: string): void {
+    const isExcluded = newUrl === '/user' || newUrl.startsWith('/login');
+    const previous = localStorage.getItem('currentUrl');
+
+    if (previous && previous !== newUrl) {
+      localStorage.setItem('lastUrl', previous);
+    }
+
+    if (!isExcluded) {
+      localStorage.setItem('currentUrl', newUrl);
     }
   }
 
@@ -52,7 +60,7 @@ export class ReturnCorner {
     const userDataLocal = JSON.parse(localStorage.getItem('userDataLocal') || '{}');
     const userId = userDataLocal.uid;
     this.amService.resetAMServiceVariables();
-    if (this.url === '/geoportal' && lastUrl === '/') {
+    if (this.url === '/geoportal') {
       this.router.navigate(['/']);
       this.GeoserverService.deleteTemps(userId).subscribe({
         next: (response) => {
@@ -62,7 +70,7 @@ export class ReturnCorner {
           console.error('Error deleting temporary workspaces and datastores:', error);
         }
       });
-    } else if (this.url === '/history' && lastUrl === '/geoportal'){  SPRAWDZ z chat
+    } else if (this.url === '/history' && lastUrl === '/geoportal') {
       this.router.navigate(['/geoportal']);
     } else if ((this.url === '/login?type=signin' || this.url === '/login?type=login') && lastUrl === '/') {
       this.router.navigate([lastUrl]);

@@ -15,10 +15,11 @@ import { fromLonLat, transformExtent } from 'ol/proj';
 import { ActivatedRoute } from '@angular/router';
 import { Redirect } from '../../../global-components/redirect/redirect';
 import { LoginService } from '../../../services/login-service/login-service';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-history-inner',
-  imports: [RouterLink, MatProgressSpinnerModule, Redirect],
+  imports: [RouterLink, MatProgressSpinnerModule, Redirect, TranslatePipe],
   templateUrl: './history-inner.html',
   styleUrl: './history-inner.scss',
 })
