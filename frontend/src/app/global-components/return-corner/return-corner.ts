@@ -52,7 +52,7 @@ export class ReturnCorner {
     const userDataLocal = JSON.parse(localStorage.getItem('userDataLocal') || '{}');
     const userId = userDataLocal.uid;
     this.amService.resetAMServiceVariables();
-    if (this.url === '/geoportal') {
+    if (this.url === '/geoportal' && lastUrl === '/') {
       this.router.navigate(['/']);
       this.GeoserverService.deleteTemps(userId).subscribe({
         next: (response) => {
@@ -62,6 +62,8 @@ export class ReturnCorner {
           console.error('Error deleting temporary workspaces and datastores:', error);
         }
       });
+    } else if (this.url === '/history' && lastUrl === '/geoportal'){  SPRAWDZ z chat
+      this.router.navigate(['/geoportal']);
     } else if ((this.url === '/login?type=signin' || this.url === '/login?type=login') && lastUrl === '/') {
       this.router.navigate([lastUrl]);
     } else if ((this.url === '/login?type=signin' || this.url === '/login?type=login') && lastUrl === '/search') {
