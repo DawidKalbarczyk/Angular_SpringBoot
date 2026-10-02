@@ -96,28 +96,28 @@
 
 
   "HISTORY": {
-    "ADD-MORE": "Add more data",
-    "NO-DATA": "You don't have any saved data yet",
-    "LOADING": "Loading saved data...",
+    "ADD-MORE": "Dodaj więcej obiektów",
+    "NO-DATA": "Brak zapisanych obiektów",
+    "LOADING": "Ładowanie zapisanych obiektów...",
     "MAIN": {
-      "TITLE": "Saved data",
-      "TILE-TITLE-SELECTION": "Selected: ",
-      "TILE-TITLE-ANALYSIS": "Attribute analysis: ",
-      "TILE-TITLE-SPATIAL": "Spatial analysis"
+      "TITLE": "Zapisane dane",
+      "TILE-TITLE-SELECTION": "Wybrane obiekty: ",
+      "TILE-TITLE-ANALYSIS": "Analiza atrybutowa: ",
+      "TILE-TITLE-SPATIAL": "Analiza przestrzenna: "
     },
     "INNER": {
       "LEFT-SECTION": {
-        "CREATION-DATE": "Date of creation: ",
-        "LAYER": "Layer ",
-        "CREATED": "created with",
-        "NR-OBJ": "Number of objects in the layer: ",
-        "ALL-LOCALITIES": "Localities in the whole layer: ",
-        "ALL-POPULATION": "Population in the whole layer: ",
-        "OBJ-NAMES": "Names of objects in the layer: "
+        "CREATION-DATE": "Data utworzenia: ",
+        "LAYER": "Warstwa ",
+        "CREATED": "stworzona ",
+        "NR-OBJ": "Liczba obiektów w warstwie: ",
+        "ALL-LOCALITIES": "Liczba miejscowości w całej warstwie: ",
+        "ALL-POPULATION": "Liczba mieszkańców w całej warstwie: ",
+        "OBJ-NAMES": "Nazwy obiektów w warstwie: "
       },
       "RIGHT-SECTION": {
-        "MAP-TITLE": "Interactive map preview",
-        "EXPORT-BUTTON": "Export data"
+        "MAP-TITLE": "Interaktywny podgląd mapy",
+        "EXPORT-BUTTON": "Eksportuj dane"
       }
     }
   },

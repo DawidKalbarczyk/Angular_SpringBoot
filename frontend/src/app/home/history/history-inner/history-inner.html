@@ -4,15 +4,18 @@
             <app-redirect></app-redirect>
         } @else {
             <div class="left-content">
-                @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
+                @for (thumbnail of historyService.thumbnailArray(); track thumbnail; let i = $index) {
                     <div class="left-row"
                     [class.active]="historyService.selectedThumbnail() === thumbnail"
                     (click)="historyService.selectThumbnail(thumbnail[0]);
                     responseDataPresent.set(false);"
                     [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]">
                         <img alt="Thumbnail" [src]="thumbnail[0].src">
-                        <div>
+                        <div class="left-row-text">
                             <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+                        </div>
+                        <div class="left-row-number">
+                            <p>{{ i + 1 }}</p>
                         </div>
                     </div>
                 }
