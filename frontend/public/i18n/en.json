@@ -93,6 +93,34 @@
         "LAY6": "Country boundaries"
     }
   },
+
+
+
+
+
+  "HISTORY": {
+    "TITLE": "Saved data",
+    "TILE-TITLE-SELECTION": "Selected: ",
+    "TILE-TITLE-ANALYSIS": "Attribute analysis: ",
+    "TILE-TITLE-SPATIAL": "Spatial analysis",
+    "ADD-MORE": "Add more data",
+    "NO-DATA": "You don't have any saved data yet",
+    "LOADING": "Loading saved data..."
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   "LOGIN-PAGE": {
     "TITLE": "Sign Up",
     "TITLE2": "Sign In",
