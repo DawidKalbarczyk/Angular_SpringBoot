@@ -36,7 +36,7 @@
                         <div>
                             <img alt="Data-Img" src="/images/icons/layers.png">
                             <p>Warstwa 
-                                <span>{{translateLayerName('layerType', responseData()?.[0]?.featureType?.name || 'Brak typu')}}</span>
+                                <span>{{translateLayerName('layerType', responseData()?.[0]?.wkb_geometry?.type || 'Brak typu')}}</span>
                                 stworzona <span>{{translateLayerName('selectionType', type())}}</span></p>
                         </div>
                         <div>
