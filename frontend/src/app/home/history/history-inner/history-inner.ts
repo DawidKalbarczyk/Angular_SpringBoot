@@ -16,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Redirect } from '../../../global-components/redirect/redirect';
 import { LoginService } from '../../../services/login-service/login-service';
 import { TranslatePipe } from '../../../pipes/translate.pipe';
+import { DarkMode } from '../../../services/dark-mode/dark-mode';
 
 @Component({
   selector: 'app-history-inner',
@@ -30,6 +31,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
   public userId = '';
   public time = '';
+  public isDarkMode = inject(DarkMode).isDarkMode;
 
   public responseDataPresent = signal<boolean>(true);
   public responseData = signal<any>(null);

@@ -1,4 +1,4 @@
-<div class="history-inner-container">
+<div class="history-inner-container" [class.dark-mode]="isDarkMode()">
     <div class="content" [class.content-none]="loginService.isLoggedIn() === false">
         @if (loginService.isLoggedIn() === false) {
             <app-redirect></app-redirect>

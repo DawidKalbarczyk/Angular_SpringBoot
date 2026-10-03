@@ -7,6 +7,7 @@ import { HistoryService } from '../../../services/history-service/history-servic
 import { LoginService } from '../../../services/login-service/login-service';
 import { Redirect } from '../../../global-components/redirect/redirect';
 import { TranslatePipe } from '../../../pipes/translate.pipe';
+import { DarkMode} from '../../../services/dark-mode/dark-mode';
 
 @Component({
   selector: 'app-history-main',
@@ -22,6 +23,7 @@ export class HistoryMain {
   public redirect = signal<boolean>(false);
   private router = inject(Router);
   private url = this.router.url;
+  public isDarkMode = inject(DarkMode).isDarkMode;
 
   constructor() {
     this.historyService.setThumbnails();

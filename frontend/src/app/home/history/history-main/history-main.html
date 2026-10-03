@@ -1,48 +1,50 @@
-@if (loginService.isLoggedIn() === false) {
-    <div class="history-redirect-con">
-        <app-redirect></app-redirect>
-    </div>
-} @else {
-    @if (historyService.thumbnailArray().length === 0 && historyService.isLoading() == false) {
-        <div class="no-content">
-            <img src="/images/icons/bored.png" alt="Bored icon" />
-            <p>{{ 'HISTORY.NO-DATA' | translate }}</p>
+<div class="history-main" [class.dark-mode]="isDarkMode()">
+    @if (loginService.isLoggedIn() === false) {
+        <div class="history-redirect-con" [class.dark-mode]="isDarkMode()">
+            <app-redirect></app-redirect>
         </div>
-    } @else if (historyService.thumbnailArray().length === 0 && historyService.isLoading() == true) {
-        <div class="no-content progress-spinner-con">
-            <p>{{ 'HISTORY.LOADING' | translate }}</p>
-            <mat-spinner [diameter]="250"></mat-spinner>
-            <button routerLink="/history/saved/123/456">
-                Click
-            </button>
-        </div>
-        <!-- Jezeli jest history i JESZCZE wczesniejszy to geoportal to cofnij do geoportalu -->
     } @else {
-        <div class="saved-obj-con">
-            <p>{{ 'HISTORY.MAIN.TITLE' | translate }}</p>
-        </div>
-        <div class="history-main-container">
-            @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
-                <div class="template-con" 
-                [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]"
-                (click)="historyService.selectThumbnail(thumbnail[0])">
-                    <div class="template">
-                        <img [src]="thumbnail[0].src" [alt]="thumbnail[1]" />
-                        <div class="text">
-                            <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+        @if (historyService.thumbnailArray().length === 0 && historyService.isLoading() == false) {
+            <div class="no-content" [class.dark-mode]="isDarkMode()">
+                <img src="/images/icons/bored.png" alt="Bored icon" />
+                <p>{{ 'HISTORY.NO-DATA' | translate }}</p>
+            </div>
+        } @else if (historyService.thumbnailArray().length === 0 && historyService.isLoading() == true) {
+            <div class="no-content progress-spinner-con">
+                <p>{{ 'HISTORY.LOADING' | translate }}</p>
+                <mat-spinner [diameter]="250"></mat-spinner>
+                <button routerLink="/history/saved/123/456">
+                    Click
+                </button>
+            </div>
+            <!-- Jezeli jest history i JESZCZE wczesniejszy to geoportal to cofnij do geoportalu -->
+        } @else {
+            <div class="saved-obj-con">
+                <p>{{ 'HISTORY.MAIN.TITLE' | translate }}</p>
+            </div>
+            <div class="history-main-container">
+                @for (thumbnail of historyService.thumbnailArray(); track thumbnail) {
+                    <div class="template-con" 
+                    [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]"
+                    (click)="historyService.selectThumbnail(thumbnail[0])">
+                        <div class="template">
+                            <img [src]="thumbnail[0].src" [alt]="thumbnail[1]" />
+                            <div class="text">
+                                <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+                            </div>
                         </div>
+                        
                     </div>
-                    
-                </div>
-            }
+                }
+            </div>
+        }
+
+
+        <div class="add-content-con">
+            <p [class.arrow]="jumpingArrows()">&#8594;</p>
+            <button routerLink="/geoportal">{{ 'HISTORY.ADD-MORE' | translate }}</button>
+            <p [class.arrow]="jumpingArrows()">&#8592;</p>
         </div>
+
     }
-
-
-    <div class="add-content-con">
-        <p [class.arrow]="jumpingArrows()">&#8594;</p>
-        <button routerLink="/geoportal">{{ 'HISTORY.MAIN.ADD-MORE' | translate }}</button>
-        <p [class.arrow]="jumpingArrows()">&#8592;</p>
-    </div>
-
-}
+</div>
