@@ -1,10 +1,11 @@
-import { Component, inject} from '@angular/core';
+import { Component, inject, signal} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { DarkMode } from '../../services/dark-mode/dark-mode';
 import { GeoserverService } from '../../services/GeoserverService/geoserver-service';
 import { LanguageService } from '../../services/language/language-service';
 import { AMService } from '../../services/a-m-service/a-m-service';
 import { filter } from 'rxjs/operators';
+import { ReturnService } from '../../services/return-service/return-service';
 
 @Component({
   selector: 'app-return-corner',
@@ -16,37 +17,12 @@ export class ReturnCorner {
   private router: Router = inject(Router);
   public url: string = this.router.url;
   public isDarkMode = inject(DarkMode).isDarkMode;
-  private GeoserverService = inject(GeoserverService);
   public languageService = inject(LanguageService);
   public userData = JSON.parse(localStorage.getItem('userData') || '{}');
   public amService = inject(AMService);
-
-
-  constructor() {
-    this.updateRouteHistory(this.url);
-
-    // Aktualizuj url przy każdej zmianie trasy
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event) => {
-      this.url = (event as NavigationEnd).urlAfterRedirects;
-      console.log('Current URL:', this.url);
-      this.updateRouteHistory(this.url);
-    });
-  }
-
-  private updateRouteHistory(newUrl: string): void {
-    const isExcluded = newUrl === '/user' || newUrl.startsWith('/login');
-    const previous = localStorage.getItem('currentUrl');
-
-    if (previous && previous !== newUrl) {
-      localStorage.setItem('lastUrl', previous);
-    }
-
-    if (!isExcluded) {
-      localStorage.setItem('currentUrl', newUrl);
-    }
-  }
+  private GeoserverService = inject(GeoserverService);
+  
+  
 
   switchColors(): void {
     this.isDarkMode.set(!this.isDarkMode());
@@ -54,14 +30,22 @@ export class ReturnCorner {
 
     localStorage.setItem('darkMode', this.isDarkMode() ? 'true' : 'false');
   }
-      
+   
+  private urlList = inject(ReturnService).urlList;
+  constructor() {
+    if (this.urlList().at(-1) !== this.router.url) {
+      this.urlList.update((urls) => [...urls, this.router.url]);
+      console.log(this.urlList())
+    } else {
+      console.log('URL already exists. UrlList: ', this.urlList());
+    }
+  }
   goBack(): void {
-    const lastUrl = localStorage.getItem('lastUrl') || this.router.url;
     const userDataLocal = JSON.parse(localStorage.getItem('userDataLocal') || '{}');
     const userId = userDataLocal.uid;
+    this.urlList.update((urls) => urls.slice(0, -1));
     this.amService.resetAMServiceVariables();
-    if (this.url === '/geoportal') {
-      this.router.navigate(['/']);
+    if (this.router.url === '/geoportal') {
       this.GeoserverService.deleteTemps(userId).subscribe({
         next: (response) => {
           console.log('Temporary workspaces and datastores deleted successfully:', response);
@@ -70,20 +54,9 @@ export class ReturnCorner {
           console.error('Error deleting temporary workspaces and datastores:', error);
         }
       });
-    } else if (this.url === '/history' && lastUrl === '/geoportal') {
-      this.router.navigate(['/geoportal']);
-    } else if ((this.url === '/login?type=signin' || this.url === '/login?type=login') && lastUrl === '/') {
-      this.router.navigate([lastUrl]);
-    } else if ((this.url === '/login?type=signin' || this.url === '/login?type=login') && lastUrl === '/search') {
-      this.router.navigate([lastUrl]);
-    } else if (this.url === '/search' || this.url === '/history') {
-      this.router.navigate(['/']);
-    } else if (this.url.includes('/saved')) {
-      // Zawsze wróć do /history z poziomu zapisanego obiektu
-      this.router.navigate(['/history']);
-    } else if (this.url === '/user') {
-      this.router.navigate([lastUrl || '/']);
     }
+
+    this.router.navigate([this.urlList().at(-1)]);
     
   }
 }
