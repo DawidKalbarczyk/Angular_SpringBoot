@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AMService } from '../../../services/a-m-service/a-m-service';
 import { ObjSelection } from '../../../services/obj-selection/obj-selection';
@@ -15,7 +15,7 @@ import { DarkMode} from '../../../services/dark-mode/dark-mode';
   templateUrl: './history-main.html',
   styleUrl: './history-main.scss',
 })
-export class HistoryMain {
+export class HistoryMain implements OnDestroy {
   public objectSelection = inject(ObjSelection);
   public AMService = inject(AMService);
   public historyService = inject(HistoryService);
@@ -24,12 +24,17 @@ export class HistoryMain {
   private router = inject(Router);
   private url = this.router.url;
   public isDarkMode = inject(DarkMode).isDarkMode;
+  private arrowIntervalId: ReturnType<typeof setInterval>;
 
   constructor() {
     this.historyService.setThumbnails();
-    setInterval(() => {
+    this.arrowIntervalId = setInterval(() => {
       this.toggleArrows();
     }, 2500);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.arrowIntervalId);
   }
 
   public jumpingArrows = signal<boolean>(false);
