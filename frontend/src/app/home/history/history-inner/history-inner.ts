@@ -24,6 +24,8 @@ import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
+import { BignumbersPipe } from '../../../pipes/bignumbers-pipe';
+import { ZoomToObject } from '../../../services/zoom-to-object/zoom-to-object';
 
 export type ResponseDataPoint = {
   gmina: string;
@@ -49,7 +51,7 @@ export type ResponseDataPoint = {
 
 @Component({
   selector: 'app-history-inner',
-  imports: [RouterLink, MatProgressSpinnerModule, Redirect, TranslatePipe],
+  imports: [BignumbersPipe, RouterLink, MatProgressSpinnerModule, Redirect, TranslatePipe],
   templateUrl: './history-inner.html',
   styleUrl: './history-inner.scss',
 })
@@ -64,6 +66,11 @@ export class HistoryInner implements OnInit, AfterViewInit {
 
   public responseDataPresent = signal<boolean>(true);
   public responseData = signal<any>(null);
+
+  ngOnDestroy(): void {
+    this.historyService.unhighlightSelectedObject();
+  }
+
   async ngOnInit(): Promise<void> {
     const auth = getAuth();
     await auth.authStateReady();
@@ -225,7 +232,10 @@ export class HistoryInner implements OnInit, AfterViewInit {
     }
   }
 
-  public pointLayerPopulationQuantity = signal<number>(0);
+  public pointLayerPopulationQuantity = this.historyService.pointLayerPopulationQuantity;
+  public pointObjectPopulationQuantity = this.historyService.pointObjectPopulationQuantity;
+  public pointObjectPopulationClicked = this.historyService.pointObjectPopulationClicked;
+  public pointObjectPopulationName = this.historyService.pointObjectPopulationName;
   public calculateLayerPopulationQuantity(): void {
     let population = 0;
     if (this.responseData()[0]?.wkb_geometry?.type === 'Point') {
@@ -243,6 +253,49 @@ export class HistoryInner implements OnInit, AfterViewInit {
     this.pointLayerPopulationQuantity.set(population);
     console.log('Calculated population quantity:', this.pointLayerPopulationQuantity());
   }
+  private lastObjectName = signal<string>('');
+  private zoomToObject = inject(ZoomToObject);
+
+  public async getObjectPopulationQuantity(objectName: string): Promise<void> {
+    const bboxArray = await this.AMService.getLayerBBox();
+    const item = bboxArray.find(item => item.time === this.time && item.userId === this.userId);
+
+    if (this.pointObjectPopulationClicked() === true && this.lastObjectName() === objectName) {
+      this.pointObjectPopulationClicked.set(false);
+      this.pointObjectPopulationQuantity.set(0);
+      this.pointObjectPopulationName.set('');
+      this.historyService.zoomOutObject(item);
+      this.historyService.unhighlightSelectedObject();
+      return;
+    }
+    this.pointObjectPopulationClicked.set(true);
+    this.pointObjectPopulationName.set(objectName);
+    if (this.responseData()?.[0]?.wkb_geometry?.type === 'Point') {
+      this.responseData()?.find((item: ResponseDataPoint) => {
+        if (item.nazwa === objectName) {
+          this.pointObjectPopulationQuantity.set(Number(item.liczbamies) ? Number(item.liczbamies) : 0);
+        }
+      });
+      console.log('Calculated object population quantity:', this.pointObjectPopulationQuantity());
+    } else if (this.responseData()?.[0]?.wkb_geometry?.type === 'Polygon') {
+      /////////////////// SKIP FOR NOW, AS WE DON'T HAVE POLYGON DATA STRUCTURE DEFINED
+    }
+    const thirdParam = this.responseData()?.[0]?.wkb_geometry?.type === 'Point' ? this.objectLayerPoint : this.objectLayerPolygon;
+    const secondParam = this.responseData()?.find((item: ResponseDataPoint) => item.nazwa === objectName)?.wkb_geometry;
+    this.historyService.startZoom(
+      this.thumbnailMap,
+      secondParam,
+      objectName,
+      thirdParam,
+      item
+    )
+    this.lastObjectName.set(objectName);
+  }
+
+
+
+
+
 
 
   async ngAfterViewInit(): Promise<void> {

@@ -7,7 +7,8 @@
                 @for (thumbnail of historyService.thumbnailArray(); track thumbnail; let i = $index) {
                     <div class="left-row"
                     [class.active]="historyService.selectedThumbnail() === thumbnail"
-                    (click)="historyService.selectThumbnail(thumbnail[0])"
+                    (click)="historyService.selectThumbnail(thumbnail[0]); 
+                    this.historyService.unhighlightSelectedObject();"
                     [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]">
                         <img alt="Thumbnail" [src]="thumbnail[0].src">
                         <div class="left-row-text">
@@ -60,11 +61,11 @@
                         } @else if (responseData()?.[0]?.wkb_geometry?.type === 'Point') {
                             <div>
                                 <img alt="Data-Img" src="/images/icons/crowd.png">
-                                <p>Population in the whole layer</p>
+                                <p>Population in the whole layer: <span>{{pointLayerPopulationQuantity() | bignumbers}}</span></p>
                             </div>
                             <div>
                                 <img alt="Data-Img" src="/images/icons/man.png">
-                                <p>Population in the selected object</p>
+                                <p>Population in the selected object: <span>{{pointObjectPopulationQuantity() | bignumbers}}</span></p>
                             </div>
                         }
                         <div>
@@ -73,7 +74,9 @@
                         </div>
                         <div class="data-names">
                             @for (res of responseData(); track res) {
-                                <div>{{ res?.jpt_nazwa_ || res?.nazwa || 'Brak nazwy' }}</div>
+                                <div (click)="getObjectPopulationQuantity(res?.nazwa || res?.jpt_nazwa_)"
+                                [class.selected]="pointObjectPopulationName() !== '' && (res?.nazwa || res?.jpt_nazwa_) === pointObjectPopulationName()">
+                                    {{ res?.jpt_nazwa_ || res?.nazwa || 'Brak nazwy' }}</div>
                             }
                         </div>
                     </div>

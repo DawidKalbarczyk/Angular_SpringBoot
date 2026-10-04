@@ -2,7 +2,17 @@ import { inject, Service, signal } from '@angular/core';
 import { AMService } from '../a-m-service/a-m-service';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat, transformExtent } from 'ol/proj';
+import Style from 'ol/style/Style';
+import VectorSource from 'ol/source/Vector';
+import VectorLayer from 'ol/layer/Vector';
+import Stroke from 'ol/style/Stroke';
+import CircleStyle from 'ol/style/Circle';
+import Fill from 'ol/style/Fill';
+import Text from 'ol/style/Text';
+import TileLayer from 'ol/layer/Tile';
+import VectorImageLayer from 'ol/layer/VectorImage';
+import Map from 'ol/Map';
 
 type Thumbnail = [HTMLImageElement, string, string, string, string, string];
 interface LayerRow {
@@ -20,6 +30,11 @@ export class HistoryService {
     public isLoading = signal<boolean>(true);
     public AMService = inject(AMService);
     public layerNames = signal<string[]>([]);
+
+    public pointLayerPopulationQuantity = signal<number>(0);
+    public pointObjectPopulationQuantity = signal<number>(0);
+    public pointObjectPopulationClicked = signal<boolean>(false);
+    public pointObjectPopulationName = signal<string>('');
 
 
     public async setThumbnails(): Promise<void> {
@@ -106,4 +121,164 @@ export class HistoryService {
   public selectThumbnail(thumbnailSrc: any): void {
     this.selectedThumbnail.set(thumbnailSrc);
   }
+
+
+
+
+
+
+
+
+  private map: Map | null = null;
+  public async startZoom(map: Map, geomType: string, objectName: string, layer: VectorImageLayer | TileLayer, bboxItem: any): Promise<void> {
+    console.log(bboxItem);
+    this.map = map;
+    await this.highlightSelectedObject(geomType, objectName, layer, bboxItem);
+  }
+
+  private highlightSource = new VectorSource();
+  private hasZoomedAlready = signal<boolean>(false);
+
+
+
+
+
+  
+
+
+  public unhighlightSelectedObject(): void {
+    if (!this.map) {
+      console.error('Map instance is not yet set');
+      return;
+    }
+    this.highlightSource.clear();
+    this.hasZoomedAlready.set(false);
+    this.pointObjectPopulationName.set('');
+    this.map.getLayers().forEach((layer) => {
+      if (layer instanceof VectorLayer && layer.get('name') === 'highlightLayer') {
+        this.map?.removeLayer(layer);
+      }
+    });
+  }
+
+  public async highlightSelectedObject(wkb_geometry: any, objectName: string, layer: VectorImageLayer | TileLayer, bboxItem: any): Promise<void> {
+    switch (wkb_geometry?.type) {
+      case 'Point':
+        const activateHiglight = () => {
+          this.matchVectorData(layer, objectName);
+          this.map?.addLayer(this.returnHighlightedVectorLayer());
+          this.zoomToObject(wkb_geometry, bboxItem);
+          
+        }
+        
+        if (this.hasZoomedAlready() === true ) {
+          setTimeout(() => {
+            activateHiglight();
+          }, 1000);
+          this.zoomOutObject(bboxItem);
+        } else {
+          this.hasZoomedAlready.set(true);
+          activateHiglight();
+        }
+        
+        break;
+      case 'Polygon':
+        // Highlight the selected polygon
+        break;
+      default:
+        console.error('Unknown geometry type');
+    }
+
+  }
+
+  private matchVectorData(vectorPointLayer: VectorImageLayer | TileLayer, objectName: string): void {
+    const source = vectorPointLayer instanceof VectorImageLayer ? vectorPointLayer.getSource() : undefined;
+
+    if (!source) {
+      console.error('Vector layer source is undefined');
+      return;
+    }
+
+    this.highlightSource.clear();
+
+    const features = source.getFeatures();
+
+    const match = features.find((feature: any) => feature.get('nazwa') === objectName);
+
+    if (match) {
+      match.set('highlighted', true);
+      const clone = match.clone();
+      this.highlightSource.addFeature(clone);
+    } else {
+      console.warn('No matching feature found for objectName:', objectName);
+    }
+    
+  }
+
+  private returnHighlightedVectorLayer(): VectorLayer {
+    return new VectorLayer({
+      source: this.highlightSource,
+      zIndex: 9999,
+      properties: { name: 'highlightLayer' },
+      style: (feature) => {
+        return new Style({
+          image: new CircleStyle({
+            radius: 10,
+            fill: new Fill({ color: '#ffc333' }),
+            stroke: new Stroke({ color: '#fff', width: 3 }),
+          }),
+          text: new Text({
+            text: feature.get('nazwa'),
+            offsetY: -25,
+            font: 'bold 25px Roboto Flex',
+            stroke: new Stroke ({ color: '#fff', width: 5 }),
+          })
+        })
+      }
+    })
+  }
+
+  private coordinates = signal<[number, number]>([0, 0]);
+
+  private fitToLayer(item: any): void {
+    const extent = transformExtent(
+      [item.bbox.minx, item.bbox.miny, item.bbox.maxx, item.bbox.maxy], 
+      'EPSG:4326', 'EPSG:3857');
+    if (item.layer === 'vectorLayer') {
+      this.map?.getView().fit(extent, {
+        padding: [100, 100, 100, 100],
+        maxZoom: 15,
+        duration: 1000
+      })
+    } else { 
+      this.map?.getView().fit(extent, {
+        padding: [50, 50, 50, 50],
+        maxZoom: 15,
+        duration: 1000
+      })
+    }
+  }
+  private zoomToObject(wkb_geometry: any, bboxItem: any): void {
+    console.log("YEAEAWAEWAH"+ wkb_geometry.coordinates);
+    if (!this.map) {
+      console.error('Map instance is not yet set');
+      return;
+    }
+    this.coordinates.set([wkb_geometry.coordinates[0], wkb_geometry.coordinates[1]]);
+    this.map?.getView().animate({
+      center: fromLonLat(this.coordinates()),
+      zoom: 12,
+      duration: 1000
+    });
+  }
+
+  public zoomOutObject(bboxItem: any): void {
+    if (!this.map) {
+      console.error('Map instance is not yet set');
+      return;
+    }
+    this.fitToLayer(bboxItem);
+  }
+
+  
 }
