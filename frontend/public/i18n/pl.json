@@ -108,7 +108,6 @@
     "INNER": {
       "LEFT-SECTION": {
         "CREATION-DATE": "Data utworzenia: ",
-        "LAYER": "Warstwa ",
         "CREATED": "stworzona ",
         "NR-OBJ": "Liczba obiektów w warstwie: ",
         "ALL-LOCALITIES": "Liczba miejscowości w całej warstwie: ",
@@ -124,14 +123,14 @@
           "ATTRIBUTE-ANALYSIS": "na podstawie analizy atrybutowej",
           "SPATIAL-ANALYSIS": "na podstawie analizy przestrzennej"
         },
-        "ERROR": "Nieznany typ"
-        
-        },
         "LAYER-TITLE": {
           "SELECTED-OBJ-BY-HAND": "Ręcznie wybrane",
           "SELECTED-OBJ-BY-ATTRIBUTE-ANALYSIS": "Analiza atrybutowa",
           "SELECTED-OBJ-BY-SPATIAL-ANALYSIS": "Analiza przestrzenna"
         },
+        "ERROR": "Nieznany typ"
+        },
+        
       "RIGHT-SECTION": {
         "MAP-TITLE": "Interaktywny podgląd mapy",
         "EXPORT-BUTTON": "Eksportuj dane"
