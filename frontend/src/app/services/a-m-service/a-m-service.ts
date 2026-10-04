@@ -64,8 +64,10 @@ export class AMService {
                 time: item.time,
                 bbox: bbox,
                 title: item.title,
-                type: item.type
+                type: item.type,
+                layer: item.layer ?? 'Layer ERROR'
             });
+            console.log('BBoxArray:', bboxArray);
 
         }));
         return bboxArray;

@@ -45,13 +45,14 @@ public class DataSaveService {
         this.geoServerService = geoServerService;
     }
 
-    public ResponseEntity<?> updateJSONinTable(String title, String userId, String time, String type) {
+    public ResponseEntity<?> updateJSONinTable(String title, String userId, String time, String type, String layer) {
         try {
             Map<String, Object> payload = new HashMap<>();
                 payload.put("title", title);
                 payload.put("userId", userId);
                 payload.put("time", time);
                 payload.put("type", type);
+                payload.put("layer", layer);
 
                 String json = objectMapper.writeValueAsString(payload);
 

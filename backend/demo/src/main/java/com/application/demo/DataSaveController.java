@@ -51,7 +51,7 @@ public class DataSaveController {
                 return resultDeletingTempTable;
             }
         // UPDATING THE JSON ARRAY IN THE DATABASE////////////////////////////////////////
-            ResponseEntity<?> resultSavingJSON = dataSaveService.updateJSONinTable(title, userId, time, type);
+            ResponseEntity<?> resultSavingJSON = dataSaveService.updateJSONinTable(title, userId, time, type, layer);
             if (resultSavingJSON.getStatusCode() != HttpStatus.OK) {
                 return resultSavingJSON;
             }

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { fromLonLat } from 'ol/proj';
 
-type Thumbnail = [HTMLImageElement, string, string, string, string];
+type Thumbnail = [HTMLImageElement, string, string, string, string, string];
 interface LayerRow {
   ogc_fid: number;
   wkb_geometry: {
@@ -19,6 +19,7 @@ export class HistoryService {
     public thumbnailArray = signal<Thumbnail[]>([]);
     public isLoading = signal<boolean>(true);
     public AMService = inject(AMService);
+    public layerNames = signal<string[]>([]);
 
 
     public async setThumbnails(): Promise<void> {
@@ -60,7 +61,7 @@ export class HistoryService {
       Img.onerror = () => {
         console.error('Error loading image');
       };
-      thumbnailArrayTemp.push([Img, title, type, item.userId, item.time]);
+      thumbnailArrayTemp.push([Img, title, type, item.userId, item.time, item.layer]);
     });
 
     thumbnailArrayTemp.sort((a, b) => Number(b[4]) - Number(a[4]))
@@ -72,9 +73,13 @@ export class HistoryService {
   public transformThumbnailType(type: string): string {
     switch (type) {
       case 'selectedObjByHand':
-        return 'Ręcznie wybrane';
-      default:
-        return 'Nieznany typ';
+          return 'HISTORY.INNER.LEFT-SECTION.LAYER-TITLE.SELECTED-OBJ-BY-HAND';
+        case 'selectedObjByAttributeAnalysis':
+          return 'HISTORY.INNER.LEFT-SECTION.LAYER-TITLE.SELECTED-OBJ-BY-ATTRIBUTE-ANALYSIS';
+        case 'selectedObjBySpatialAnalysis':
+          return 'HISTORY.INNER.LEFT-SECTION.LAYER-TITLE.SELECTED-OBJ-BY-SPATIAL-ANALYSIS';
+        default:
+          return 'HISTORY.INNER.LEFT-SECTION.ERROR';
     }
   }
 
