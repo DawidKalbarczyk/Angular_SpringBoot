@@ -40,7 +40,7 @@
                             <img alt="Data-Img" src="/images/icons/layers.png">
                             <p> 
                                 <span>{{(translateLayerName('layerType', responseData()?.[0]?.wkb_geometry?.type || 'HISTORY.INNER.LEFT-SECTION.LAYER-TYPES.ERROR') | translate)}}</span>
-                                {{ 'HISTORY.INNER.LEFT-SECTION.CREATED' | translate }} <span>{{translateLayerName('selectionType', type())}}</span>
+                                {{ 'HISTORY.INNER.LEFT-SECTION.CREATED' | translate }} <span>{{translateLayerName('selectionType', type()) | translate}}</span>
                                 {{'HISTORY.INNER.LEFT-SECTION.LAYERFROM' | translate }}<span>{{(translateLayerName('layerFrom',currentThumbnail?.[5] || '') | translate).toLowerCase()}}</span>
                             </p>
                         </div>
