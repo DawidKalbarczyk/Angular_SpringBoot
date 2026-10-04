@@ -7,7 +7,7 @@
             </p>
             <div class="pop-up-butt-con">
                 <button class="pop-up-yes-butt" (click)="AMService.savePopUpOff()">Zamknij</button>  
-                <button class="pop-up-no-butt" routerLink="/history">Przejdź do zapisanych</button>    
+                <button class="pop-up-no-butt" routerLink="/history" (click)="resetPopUp(true)">Przejdź do zapisanych</button>    
             </div>
 
         </div>
