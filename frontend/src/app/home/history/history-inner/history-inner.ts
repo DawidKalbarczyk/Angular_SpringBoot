@@ -25,6 +25,28 @@ import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
 
+export type ResponseDataPoint = {
+  gmina: string;
+  idgminy: string;
+  idprng: number;
+  liczbamies: number;
+  nazwa: string;
+  ogc_fid: number;
+  powiat: string;
+  rodzaj: string;
+  wkb_geometry: {
+    type: string;
+    coordinates: any;
+  };
+  wojewodz: string;
+  wspgeog: any;
+  wspxy: any;
+}
+
+// export type ResponseDataPolygon = {
+
+// }
+
 @Component({
   selector: 'app-history-inner',
   imports: [RouterLink, MatProgressSpinnerModule, Redirect, TranslatePipe],
@@ -59,6 +81,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
         await this.refreshMap(this.responseData()[0]?.wkb_geometry?.type);
         this.responseDataPresent.set(true);
 
+        console.log('Response data:', this.responseData());
       });
     }
     
@@ -166,7 +189,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
       pointSource.setUrl(newUrl);
       pointSource.refresh();
     }
-    
+
     if (item) {
       this.title.set(item.title);
       this.type.set(item.type);
@@ -175,7 +198,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
         'EPSG:4326', 'EPSG:3857');
       if (item.layer === 'vectorLayer') {
         this.thumbnailMap.getView().fit(extent, {
-          padding: [150, 150, 150, 150],
+          padding: [100, 100, 100, 100],
           maxZoom: 15,
         })
       } else { 
@@ -185,7 +208,8 @@ export class HistoryInner implements OnInit, AfterViewInit {
         })
       }
     }
-    this.checkLayerType(); 
+    this.checkLayerType();
+    this.calculateLayerPopulationQuantity(); 
     
   }
   private checkLayerType(): void {
@@ -200,6 +224,26 @@ export class HistoryInner implements OnInit, AfterViewInit {
       this.objectLayerPoint.setVisible(false);
     }
   }
+
+  public pointLayerPopulationQuantity = signal<number>(0);
+  public calculateLayerPopulationQuantity(): void {
+    let population = 0;
+    if (this.responseData()[0]?.wkb_geometry?.type === 'Point') {
+      this.responseData()?.forEach((item: ResponseDataPoint) => {
+        population += Number(item.liczbamies) ? Number(item.liczbamies) : 0;
+      });
+    } else if (this.responseData()[0]?.wkb_geometry?.type === 'Polygon') {
+      /////////////////// SKIP FOR NOW, AS WE DON'T HAVE POLYGON DATA STRUCTURE DEFINED
+      // this.responseData()?.forEach((item: ResponseDataPolygon) => {
+      //   population += Number(item.liczbamies) ? Number(item.liczbamies) : 0;
+      //   console.log(population);
+      // });
+    }
+    
+    this.pointLayerPopulationQuantity.set(population);
+    console.log('Calculated population quantity:', this.pointLayerPopulationQuantity());
+  }
+
 
   async ngAfterViewInit(): Promise<void> {
     const bboxArray = await this.AMService.getLayerBBox();
@@ -295,7 +339,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
         'EPSG:4326', 'EPSG:3857');
       if (item.layer === 'vectorLayer') {
         this.thumbnailMap.getView().fit(extent, {
-          padding: [150, 150, 150, 150],
+          padding: [100, 100, 100, 100],
           maxZoom: 15,
         })
       } else { 
