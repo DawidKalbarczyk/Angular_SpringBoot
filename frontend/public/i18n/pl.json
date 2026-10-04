@@ -113,8 +113,25 @@
         "NR-OBJ": "Liczba obiektów w warstwie: ",
         "ALL-LOCALITIES": "Liczba miejscowości w całej warstwie: ",
         "ALL-POPULATION": "Liczba mieszkańców w całej warstwie: ",
-        "OBJ-NAMES": "Nazwy obiektów w warstwie: "
-      },
+        "OBJ-NAMES": "Nazwy obiektów w warstwie: ",
+        "LAYERFROM": "z warstwy - ",
+        "LAYER-TYPES": {
+          "POLYGON": "Warstwa poligonowa",
+          "POINT": "Warstwa punktowa"
+        },
+        "SELECTION-TYPE": {
+          "MANUAL-SELECTION": "ręcznie przez użytkownika",
+          "ATTRIBUTE-ANALYSIS": "na podstawie analizy atrybutowej",
+          "SPATIAL-ANALYSIS": "na podstawie analizy przestrzennej"
+        },
+        "ERROR": "Nieznany typ"
+        
+        },
+        "LAYER-TITLE": {
+          "SELECTED-OBJ-BY-HAND": "Ręcznie wybrane",
+          "SELECTED-OBJ-BY-ATTRIBUTE-ANALYSIS": "Analiza atrybutowa",
+          "SELECTED-OBJ-BY-SPATIAL-ANALYSIS": "Analiza przestrzenna"
+        },
       "RIGHT-SECTION": {
         "MAP-TITLE": "Interaktywny podgląd mapy",
         "EXPORT-BUTTON": "Eksportuj dane"

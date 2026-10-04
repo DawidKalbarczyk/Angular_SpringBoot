@@ -9,23 +9,67 @@
 .dark-mode {
     .content {
         .left-content {
+            background-color: $background-color-dark !important;
+            border-left: 1px solid rgba(255, 255, 255, 0.4);
             .left-row {
+                background-color: $secondary-color-dark !important;
                 div {
-
+                    p {
+                        background-color: $background-color-dark !important;
+                        color: white !important;
+                    }
                 }
             }
         }
         .right-content-loading {
-
+            p {
+                color: white !important;
+            }
         }
         .right-content {
+            background-color: $secondary-color-dark !important;
             .right-data {
+                background-color: $secondary-color-dark !important;
                 .right-data-title {
-
+                    background-color: $background-color-dark !important;
+                    color: white !important;
                 }
                 > div {
+                    img {
+                        filter: invert(1);
+                    }
                     p {
-                        
+                       background-color: $background-color-dark !important;
+                       color: white !important; 
+                    }
+                }
+                .data-names {
+                    div {
+                        &:nth-child(odd) {
+                            background-color: $background-color-dark !important;
+                            color: white !important;
+                        }
+                        &:nth-child(even) {
+                            background-color: $secondary-color-light !important;
+                            color: black !important;
+                        }
+                    }
+                }
+            }
+            .right-thumbnail {
+                .right-thumbnail-this {
+                    border-left: 1px solid rgba(255,255,255,0.4) !important;
+                    border-bottom: 1px solid rgba(255,255,255,0.4) !important;
+                    .right-thumbnail-title {
+                        background-color: $background-color-dark !important;
+                        color: white !important;
+                    }
+                }
+                .right-thumbnail-export {
+                    border-left: 1px solid rgba(255,255,255,0.4) !important;
+                    button {
+                        background-color: $buttons-color !important;
+                        color: white !important;
                     }
                 }
             }
@@ -90,6 +134,9 @@
                     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
                 }
 
+                .left-row-text {
+                    padding: 0rem 0.25rem;
+                }
                 .left-row-text, .left-row-number {
                     display: flex;
                     justify-content: center;
@@ -108,6 +155,8 @@
                         padding: 0.25rem 1rem;
                         border-radius: 0.5rem;
                         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+                        word-break: keep-all;
+                        text-align: center;
                     }
                 }
                 .left-row-number {

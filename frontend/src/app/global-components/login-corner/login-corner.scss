@@ -25,14 +25,6 @@ div, button {
     }
     
 }
-.login-dark-photo {
-    .img-container {
-        border: 1px solid $secondary-color-light !important;
-        img {
-            filter: invert(1) !important;
-        }   
-    }  
-}
 
 .login-dark-history {
     background-color: $background-color-dark !important;
@@ -40,10 +32,6 @@ div, button {
     border-top: none;
     border-right: none;
     border-radius: 0rem 0rem 0rem 0.5rem;
-    .img-container {
-        background-color: $secondary-color-dark !important;
-        filter: invert(0.9) !important;
-    }
 }
 
 .headbar-history {
@@ -83,6 +71,13 @@ div, button {
         overflow: hidden;
         padding: 0.35rem;
         transition: background-color 0.3s ease, border 0.5s ease, filter 0.5s ease;
+
+        &.login-dark-photo {
+            border: 1px solid $secondary-color-light !important;
+            img {
+                filter: invert(1) !important;
+            }   
+        }
 
         &.login-dark-photo-existing {
             padding: 0 !important;

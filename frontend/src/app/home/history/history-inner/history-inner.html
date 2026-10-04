@@ -12,7 +12,7 @@
                     [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]">
                         <img alt="Thumbnail" [src]="thumbnail[0].src">
                         <div class="left-row-text">
-                            <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+                            <p>{{ (historyService.transformThumbnailType(thumbnail[2])) | translate }}:<br> {{ thumbnail[1] }}</p>
                         </div>
                         <div class="left-row-number">
                             <p>{{ i + 1 }}</p>
@@ -38,9 +38,11 @@
                         </div>
                         <div>
                             <img alt="Data-Img" src="/images/icons/layers.png">
-                            <p>{{ 'HISTORY.INNER.LEFT-SECTION.LAYER' | translate }}
-                                <span>{{translateLayerName('layerType', responseData()?.[0]?.wkb_geometry?.type || 'Brak typu')}}</span>
-                                {{ 'HISTORY.INNER.LEFT-SECTION.CREATED' | translate }} <span>{{translateLayerName('selectionType', type())}}</span></p>
+                            <p> 
+                                <span>{{(translateLayerName('layerType', responseData()?.[0]?.wkb_geometry?.type || 'HISTORY.INNER.LEFT-SECTION.LAYER-TYPES.ERROR') | translate)}}</span>
+                                {{ 'HISTORY.INNER.LEFT-SECTION.CREATED' | translate }} <span>{{translateLayerName('selectionType', type())}}</span>
+                                {{'HISTORY.INNER.LEFT-SECTION.LAYERFROM' | translate }}<span>{{(translateLayerName('layerFrom',currentThumbnail?.[5] || '') | translate).toLowerCase()}}</span>
+                            </p>
                         </div>
                         <div>
                             <img alt="Data-Img" src="/images/icons/quantity.png">

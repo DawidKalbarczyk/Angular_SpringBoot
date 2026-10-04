@@ -213,12 +213,15 @@
                 transition: background-color 0.3s ease;
                 position: absolute;
                 bottom: 2rem;
+                padding: 0rem 0.5rem;
                 left: 0;
                 right: 0;
                 p {
                     background-color: white;
                     padding: 0.25rem 1rem;
                     border-radius: 0.5rem;
+                    word-break: keep-all;
+                    text-align: center;
                 }
 
             }

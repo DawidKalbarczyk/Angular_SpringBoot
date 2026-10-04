@@ -17,6 +17,12 @@ import { Redirect } from '../../../global-components/redirect/redirect';
 import { LoginService } from '../../../services/login-service/login-service';
 import { TranslatePipe } from '../../../pipes/translate.pipe';
 import { DarkMode } from '../../../services/dark-mode/dark-mode';
+import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
+import CircleStyle from 'ol/style/Circle';
+import Stroke from 'ol/style/Stroke';
+import Fill from 'ol/style/Fill';
+import Style from 'ol/style/Style';
 
 @Component({
   selector: 'app-history-inner',
@@ -50,8 +56,12 @@ export class HistoryInner implements OnInit, AfterViewInit {
       
         await this.refreshMap(this.responseData()[0]?.wkb_geometry?.type);
         this.responseDataPresent.set(true);
+
+        console.log('RD:', this.responseData());
+        console.log('FLI:', await this.fetchLayerInfo());
       });
     }
+    
   }
 
   public AMService = inject(AMService);
@@ -76,26 +86,44 @@ export class HistoryInner implements OnInit, AfterViewInit {
     if (func === 'layerType') {
       switch (text) {
         case 'Polygon':
-          return 'poligonowa';
+          return 'HISTORY.INNER.LEFT-SECTION.LAYER-TYPES.POLYGON';
         case 'Point':
-          return 'punktowa';
+          return 'HISTORY.INNER.LEFT-SECTION.LAYER-TYPES.POINT';
         default:
-          return 'Nieznany typ: ' + func + ': ' + text;
+          return 'HISTORY.INNER.LEFT-SECTION.ERROR';
       }
     } else if (func === 'selectionType') {
       switch (text) {
         case 'selectedObjByHand':
-          return 'ręcznie przez użytkownika';
-        case 'Analiza atrybutowa':
-          return 'na podstawie analizy atrybutowej';
-        case 'Analiza przestrzenna':
-          return 'na podstawie analizy przestrzennej';
+          return 'HISTORY.INNER.LEFT-SECTION.SELECTION-TYPE.MANUAL-SELECTION';
+        case 'selectedObjByAttributeAnalysis':
+          return 'HISTORY.INNER.LEFT-SECTION.SELECTION-TYPE.ATTRIBUTE-ANALYSIS';
+        case 'selectedObjBySpatialAnalysis':
+          return 'HISTORY.INNER.LEFT-SECTION.SELECTION-TYPE.SPATIAL-ANALYSIS';
         default:
-          return 'Nieznany typ: ' + func + ': ' + text;
+          return 'HISTORY.INNER.LEFT-SECTION.ERROR';
       }
-    }
-    return 'Nieznany typ';
+    } else if (func === 'layerFrom') {
+      switch (text) {
+        case 'boundsLayerWojewodz': 
+          return 'GEOPORTAL.INFO-CONTENT.LAY5';
+        case 'boundsLayerPowiaty': 
+          return 'GEOPORTAL.INFO-CONTENT.LAY4';
+        case 'boundsLayerGminy': 
+          return 'GEOPORTAL.INFO-CONTENT.LAY3';
+        case 'boundsLayerPanstwo': 
+          return 'GEOPORTAL.INFO-CONTENT.LAY6';
+        case 'boundsLayerCities': 
+          return 'GEOPORTAL.INFO-CONTENT.LAY2';
+        case 'vectorLayer': 
+          return 'GEOPORTAL.INFO-CONTENT.LAY1';
+        default:
+          return 'HISTORY.INNER.LEFT-SECTION.ERROR';
+      }
+    } 
+    return 'HISTORY.INNER.LEFT-SECTION.ERROR';
   }
+
 
 
 
@@ -115,6 +143,13 @@ export class HistoryInner implements OnInit, AfterViewInit {
 
   public title = signal<string>('');
   public type = signal<string>('');
+
+  public get currentThumbnail() {
+    console.log('ThumbnailArray: ', this.historyService.thumbnailArray());
+    return this.historyService.thumbnailArray().find(
+      t => t[3] === this.userId && t[4] === this.time
+    ) ?? null;
+  }
   public async refreshMap(geometryType: string): Promise<void> {
     if (!this.thumbnailMap) return;
 
@@ -151,6 +186,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
     this.osmLayer = new TileLayer({
       source: new OSM({attributions: []})
     });
+ //////
     this.objectLayerPolygon = new TileLayer({
       source: new TileWMS({
         url: `${window.location.origin}/geoserver/user_${this.userId}/wms?`,
@@ -168,6 +204,33 @@ export class HistoryInner implements OnInit, AfterViewInit {
         crossOrigin: 'anonymous'
       }),
       visible: true
+    });
+
+
+    this.objectLayerPoint = new VectorImageLayer({
+      source: new VectorSource({
+        format: new GeoJSON(),
+        url: `${window.location.origin}/geoserver/user_${this.userId}/ows?` +
+          `service=WFS&version=1.0.0&request=GetFeature` +
+          `&typeName=user_${this.userId}:user_${this.userId}_perm_table_${this.time}` +
+          `&outputFormat=application/json&srsname=EPSG:3857`
+      }),
+      visible: true,
+      style: (feature) => {
+        return new Style({
+          image: new CircleStyle({
+            radius: 25,
+            fill: new Fill({
+              color: 'rgba(9, 255, 0, 0.66)'
+            }),
+            stroke: new Stroke({
+              color: 'rgb(0, 0, 0)',
+              width: 2
+            })
+          })
+        })
+      },
+      declutter: false
     });
 
 

@@ -30,7 +30,7 @@
                         <div class="template">
                             <img [src]="thumbnail[0].src" [alt]="thumbnail[1]" />
                             <div class="text">
-                                <p>{{ historyService.transformThumbnailType(thumbnail[2]) }}: {{ thumbnail[1] }}</p>
+                                <p>{{ (historyService.transformThumbnailType(thumbnail[2])) | translate}}:<br> {{ thumbnail[1] }}</p>
                             </div>
                         </div>
                         
