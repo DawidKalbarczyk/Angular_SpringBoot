@@ -7,8 +7,7 @@
                 @for (thumbnail of historyService.thumbnailArray(); track thumbnail; let i = $index) {
                     <div class="left-row"
                     [class.active]="historyService.selectedThumbnail() === thumbnail"
-                    (click)="historyService.selectThumbnail(thumbnail[0]);
-                    responseDataPresent.set(false);"
+                    (click)="historyService.selectThumbnail(thumbnail[0])"
                     [routerLink]="['/history/saved', thumbnail[3], thumbnail[4]]">
                         <img alt="Thumbnail" [src]="thumbnail[0].src">
                         <div class="left-row-text">
@@ -58,17 +57,25 @@
                                 <img alt="Data-Img" src="/images/icons/crowd.png">
                                 <p>{{ 'HISTORY.INNER.LEFT-SECTION.ALL-POPULATION' | translate }}<span>{{'Null'}}</span></p>
                             </div>
-                        
+                        } @else if (responseData()?.[0]?.wkb_geometry?.type === 'Point') {
                             <div>
-                                <img alt="Data-Img" src="/images/icons/object.png">
-                                <p>{{ 'HISTORY.INNER.LEFT-SECTION.OBJ-NAMES' | translate }}</p>
+                                <img alt="Data-Img" src="/images/icons/crowd.png">
+                                <p>Population in the whole layer</p>
                             </div>
-                            <div class="data-names">
-                                @for (res of responseData(); track res) {
-                                    <div>{{ res?.jpt_nazwa_ || 'Brak nazwy' }}</div>
-                                }
+                            <div>
+                                <img alt="Data-Img" src="/images/icons/man.png">
+                                <p>Population in the selected object</p>
                             </div>
                         }
+                        <div>
+                            <img alt="Data-Img" src="/images/icons/object.png">
+                            <p>{{ 'HISTORY.INNER.LEFT-SECTION.OBJ-NAMES' | translate }}</p>
+                        </div>
+                        <div class="data-names">
+                            @for (res of responseData(); track res) {
+                                <div>{{ res?.jpt_nazwa_ || res?.nazwa || 'Brak nazwy' }}</div>
+                            }
+                        </div>
                     </div>
                     <div class="right-thumbnail">
                         <div class="right-thumbnail-this">

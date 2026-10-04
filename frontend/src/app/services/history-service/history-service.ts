@@ -36,7 +36,12 @@ export class HistoryService {
 
       const spanX = Math.max(maxX3857 - minX3857, 1000);
       const spanY = Math.max(maxY3857 - minY3857, 1000);
-      const maxSpan = Math.max(spanX, spanY) * 1.3;
+      let maxSpan: number;
+      if (item.layer === 'vectorLayer') {
+        maxSpan = Math.max(spanX, spanY) * 1.65;
+      } else { 
+        maxSpan = Math.max(spanX, spanY) * 1.3; //padding bboxa
+      }
       const halfSpan = maxSpan / 2;
 
       const minX = Math.round(midX - halfSpan);

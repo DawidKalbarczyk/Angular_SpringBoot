@@ -23,6 +23,7 @@ import CircleStyle from 'ol/style/Circle';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
+import Text from 'ol/style/Text';
 
 @Component({
   selector: 'app-history-inner',
@@ -47,6 +48,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
     const authUserId = auth.currentUser?.uid;
     if (authUserId) {
       this.route.paramMap.subscribe(async (params) => {
+        this.responseDataPresent.set(false);
         this.userId = params.get('userId') || '';
         this.time = params.get('time') || '';
         const fetchData = await this.fetchLayerInfo();
@@ -57,8 +59,6 @@ export class HistoryInner implements OnInit, AfterViewInit {
         await this.refreshMap(this.responseData()[0]?.wkb_geometry?.type);
         this.responseDataPresent.set(true);
 
-        console.log('RD:', this.responseData());
-        console.log('FLI:', await this.fetchLayerInfo());
       });
     }
     
@@ -153,25 +153,51 @@ export class HistoryInner implements OnInit, AfterViewInit {
   public async refreshMap(geometryType: string): Promise<void> {
     if (!this.thumbnailMap) return;
 
+    const bboxArray = await this.AMService.getLayerBBox();
+    const item = bboxArray.find(item => item.time === this.time && item.userId === this.userId);
+
     if (geometryType === 'Polygon') {
       (this.objectLayerPolygon.getSource() as TileWMS).updateParams({
         'LAYERS': `user_${this.userId}:user_${this.userId}_perm_table_${this.time}`,
       });
-
-      const bboxArray = await this.AMService.getLayerBBox();
-      const item = bboxArray.find(item => item.time === this.time && item.userId === this.userId);
-      if (item) {
-        this.title.set(item.title);
-        this.type.set(item.type);
-        const extent = transformExtent(
-          [item.bbox.minx, item.bbox.miny, item.bbox.maxx, item.bbox.maxy], 
-          'EPSG:4326', 'EPSG:3857');
+    } else if (geometryType === 'Point') {
+      const newUrl = `${window.location.origin}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=user_${this.userId}:user_${this.userId}_perm_table_${this.time}&outputFormat=application/json`;
+      const pointSource = this.objectLayerPoint.getSource() as VectorSource;
+      pointSource.setUrl(newUrl);
+      pointSource.refresh();
+    }
+    
+    if (item) {
+      this.title.set(item.title);
+      this.type.set(item.type);
+      const extent = transformExtent(
+        [item.bbox.minx, item.bbox.miny, item.bbox.maxx, item.bbox.maxy], 
+        'EPSG:4326', 'EPSG:3857');
+      if (item.layer === 'vectorLayer') {
+        this.thumbnailMap.getView().fit(extent, {
+          padding: [150, 150, 150, 150],
+          maxZoom: 15,
+        })
+      } else { 
         this.thumbnailMap.getView().fit(extent, {
           padding: [50, 50, 50, 50],
           maxZoom: 15,
-        });
+        })
       }
-      
+    }
+    this.checkLayerType(); 
+    
+  }
+  private checkLayerType(): void {
+    const isPoint = this.responseData()?.[0]?.wkb_geometry?.type === 'Point'
+      || this.currentThumbnail?.[5] === 'vectorLayer';
+
+    if (isPoint) {
+      this.objectLayerPolygon.setVisible(false);
+      this.objectLayerPoint.setVisible(true);
+    } else {
+      this.objectLayerPolygon.setVisible(true);
+      this.objectLayerPoint.setVisible(false);
     }
   }
 
@@ -186,7 +212,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
     this.osmLayer = new TileLayer({
       source: new OSM({attributions: []})
     });
- //////
+    
     this.objectLayerPolygon = new TileLayer({
       source: new TileWMS({
         url: `${window.location.origin}/geoserver/user_${this.userId}/wms?`,
@@ -195,7 +221,7 @@ export class HistoryInner implements OnInit, AfterViewInit {
           'TILED': true,
           'STYLES': '',
           'VERSION': '1.1.0',
-          'BUFFER': 100
+          'BUFFER': 100,
           // 'SLD_BODY': this.objectSelection.getSLD(this.userId, this.time, 'polygon')
         },
         serverType: 'geoserver',
@@ -210,36 +236,49 @@ export class HistoryInner implements OnInit, AfterViewInit {
     this.objectLayerPoint = new VectorImageLayer({
       source: new VectorSource({
         format: new GeoJSON(),
-        url: `${window.location.origin}/geoserver/user_${this.userId}/ows?` +
-          `service=WFS&version=1.0.0&request=GetFeature` +
+        url: `${window.location.origin}/geoserver/wfs?` +
+          `service=WFS&version=1.1.0&request=GetFeature` +
           `&typeName=user_${this.userId}:user_${this.userId}_perm_table_${this.time}` +
-          `&outputFormat=application/json&srsname=EPSG:3857`
+          `&outputFormat=application/json`
       }),
-      visible: true,
       style: (feature) => {
         return new Style({
           image: new CircleStyle({
-            radius: 25,
+            radius: 10,
             fill: new Fill({
-              color: 'rgba(9, 255, 0, 0.66)'
+              color: 'rgba(230,57,70,0.6)'
             }),
             stroke: new Stroke({
-              color: 'rgb(0, 0, 0)',
+              color: '#000000',
+              width: 2
+            })
+          }),
+          text: new Text({
+            text: feature.get('nazwa') ?? '',
+            font: 'bold 25px Arial',
+            offsetY: -25,
+            fill: new Fill({
+              color: '#000000'
+            }),
+            stroke: new Stroke({
+              color: '#ffffff',
               width: 2
             })
           })
         })
       },
+      visible: true,
       declutter: false
     });
-
-
+    
+    this.checkLayerType();
     this.thumbnailMap = new Map({
       target: 'thumbnail-map',
       controls: [],
       layers: [
         this.osmLayer,
-        this.objectLayerPolygon
+        this.objectLayerPolygon,
+        this.objectLayerPoint
       ],
       view: new View({
         center: viewCenter
@@ -254,10 +293,17 @@ export class HistoryInner implements OnInit, AfterViewInit {
       const extent = transformExtent(
         [item.bbox.minx, item.bbox.miny, item.bbox.maxx, item.bbox.maxy], 
         'EPSG:4326', 'EPSG:3857');
-      this.thumbnailMap.getView().fit(extent, {
-        padding: [50, 50, 50, 50],
-        maxZoom: 15,
-      })
+      if (item.layer === 'vectorLayer') {
+        this.thumbnailMap.getView().fit(extent, {
+          padding: [150, 150, 150, 150],
+          maxZoom: 15,
+        })
+      } else { 
+        this.thumbnailMap.getView().fit(extent, {
+          padding: [50, 50, 50, 50],
+          maxZoom: 15,
+        })
+      }
     }
   }
 

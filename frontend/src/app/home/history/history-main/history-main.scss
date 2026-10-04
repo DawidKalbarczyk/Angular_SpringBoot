@@ -39,7 +39,17 @@
         }
     }
 }
+div {
+    transition: 
+        background-color 0.3s ease,
+        color 0.3s ease !important;
+}
 
+p {
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease !important;
+}
 .history-main {
     .history-redirect-con {
         box-sizing: border-box;

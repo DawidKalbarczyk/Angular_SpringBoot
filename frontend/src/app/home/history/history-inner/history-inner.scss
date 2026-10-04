@@ -6,6 +6,24 @@
     width: 100%;
 }
 
+div {
+    transition: 
+        background-color 0.3s ease,
+        border 0.3s ease,
+        color 0.3s ease !important;
+}
+
+p {
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease !important;
+}
+
+button {
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease !important; 
+}
 .dark-mode {
     .content {
         .left-content {
@@ -26,6 +44,15 @@
                 color: white !important;
             }
         }
+
+        .right-content-loading {
+            background-color: $secondary-color-dark !important;
+
+            p {
+                color: $buttons-color;
+            }
+        }
+
         .right-content {
             background-color: $secondary-color-dark !important;
             .right-data {
@@ -110,6 +137,7 @@
             display: grid;
             grid-template-columns: 1fr;
             row-gap: 2rem;
+            border-left: 1px solid $background-color-light;
             background-color: $background-color-light;
             border-radius: 1rem 0rem 0rem 1rem;
             overflow: hidden;
@@ -340,7 +368,8 @@
                         padding: 1.5rem 3rem;
                         font-size: 1.3rem;
                         border-radius: 0.5rem;
-                        background-color: $background-color-light;
+                        background-color: $buttons-color;
+                        color: $text-color-dark;
                         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
                         cursor: pointer;
                         transition: 

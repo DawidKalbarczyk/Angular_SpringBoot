@@ -2,7 +2,7 @@
 [class.login-dark-history]="isDarkMode() && url.startsWith('/history')"
 [class.headbar-history]="url === '/history' && (isDarkMode() === false)">
     <div class="img-container" [class.login-dark-photo]="isDarkMode() && (hasPhoto() === false)">
-        <img [src]="isLoggedIn() ? userData()?.photoURL : './images/icons/user.png'" alt="User" draggable="false"/>
+        <img [src]="isLoggedIn() ? (userData()?.photoURL ? userData()?.photoURL : './images/icons/user.png') : './images/icons/user.png'" alt="User" draggable="false"/>
     </div>
     <div class="button-container">
         @if (isLoggedIn()) {

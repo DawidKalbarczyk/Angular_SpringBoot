@@ -86,9 +86,12 @@ public class DataSaveController {
     }
 
     @PostMapping("/publish-layer")
-    public ResponseEntity<?> publishLayer(@RequestParam String userId, @RequestParam String time) {
+    public ResponseEntity<?> publishLayer(
+            @RequestParam String userId,
+            @RequestParam String time,
+            @RequestParam(required = false) String layer) {
         try {
-            ResponseEntity<?> result = dataSaveService.publishLayer(userId, time);
+            ResponseEntity<?> result = dataSaveService.publishLayer(userId, time, layer);
             if (result.getStatusCode() != HttpStatus.OK) {
                 return result;
             }

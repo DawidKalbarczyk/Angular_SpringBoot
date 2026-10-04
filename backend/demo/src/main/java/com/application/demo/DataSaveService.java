@@ -132,12 +132,12 @@ public class DataSaveService {
         }
     }
 
-    public ResponseEntity<?> publishLayer(String userId, String time) {
+    public ResponseEntity<?> publishLayer(String userId, String time, String layer) {
         try {
             String tableName = "user_" + userId + "_perm_table_" + time;
             String title = tableName;
-            String layerTitle = (title != null && !title.isBlank()) ? title : tableName;
-            publishLayerCore(tableName, title, userId);
+            String style = determineStyle(layer);
+            publishLayerCore(tableName, title, userId, style);
             return ResponseEntity.ok(Map.of("message", "Layer published successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -145,7 +145,20 @@ public class DataSaveService {
         }
     }
 
-    public void publishLayerCore(String tableName, String title, String userId) {
+    private String determineStyle(String layer) {
+        if (layer == null) return "generic";
+        return switch (layer) {
+            case "boundsLayerPanstwo" -> "boundsPanstwo";
+            case "boundsLayerWojewodz" -> "boundsWojewodz";
+            case "boundsLayerPowiaty" -> "boundsPowiaty";
+            case "boundsLayerGminy" -> "boundsGminy";
+            case "boundsLayerCities" -> "boundsCities";
+            case "vectorLayer" -> "pointLayer";
+            default -> "generic";
+        };
+    }
+
+    public void publishLayerCore(String tableName, String title, String userId, String styleName) {
         String url = geoserverUrl + "/rest/workspaces/user_" + userId
                 + "/datastores/user_" + userId + "/featuretypes"
                 + "?recalculate=nativebbox,latlonbbox";
@@ -173,6 +186,35 @@ public class DataSaveService {
 
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new RuntimeException("GeoServer error: " + response.getStatusCode());
+        }
+
+        if (styleName != null && !styleName.isBlank()) {
+            setLayerStyle(tableName, userId, styleName);
+        }
+    }
+
+
+    public void setLayerStyle(String tableName, String userId, String styleName) {
+        try {
+            String layerUrl = geoserverUrl + "/rest/layers/user_" + userId + ":" + tableName;
+            String body = """
+                    {
+                      "layer": {
+                        "defaultStyle": {
+                          "name": "%s"
+                        }
+                      }
+                    }
+                    """.formatted(styleName);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBasicAuth(username, password);
+
+            HttpEntity<String> entity = new HttpEntity<>(body, headers);
+            restTemplate.put(layerUrl, entity);
+        } catch (Exception e) {
+            // Jeśli styl nie istnieje w GeoServerze, warstwa zachowa styl generic
         }
     }
 

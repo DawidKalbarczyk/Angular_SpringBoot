@@ -65,9 +65,8 @@ export class AMService {
                 bbox: bbox,
                 title: item.title,
                 type: item.type,
-                layer: item.layer ?? 'Layer ERROR'
+                layer: item.layer ?? item.layerFrom ?? 'Layer ERROR'
             });
-            console.log('BBoxArray:', bboxArray);
 
         }));
         return bboxArray;
@@ -138,7 +137,7 @@ export class AMService {
                 console.error('No response from saveSelectedObjects');
             }
 
-            await firstValueFrom(this.http.post(`/save/publish-layer?userId=${userId}&time=${time}`, {}));
+            await firstValueFrom(this.http.post(`/save/publish-layer?userId=${userId}&time=${time}&layer=${layer}`, {}));
             
         } catch (error) {
             console.error('Error creating FormData:', error);
