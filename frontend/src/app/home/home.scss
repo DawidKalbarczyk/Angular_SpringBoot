@@ -254,6 +254,12 @@
 
         .selection-history, .selection-search, .selection-geoportal {
             background-color: $secondary-color-light;
+            background-image: linear-gradient(
+                var(--tile-gradient-direction, 135deg),
+                rgba(255, 255, 255, 0.55) 0%,
+                transparent 45%,
+                rgba(0, 0, 0, 0.3) 100%
+            );
             border-radius: 1rem;
             width: 100%;
             height: 100%;
@@ -280,6 +286,9 @@
             }
 
             .selection-text {
+                background-color: inherit;
+                background-image: inherit;
+                border-radius: 1rem 1rem 0 0;
                 display: flex;
                 padding: 5rem 0;
                 justify-content: center;
@@ -319,6 +328,7 @@
         }
 
         .selection-geoportal {
+            --tile-gradient-direction: 225deg;
             grid-template-rows: 1fr 2.5fr;
 
             div:nth-child(2) {
@@ -328,6 +338,10 @@
                 img {
                     clip-path: polygon(0% 0%, 100% 30%, 100% 100%, 0% 100%);            }
             }
+        }
+
+        .selection-history {
+            --tile-gradient-direction: 180deg;
         }
 
         .selection-search {
