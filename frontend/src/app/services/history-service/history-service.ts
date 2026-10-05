@@ -13,6 +13,7 @@ import Text from 'ol/style/Text';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import Map from 'ol/Map';
+import GeoJSON from 'ol/format/GeoJSON';
 
 type Thumbnail = [HTMLImageElement, string, string, string, string, string];
 interface LayerRow {
@@ -35,6 +36,9 @@ export class HistoryService {
     public pointObjectPopulationQuantity = signal<number>(0);
     public pointObjectPopulationClicked = signal<boolean>(false);
     public pointObjectPopulationName = signal<string>('');
+
+    private oldUserId = signal<string>('');
+    private oldTime = signal<string>('');
 
 
     public async setThumbnails(): Promise<void> {
@@ -107,7 +111,6 @@ export class HistoryService {
   public async getLayerSQLData(tableName: string): Promise<LayerRow[]> {
     try {
       const responseData = await firstValueFrom(this.http.get<{ data: LayerRow[] }>((`/history-service/get-history?tableName=${tableName}`)));
-      console.log('Response from getLayerSQLData:', responseData);
       return responseData.data;
         
     } catch (error) {
@@ -130,10 +133,15 @@ export class HistoryService {
 
 
   private map: Map | null = null;
-  public async startZoom(map: Map, geomType: string, objectName: string, layer: VectorImageLayer | TileLayer, bboxItem: any): Promise<void> {
-    console.log(bboxItem);
+  public async startZoom(
+    map: Map,
+    geometry: LayerRow['wkb_geometry'],
+    objectName: string,
+    layer: VectorImageLayer | TileLayer,
+    bboxItem: any
+  ): Promise<void> {
     this.map = map;
-    await this.highlightSelectedObject(geomType, objectName, layer, bboxItem);
+    await this.highlightSelectedObject(geometry, objectName, layer, bboxItem);
   }
 
   private highlightSource = new VectorSource();
@@ -146,7 +154,7 @@ export class HistoryService {
   
 
 
-  public unhighlightSelectedObject(): void {
+  public unhighlightSelectedObject(geomType: string): void {
     if (!this.map) {
       console.error('Map instance is not yet set');
       return;
@@ -154,14 +162,12 @@ export class HistoryService {
     this.highlightSource.clear();
     this.hasZoomedAlready.set(false);
     this.pointObjectPopulationName.set('');
-    this.map.getLayers().forEach((layer) => {
-      if (layer instanceof VectorLayer && layer.get('name') === 'highlightLayer') {
-        this.map?.removeLayer(layer);
-      }
-    });
+    this.removeHighlightLayers();
   }
 
   public async highlightSelectedObject(wkb_geometry: any, objectName: string, layer: VectorImageLayer | TileLayer, bboxItem: any): Promise<void> {
+    this.oldTime.set(bboxItem.time);
+    this.oldUserId.set(bboxItem.userId);
     switch (wkb_geometry?.type) {
       case 'Point':
         const activateHiglight = () => {
@@ -183,13 +189,62 @@ export class HistoryService {
         
         break;
       case 'Polygon':
-        // Highlight the selected polygon
+        // Zrobione 50/50 ja i AI. W przypadku ociążenia wyjebać to i przejść na SpringBoot.
+        await this.matchTileLayerData(bboxItem, objectName);
         break;
       default:
-        console.error('Unknown geometry type');
+        console.error('Unknown geometry type', wkb_geometry);
     }
 
   }
+
+  private async matchTileLayerData(bboxItem: any, objectName: string): Promise<void> {
+    const WFSurl = `/geoserver/wfs?service=`
+    + `WFS&version=1.0.0&request=GetFeature&typeName=user_${bboxItem.userId}:user_${bboxItem.userId}_perm_table_${bboxItem.time}`
+    + `&outputFormat=application/json&srsName=EPSG:4326`;
+
+    const data: any = await firstValueFrom(this.http.get(WFSurl));
+    const format = new GeoJSON();
+    const features = format.readFeatures(data, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857',
+    });
+    const match = features.find((feature) =>
+      (feature.get('jpt_nazwa_') || feature.get('nazwa')) === objectName
+    );
+
+    if (!match) {
+      console.warn('No matching polygon found for objectName:', objectName);
+      return;
+    }
+
+    this.pointObjectPopulationName.set(objectName);
+    this.removeHighlightLayers();
+    this.highlightSource.clear();
+    match.set('highlighted', true);
+    this.highlightSource.addFeature(match);
+    this.map?.addLayer(this.returnHighlightedPolygonLayer());
+
+    const geometry = match.getGeometry();
+    if (geometry) {
+      this.map?.getView().fit(geometry.getExtent(), {
+        padding: [100, 100, 100, 100],
+        maxZoom: 15,
+        duration: 1000,
+      });
+    }
+  }
+
+  private removeHighlightLayers(): void {
+    this.map?.getLayers().forEach((layer) => {
+      if (layer.get('name') === 'highlightLayer') {
+        this.map?.removeLayer(layer);
+      }
+    });
+  }
+
+
+
 
   private matchVectorData(vectorPointLayer: VectorImageLayer | TileLayer, objectName: string): void {
     const source = vectorPointLayer instanceof VectorImageLayer ? vectorPointLayer.getSource() : undefined;
@@ -238,6 +293,18 @@ export class HistoryService {
     })
   }
 
+  private returnHighlightedPolygonLayer(): VectorLayer {
+    return new VectorLayer({
+      source: this.highlightSource,
+      zIndex: 9999,
+      properties: { name: 'highlightLayer' },
+      style: new Style({
+        fill: new Fill({ color: 'rgba(255, 195, 51, 0.35)' }),
+        stroke: new Stroke({ color: '#ffc333', width: 4 }),
+      }),
+    });
+  }
+
   private coordinates = signal<[number, number]>([0, 0]);
 
   private fitToLayer(item: any): void {
@@ -281,4 +348,23 @@ export class HistoryService {
   }
 
   
+
+
+
+
+
+
+
+
+
+
+  /// GEOPORTAL TEMP
+  public layerToPass = signal<TileLayer | VectorImageLayer | null>(null);
+  public setLayerToPass(layer: TileLayer | VectorImageLayer): void {
+    this.layerToPass.set(layer);
+  }
+
+  public clearLayerToPass(): void {
+    this.layerToPass.set(null);
+  }
 }
