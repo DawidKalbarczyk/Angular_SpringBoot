@@ -1,5 +1,19 @@
 @use '../../../_variables.scss' as *;
 
+.container.container-geoportal-temp {
+    background-color: transparent !important;
+
+    .go-back {
+        background-color: white !important;
+        width: 60px;
+        height: 60px;
+        
+        .go-back:hover {
+            background-color: $background-color-light !important;
+        }
+    }
+}
+
 .mode-dark {
     div {
         border: 1px solid $secondary-color-light !important;

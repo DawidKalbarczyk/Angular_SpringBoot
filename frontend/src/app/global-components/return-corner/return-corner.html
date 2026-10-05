@@ -1,13 +1,14 @@
-<div class="container" [class.mode-dark]="isDarkMode() && url !== '/geoportal'"
-[class.mode-dark-history]="isDarkMode() && url.startsWith('/history')"
-[class.container-history]="url ==='/history' && (isDarkMode() === false)"
+<div class="container" [class.mode-dark]="isDarkMode() && url() !== '/geoportal'"
+[class.mode-dark-history]="isDarkMode() && (url().startsWith('/history') && url().includes('geoportal-temp') === false)"
+[class.container-history]="url() ==='/history' && (isDarkMode() === false)"
+[class.container-geoportal-temp]="url().includes('geoportal-temp')"
 >
-    @if(url !== '/') {
-        <div (click)="goBack()">
+    @if(url() !== '/') {
+        <div class="go-back" (click)="goBack()">
             <img class="return-button" src="./images/icons/return.png" alt="Return" draggable="false"/>
         </div>
     }
-    @if(url !== '/geoportal') {
+    @if(url() !== '/geoportal' && url().includes('geoportal-temp') === false) {
         <div (click)="switchColors()">
             @if(isDarkMode()){
                 <img class="night-mode-button" src="./images/icons/sun.png" alt="Sun" draggable="false"/>
