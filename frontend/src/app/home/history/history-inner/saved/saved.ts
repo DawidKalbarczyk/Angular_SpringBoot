@@ -77,6 +77,7 @@ export class Saved implements OnInit, AfterViewInit {
     await auth.authStateReady();
     const authUserId = auth.currentUser?.uid;
     if (authUserId) {
+      this.historyService.setThumbnails();
       this.route.paramMap.subscribe(async (params) => {
         this.responseDataPresent.set(false);
         this.userId = params.get('userId') || '';
