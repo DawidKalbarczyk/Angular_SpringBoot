@@ -57,7 +57,6 @@ export class AMService {
 
             const url = `http://geoserver:8080/geoserver/rest/workspaces/${workspace}/featuretypes/${layer}.json`;
             const response = await firstValueFrom(this.http.get<any>('/save/get-xml-as-json?url=' + url));
-            console.log('Response from getLayerBBox:', response);
             const bbox = response.featureType.latLonBoundingBox;
             bboxArray.push({
                 userId: item.userId,
@@ -146,7 +145,6 @@ export class AMService {
     public async getJson(userId: string = this.objectSelection.getUserId()): Promise<any> {
         try {
             const response = await firstValueFrom(this.http.get(`/save/get-json?userId=${userId}`));
-            console.log('Response from getJsonDADADWAADWA:', response);
             return response;
         } catch (error) {
             console.error('Error fetching JSON:', error);
