@@ -155,10 +155,23 @@ export class Saved implements OnInit, AfterViewInit {
     return 'HISTORY.INNER.LEFT-SECTION.ERROR';
   }
 
-
-
-
-
+  private router = inject(Router);
+  public animationOn = signal<boolean>(false);
+  public animationFunc(mapElement: HTMLElement): void {
+    if (this.animationOn()) return;
+    const rect = mapElement.getBoundingClientRect();
+    mapElement.style.setProperty('--map-left', `${rect.left}px`);
+    mapElement.style.setProperty('--map-top', `${rect.top}px`);
+    mapElement.style.setProperty('--map-bottom', `${window.innerHeight - rect.bottom}px`);
+    mapElement.style.setProperty('--map-right', `${window.innerWidth - rect.right}px`);
+    this.animationOn.set(true);
+  }
+  public finishMapAnimation(event: AnimationEvent): void {
+    if (event.target !== event.currentTarget || !this.animationOn()) return;
+    setTimeout(() => {
+      this.router.navigate(['/history/saved', this.userId, this.time, 'geoportal-temp']);
+    }, 500);
+  }
 
 
 

@@ -363,9 +363,17 @@ button {
                         width: 100%;
                         height: calc(100% - 3rem);
                         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-
                         &:active {
                             cursor: grabbing !important;
+                        }
+
+                        &.thumbnail-map-animation {
+                            position: fixed;
+                            width: auto;
+                            height: auto;
+                            z-index: 2000;
+                            pointer-events: none;
+                            animation: thumbnail-map-expand 1s ease both;
                         }
                     }
                 }
@@ -400,5 +408,34 @@ button {
                 }
             }
         }
+    }
+}
+
+
+.map-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    background-color: rgba(0, 0, 0, 0.6);
+    animation: map-backdrop-fade 0.3s ease both;
+}
+
+@keyframes map-backdrop-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes thumbnail-map-expand {
+    from {
+        left: var(--map-left);
+        top: var(--map-top);
+        bottom: var(--map-bottom);
+        right: var(--map-right);
+    }
+    to {
+        left: 15%;
+        top: 15%;
+        bottom: 15%;
+        right: 15%;
     }
 }

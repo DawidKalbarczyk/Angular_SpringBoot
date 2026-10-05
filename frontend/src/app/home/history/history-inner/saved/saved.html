@@ -1,3 +1,6 @@
+@if (animationOn()) {
+    <div class="map-backdrop" aria-hidden="true"></div>
+}
 <div class="history-inner-container" [class.dark-mode]="isDarkMode()">
     <div class="content" [class.content-none]="loginService.isLoggedIn() === false">
         @if (loginService.isLoggedIn() === false) {
@@ -85,10 +88,11 @@
                             <div class="right-thumbnail-title">
                                 <h3>{{ 'HISTORY.INNER.RIGHT-SECTION.MAP-TITLE' | translate }}</h3>
                             </div>
-                            <div id="thumbnail-map"></div>
+                            <div #mapPreview id="thumbnail-map" [class.thumbnail-map-animation]="animationOn() === true"
+                            (animationend)="finishMapAnimation($event)"></div>
                         </div>
                         <div class="right-thumbnail-export">
-                            <button (click)="historyService.setLayerToPass(objectLayerPolygon.getVisible() ? objectLayerPolygon : objectLayerPoint)" [routerLink]="['/history/saved', userId, time, 'geoportal-temp']">Podgląd</button>
+                            <button [disabled]="animationOn()" (click)="historyService.setLayerToPass(objectLayerPolygon.getVisible() ? objectLayerPolygon : objectLayerPoint); animationFunc(mapPreview)">Podgląd</button>
                             <button>{{ 'HISTORY.INNER.RIGHT-SECTION.EXPORT-BUTTON' | translate }}</button>
                         </div>
                     </div>
