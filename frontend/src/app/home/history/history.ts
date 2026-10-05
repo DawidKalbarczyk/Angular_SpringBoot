@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthorBar } from '../../global-components/author-bar/author-bar';
 import { LoginCorner } from '../../global-components/login-corner/login-corner';
 import { ReturnCorner } from '../../global-components/return-corner/return-corner';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-history',
@@ -10,4 +12,16 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './history.html',
   styleUrl: './history.scss',
 })
-export class History {}
+export class History {
+  private router = inject(Router);
+
+public url = toSignal(
+  this.router.events.pipe(
+    filter((event): event is NavigationEnd =>
+      event instanceof NavigationEnd
+    ),
+    map(event => event.urlAfterRedirects)
+  ),
+  { initialValue: this.router.url }
+);
+} 

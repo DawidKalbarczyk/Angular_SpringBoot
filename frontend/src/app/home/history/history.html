@@ -1,6 +1,8 @@
-<app-author-bar></app-author-bar>
-<app-login-corner></app-login-corner>
-<app-return-corner></app-return-corner>
+@if (url().includes('geoportal-temp') === false) {
+    <app-author-bar></app-author-bar>
+    <app-login-corner></app-login-corner>
+    <app-return-corner></app-return-corner>
+}
 <router-outlet></router-outlet>
 
 

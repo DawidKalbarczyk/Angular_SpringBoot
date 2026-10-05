@@ -24,6 +24,9 @@
     .history-main-container {
         .template-con {
             background-color: $secondary-color-dark !important;
+            transition:
+                filter 0.3s ease,
+                transform 0.3s ease !important;
 
             &:hover {
                 filter: brightness(1.2) !important;
@@ -199,7 +202,7 @@ p {
             transform: translateY(0);
             transition:
                 filter 0.3s ease,
-                transform 0.3s ease;
+                transform 0.3s ease !important;
 
             &:hover {
                 filter: brightness(0.8);
