@@ -7,9 +7,13 @@
         background-color: white !important;
         width: 60px;
         height: 60px;
+        transition: 
+            background-color 0.3s ease,
+            filter 0.3s ease;
         
         .go-back:hover {
             background-color: $background-color-light !important;
+            filter: brightness(0.8) !important;
         }
     }
 }
@@ -19,6 +23,9 @@
         border: 1px solid $secondary-color-light !important;
         &:hover {
             background-color: $secondary-color-dark !important;
+        }
+        &.feedback-button-con {
+            background-color: rgb(133, 1, 1) !important;
         }
         img {
             filter: invert(1);
@@ -72,10 +79,26 @@
         border: 1px solid black;
         border-radius: 50%;
         padding: 0.35rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         transition: 
             transform 0.3s ease,
             background-color 0.3s ease;
 
+
+        &.feedback-button-con {
+            background-color: rgb(197, 0, 0);
+            transition: 
+                brightness 0.3s ease,
+                background-color 0.3s ease,
+                transform 0.3s ease;
+
+            &:hover {
+                background-color: rgb(197, 0, 0) !important;
+                filter: brightness(0.8) !important;
+            }
+        }
         &:hover {
             cursor: pointer;
             background-color: $secondary-color-light;
@@ -96,6 +119,10 @@
         }
 
         .help-button {
+            transform: scale(0.8);
+        }
+
+        .feedback-button {
             transform: scale(0.8);
         }
 
