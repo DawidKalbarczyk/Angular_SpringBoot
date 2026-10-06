@@ -11,36 +11,79 @@ import { AMService } from '../../../../services/a-m-service/a-m-service';
 
 @Component({
   selector: 'app-analysys-component',
-    imports: [TranslatePipe],
-      templateUrl: './analysys-component.html',
-        styleUrl: './analysys-component.scss',
-        })
-        export class AnalysysComponent {
-          public inputText = signal<string>('');
+  imports: [TranslatePipe],
+  templateUrl: './analysys-component.html',
+  styleUrl: './analysys-component.scss',
+})
+export class AnalysysComponent {
+  public inputText = signal<string>('');
 
-          public zoomToObject = inject(ZoomToObject);
-          public GeoserverService = inject(GeoserverService);
-          
-          public userCreation(userId: string, func: 'createWorkspace' | 'createTempWorkspace' | 'createDatastore' | 'createTempDatastore' ) {
-            this.GeoserverService[func](userId).subscribe({
-              next: (response) => {
-                console.log('Workspace created successfully:', response);
-              },
-              error: (error) => {
-                console.error('Error creating workspace:', error);
-              }
-            })
-          }
+  public zoomToObject = inject(ZoomToObject);
+  public GeoserverService = inject(GeoserverService);
+  
+  public userCreation(userId: string, func: 'createWorkspace' | 'createTempWorkspace' | 'createDatastore' | 'createTempDatastore' ) {
+    this.GeoserverService[func](userId).subscribe({
+      next: (response) => {
+        console.log('Workspace created successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error creating workspace:', error);
+      }
+    })
+  }
 
-          public objectSelection = inject(ObjSelection);
-          
+  public objectSelection = inject(ObjSelection);
+  
 
 
-          private http = inject(HttpClient);
-          
-          
+  private http = inject(HttpClient);
+  
+  
 
-          public popUpService = inject(PopUpService);
-          public AMService = inject(AMService);
-          
-        }
+  public popUpService = inject(PopUpService);
+  public AMService = inject(AMService);
+
+  public responseData = signal<any>(null);
+  public async getLayerInfo(layerName: string): Promise<void> {
+    let realGeoserverLayerName = '';
+    switch (layerName) {
+      case 'vectorLayer':
+        realGeoserverLayerName = 'sql_data';
+        break;
+      case 'boundsLayerCities':
+        realGeoserverLayerName = 'boundscities';
+        break;
+      case 'boundsLayerGminy':
+        realGeoserverLayerName = 'boundsgminy';
+        break;
+      case 'boundsLayerPowiaty':
+        realGeoserverLayerName = 'boundspowiaty';
+        break;
+      case 'boundsLayerWojewodz':
+        realGeoserverLayerName = 'boundswojewodz';
+        break;
+      case 'boundsLayerPanstwo':
+        realGeoserverLayerName = 'boundspanstwo';
+        break;
+      default:
+        console.warn('Unknown layer name:', layerName);
+    }
+
+    const workspace = "AngularLocal";
+    const layer = realGeoserverLayerName;
+
+    const url = `http://geoserver:8080/geoserver/rest/workspaces/${workspace}/featuretypes/${layer}.json`;
+    const response = await firstValueFrom(this.http.get<any>('/save/get-xml-as-json?url=' + url));
+    
+    let data: any;
+    const argumentName = layer;
+    if (response?.featureType?.name === argumentName) {
+        data = response;
+    }
+    console.log(data);
+    this.responseData.set(data);
+    };
+
+    
+  }
+  
