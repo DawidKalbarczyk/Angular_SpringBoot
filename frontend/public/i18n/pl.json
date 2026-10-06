@@ -38,6 +38,7 @@
         "TEXT1": "Kliknij na mapę, aby zaznaczyć obiekt",
         "TEXT2": "Warstwa do zaznaczenia: ",
         "SELECT": "Wybierz warstwę",
+        "SELECT-COLUMN": "Wybierz atrybut",
         "SELECT-TITLES": {
           "PAN": "Państwo",
           "WOJ": "Województwo",

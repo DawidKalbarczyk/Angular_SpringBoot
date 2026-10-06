@@ -38,6 +38,7 @@
         "TEXT1": "Click on the map to select an object",
         "TEXT2": "Layer to select from: ",
         "SELECT": "Choose layer",
+        "SELECT-COLUMN": "Choose attribute",
         "SELECT-TITLES": {
           "PAN": "Country",
           "WOJ": "Voivodeship",
