@@ -2,7 +2,7 @@ import { AfterViewInit, Component, inject,  OnInit,  signal } from '@angular/cor
 import { Router } from '@angular/router';
 import { AMService } from '../../../../services/a-m-service/a-m-service';
 import { HistoryService } from '../../../../services/history-service/history-service';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { getAuth } from '@firebase/auth';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { Map, View } from 'ol';
@@ -25,7 +25,6 @@ import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/Text';
 import { BignumbersPipe } from '../../../../pipes/bignumbers-pipe';
-import { ZoomToObject } from '../../../../services/zoom-to-object/zoom-to-object';
 
 export type ResponseDataPoint = {
   gmina: string;
@@ -268,7 +267,6 @@ export class Saved implements OnInit, AfterViewInit {
     console.log('Calculated population quantity:', this.pointLayerPopulationQuantity());
   }
   private lastObjectName = signal<string>('');
-  private zoomToObject = inject(ZoomToObject);
 
   public async getObjectPopulationQuantity(objectName: string): Promise<void> {
     const bboxArray = await this.AMService.getLayerBBox();
