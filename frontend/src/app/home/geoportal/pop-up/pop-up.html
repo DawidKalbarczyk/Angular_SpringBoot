@@ -40,5 +40,16 @@
             </div>
             
         </div>
+    } @else if (typeOfPopUp() === 'login') {
+        <div class="pop-up-content">
+            <p class="pop-up-title">
+                Zaloguj się lub zarejestruj, aby korzystać z tej funkcji
+            </p>
+            <div class="pop-up-butt-con">
+                <button class="pop-up-yes-butt" routerLink="/login" (click)="resetPopUp(false)">Zaloguj się</button>
+                <button class="pop-up-no-butt" (click)="resetPopUp(false)">Anuluj</button>    
+            </div>
+            
+        </div>
     }
 </div>

@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AMService } from '../../../../services/a-m-service/a-m-service';
 import { FormsModule } from '@angular/forms';
+import { LoginService } from '../../../../services/login-service/login-service';
 
 @Component({
   selector: 'app-analysys-component',
@@ -21,6 +22,7 @@ export class AnalysysComponent {
 
   public zoomToObject = inject(ZoomToObject);
   public GeoserverService = inject(GeoserverService);
+  public loginService = inject(LoginService);
   
   public userCreation(userId: string, func: 'createWorkspace' | 'createTempWorkspace' | 'createDatastore' | 'createTempDatastore' ) {
     this.GeoserverService[func](userId).subscribe({
@@ -47,7 +49,7 @@ export class AnalysysComponent {
   public responseData = signal<any>(null);
   public attributeLayer: string = "";
   public attributeAttribute: string = "";
-  public attributeSign: string = "";
+  public attributeSign: string = "=";
   public attributeCondition: string = "";
   public attributeFormSubmit(): void {
     console.log('Form submitted with values:', {

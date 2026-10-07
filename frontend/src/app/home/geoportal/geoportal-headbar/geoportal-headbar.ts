@@ -9,6 +9,8 @@ import { InfoFeatures } from '../../../services/info-features/info-features';
 import { UpperCasePipe } from '@angular/common';
 import { AMService } from '../../../services/a-m-service/a-m-service';
 import { TranslatePipe } from '../../../pipes/translate.pipe';
+import { PopUpService } from '../../../services/pop-up-service/pop-up-service';
+import { LoginService } from '../../../services/login-service/login-service';
 
 export interface HeadbarKeys {
   search: boolean;
@@ -46,6 +48,8 @@ export class GeoportalHeadbar {
   public mapLayerService = inject(LayerVisibility);
   public infoToggleService = inject(InfoToggle);
   public zoomToObject = inject(ZoomToObject);
+  public popUpService = inject(PopUpService);
+  private loginService = inject(LoginService);
   public headbarKeys: HeadbarKeys = {
     search: false,
     baseLayer: false,
@@ -81,6 +85,15 @@ export class GeoportalHeadbar {
     this.checkButt('info');
   }
   public AMservice = inject(AMService);
+
+  public onAnalysisClick(): void {
+    if (!this.loginService.isLoggedIn()) {
+      this.popUpService.showPopUpLogin();
+      return;
+    }
+
+    this.AMservice.analysysOut();
+  }
   
 
 
@@ -104,4 +117,3 @@ export class GeoportalHeadbar {
   public wasSearchResultClicked = signal<boolean>(false);
   
 }
-

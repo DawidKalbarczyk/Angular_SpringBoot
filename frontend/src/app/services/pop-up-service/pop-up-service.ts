@@ -4,7 +4,7 @@ import { ObjSelection } from '../obj-selection/obj-selection';
 @Service()
 export class PopUpService {
     private objectSelection = inject(ObjSelection);
-    public typeOfPopUp = signal<'' | 'save' | 'delete' | 'info'>('');
+    public typeOfPopUp = signal<'' | 'login' | 'save' | 'delete' | 'info'>('');
 
     public showPopUpSave = (): void  => {
         this.typeOfPopUp.set('save');
@@ -16,6 +16,10 @@ export class PopUpService {
 
     public showPopUpInfo = (): void  => {
         this.typeOfPopUp.set('info');
+    }
+
+    public showPopUpLogin = (): void => {
+        this.typeOfPopUp.set('login');
     }
 
     public resetPopUp = (agree: boolean): void => {
