@@ -21,9 +21,9 @@
                 </section>
             } @else if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() === 'attribute') {
                 <div class="info">
-                    <form class="attribute-form" >
+                    <form #attributeForm="ngForm" (submit)="attributeForm.valid ? attributeFormSubmit() : null" class="attribute-form" >
                         <label>Wybierz obiekty z warstwy:</label>
-                        <select class="attribute-select" 
+                        <select class="attribute-select" [(ngModel)]="attributeLayer" name="attributeLayer" required
                         (change)="objectSelection.onLayerSelectChange($any($event.target).value); 
                         getLayerInfo(objectSelection.selectedSelectOptionLayer()); 
                         objectSelection.clearAllSelectedVariables()" 
@@ -38,25 +38,29 @@
                         
                         <label class="attribute-label-where">gdzie atrybut:</label>
                         <!-- Nadam tu zapytanie WFS ale tylko i wyłącznei do sprawdzenia kolumn bez ich wartości. -->
-                        <select class="attribute-column-select">
+                        <select class="attribute-column-select" [(ngModel)]="attributeAttribute" name="attributeAttribute" required>
                             <option value="" disabled selected>-- {{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-COLUMN' | translate}} --</option>
                             @for (attribute of responseData()?.featureType?.attributes.attribute; track attribute) {
                                 <option value="{{attribute?.name}}">{{attribute?.name}}</option>
                             }
                         </select>
                         <div class="attribute-condition-con">
-                            <select>
-                                <option>&#61;</option>
+                            <select [(ngModel)]="attributeSign" name="attributeSign" required>
+                                <option selected>&#61;</option>
                                 <option>&#8800;</option>
                                 <option>&lt;</option>
                                 <option>&gt;</option>
                                 <option>&le;</option>
                                 <option>&ge;</option>
                             </select>
-                            <input type="text" placeholder="warunek...">
+                            <input type="text" placeholder="warunek..." [(ngModel)]="attributeCondition" name="attributeCondition" required>
                         </div>
                         <button type="submit">Submit Butt</button>
+                        
                     </form>
+                    <button>
+                        Pokaż tabelę atrybutów
+                    </button>
                    
                    
                 </div>

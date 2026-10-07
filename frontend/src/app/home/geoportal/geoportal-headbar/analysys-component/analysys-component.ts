@@ -8,10 +8,11 @@ import { PopUpService } from '../../../../services/pop-up-service/pop-up-service
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AMService } from '../../../../services/a-m-service/a-m-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-analysys-component',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, FormsModule, CommonModule],
   templateUrl: './analysys-component.html',
   styleUrl: './analysys-component.scss',
 })
@@ -44,6 +45,18 @@ export class AnalysysComponent {
   public AMService = inject(AMService);
 
   public responseData = signal<any>(null);
+  public attributeLayer: string = "";
+  public attributeAttribute: string = "";
+  public attributeSign: string = "";
+  public attributeCondition: string = "";
+  public attributeFormSubmit(): void {
+    console.log('Form submitted with values:', {
+      layer: this.attributeLayer,
+      attribute: this.attributeAttribute,
+      sign: this.attributeSign,
+      condition: this.attributeCondition
+    });
+  }
   public async getLayerInfo(layerName: string): Promise<void> {
     let realGeoserverLayerName = '';
     switch (layerName) {
