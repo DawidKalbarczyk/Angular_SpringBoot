@@ -145,6 +145,7 @@
                         }
                     }
                     .attribute-label-where {
+                        margin-top: 1rem;
                         display: inline-block;
                     }
                     .attribute-column-select {
@@ -204,6 +205,35 @@
                             
                         }
                     }
+
+                    .attribute-buttons {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        justify-content: center;
+                        align-items: center;
+                        column-gap: 0.5rem;
+                        width: 90%;
+                        margin-top: 1rem;
+
+                        .attribute-submit-new-butt, .attribute-submit-update-butt {
+                            display: inline-block;
+                            width: 100%;
+                            background-color: white;
+                            padding: 0.8rem 1rem;
+                            font-size: 0.95rem;
+                            border-radius: 0.5rem;
+                            border: 1px solid rgba(0,0,0,0.15);
+                            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+                            transition: filter 0.3s ease;
+                            cursor: pointer;
+
+                            &:hover {
+                                filter: brightness(0.8);
+                            }
+                        }
+                    }
+                    
+
 
                     .hand-info {
                         color: rgba(0,0,0,0.6);
@@ -318,7 +348,7 @@
                             border: 1px solid rgba(255,255,255,0.7);
                             border-radius: 0.5rem;
                             background: linear-gradient(145deg, #ffffff, #f0f0f0);
-                            box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+                            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
                             color: rgba(0,0,0,0.8);
                             cursor: pointer;
                             word-break: break-word;
@@ -339,6 +369,24 @@
                     }
                     
                 }
+
+                .show-attribute-table-butt {
+                    display: inline-block;
+                    width: 90%;
+                    background-color: white;
+                    padding: 0.8rem 1rem;
+                    font-size: 0.95rem;
+                    border-radius: 0.5rem;
+                    border: 1px solid rgba(0,0,0,0.15);
+                    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+                    cursor: pointer;
+                    transition: filter 0.3s ease;
+
+                    &:hover {
+                        filter: brightness(0.8);
+                    }
+                }
+
                 .butt-section {
                     display: grid;
                     grid-template-columns: 1fr 1fr;

@@ -22,7 +22,8 @@
                     </section>
                 } @else if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() === 'attribute') {
                     <div class="info">
-                        <form #attributeForm="ngForm" (submit)="attributeForm.valid ? attributeFormSubmit() : null" class="attribute-form" >
+                        <form #attributeForm="ngForm" (submit)="attributeForm.valid ? attributeFormSubmit(submitType()) : null" class="attribute-form" >
+                            <label class="hand-info">Stwórz zapytanie, aby zaznaczyć obiekty</label>
                             <label>Wybierz obiekty z warstwy:</label>
                             <select class="attribute-select" [(ngModel)]="attributeLayer" name="attributeLayer" required
                             (change)="objectSelection.onLayerSelectChange($any($event.target).value); 
@@ -39,7 +40,7 @@
                             
                             <label class="attribute-label-where">gdzie atrybut:</label>
                             <!-- Nadam tu zapytanie WFS ale tylko i wyłącznei do sprawdzenia kolumn bez ich wartości. -->
-                            <select class="attribute-column-select" [(ngModel)]="attributeAttribute" name="attributeAttribute" required>
+                            <select class="attribute-column-select" [ngModel]="attributeAttribute()" (ngModelChange)="attributeAttribute.set($event)" name="attributeAttribute" required>
                                 <option value="" disabled selected>-- {{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-COLUMN' | translate}} --</option>
                                 @for (attribute of responseData()?.featureType?.attributes.attribute; track attribute) {
                                     <option value="{{attribute?.name}}">{{attribute?.name}}</option>
@@ -49,17 +50,20 @@
                                 <select [(ngModel)]="attributeSign" name="attributeSign" required>
                                     <option value="=" selected>&#61;</option>
                                     <option value="&#8800;">&#8800;</option>
-                                    <option value="&#60;">&#60;</option>
-                                    <option value="&#62;">&#62;</option>
-                                    <option value="&#8804;">&#8804;</option>
-                                    <option value="&#8805;">&#8805;</option>
+                                    <option [disabled]="disableOption()" value="&#60;">&#60;</option>
+                                    <option [disabled]="disableOption()" value="&#62;">&#62;</option>
+                                    <option [disabled]="disableOption()" value="&#8804;">&#8804;</option>
+                                    <option [disabled]="disableOption()" value="&#8805;">&#8805;</option>
                                 </select>
                                 <input type="text" placeholder="warunek..." [(ngModel)]="attributeCondition" name="attributeCondition" required>
                             </div>
-                            <button type="submit">Submit Butt</button>
+                            <div class="attribute-buttons">
+                                <button type="submit" class="attribute-submit-new-butt" (click)="submitType.set('new')">Submit Butt</button>
+                                <button type="submit" class="attribute-submit-update-butt" (click)="submitType.set('update')">Update Butt</button>
+                            </div>
                             
                         </form>
-                        <button>
+                        <button class="show-attribute-table-butt">
                             Pokaż tabelę atrybutów
                         </button>
                     
