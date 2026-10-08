@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { PopUpService } from '../pop-up-service/pop-up-service';
 
+import { Map } from 'ol';
+
 
 export interface HeadbarKeys {
   analysys: boolean;
@@ -18,6 +20,12 @@ export class AMService {
         analysys: false,
         measure: false,
         save: false
+    }
+
+
+    public map!: Map;
+    public getMap(map: Map): void {
+      this.map = map;
     }
   
     public resetAMServiceVariables(): void{

@@ -19,6 +19,7 @@ import { ObjSelection } from '../../../services/obj-selection/obj-selection';
 import { getAuth } from 'firebase/auth';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+import { AMService } from '../../../services/a-m-service/a-m-service';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class MapComponent implements AfterViewInit {
   private vectorSource!: VectorSource;
   private zoomToObject = inject(ZoomToObject);
   public vectorResults = inject(LayerVisibility).vectorResults;
+  private AMService = inject(AMService);
 
 
   constructor() {
@@ -128,6 +130,7 @@ export class MapComponent implements AfterViewInit {
       }),
     });
     this.zoomToObject.setMap(this.map);
+    this.AMService.getMap(this.map);
     this.objectSelection.getMapLayers(this.map.getLayers());
     
     this.map.on('singleclick', (event) => {
