@@ -46,8 +46,11 @@
                 Zaloguj się lub zarejestruj, aby korzystać z tej funkcji
             </p>
             <div class="pop-up-butt-con">
-                <button class="pop-up-yes-butt" routerLink="/login" (click)="resetPopUp(false)">Zaloguj się</button>
-                <button class="pop-up-no-butt" (click)="resetPopUp(false)">Anuluj</button>    
+                <button class="pop-up-yes-butt" routerLink="/login" [queryParams]="{ type: 'signin' }"
+                (click)="resetPopUp(false)">Zarejestruj się</button>
+                <button class="pop-up-no-butt" routerLink="/login" [queryParams]="{ type: 'login' }"
+                (click)="resetPopUp(false)">Zaloguj się</button>
+                <button class="pop-up-yes-butt" (click)="resetPopUp(false)">Anuluj</button>    
             </div>
             
         </div>
