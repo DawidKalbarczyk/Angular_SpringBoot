@@ -3,7 +3,7 @@
         <div class="content-wrapper">
             <div class="title" [style.justify-content]="objectSelection.analysysPicked() ? 'start' : 'center'">
                 @if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() !== 'none') {
-                    <button class="analysys-return" (click)="objectSelection.analysisDeactive(); objectSelection.clearAllSelectedVariables()" [style.display]="objectSelection.analysysPicked() ? 'block' : 'none'">&#8635;</button>
+                    <button class="analysys-return" (click)="objectSelection.analysisDeactive(); clearAttributeSelection(); objectSelection.clearAllSelectedVariables()" [style.display]="objectSelection.analysysPicked() ? 'block' : 'none'">&#8635;</button>
                 } @else {
                     <button class="analysys-return" (click)="objectSelection.analysisDeactive();" [style.display]="objectSelection.analysysPicked() ? 'block' : 'none'">&#8635;</button>
                 }
@@ -28,7 +28,7 @@
                             <select class="attribute-select" [(ngModel)]="attributeLayer" name="attributeLayer" required
                             (change)="objectSelection.onLayerSelectChange($any($event.target).value); 
                             getLayerInfo(objectSelection.selectedSelectOptionLayer()); 
-                            objectSelection.clearAllSelectedVariables()" 
+                            objectSelection.clearAllSelectedVariables(); clearAttributeSelection(); " 
                             [value]="objectSelection.selectedSelectOptionLayer()">
                                 <option value="" disabled selected>-- {{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT' | translate}} --</option>
                                 @for (layer of objectSelection.visibleMapLayers(); track layer) {
@@ -65,6 +65,9 @@
                         </form>
                         <button class="show-attribute-table-butt">
                             Pokaż tabelę atrybutów
+                        </button>
+                        <button class="save-attribute-table-butt">
+                            Zapisz analizę atrybutową
                         </button>
                     
                     

@@ -167,4 +167,20 @@ export class AMService {
     public savePopUpOff(): void {
         this.wasSaved.set(false);
     }
+
+    public mapResolution = signal<number>(500);
+    public analysisResolution = signal<number>(300);
+    public showResolution(component: string): void {
+        switch (component) {
+            case 'map':
+                this.mapResolution.set(500);
+                break;
+            case 'analysys':
+                this.analysisResolution.set(300);
+                this.mapResolution.set(-1); // nigdy się nie spełni 
+                break;
+            default:
+                console.error('Unknown component for resolution display');
+        }
+    }
 }

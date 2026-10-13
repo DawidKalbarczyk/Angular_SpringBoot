@@ -1,15 +1,10 @@
 package com.application.demo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/save")

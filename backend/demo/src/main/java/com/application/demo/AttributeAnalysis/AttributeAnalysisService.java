@@ -28,17 +28,24 @@ public class AttributeAnalysisService {
             String sign = (String) formData.get("attributeSign");
 
             List<String> numericAttributes = List.of(
-                "jpt_powier", "jpt_powi_1", "shape_leng", "shape_le_1", "shape_area"
+                "jpt_powier", "jpt_powi_1", "shape_leng", "shape_le_1", "shape_area",
+                "wspgeog", "wspxy", "liczbamies"
             );
 
             String sqlSELECT = "";
             String pickedLayer = translateLayer(layer);
+            if (pickedLayer.equals("vectorLayer")) {
+                pickedLayer = "sql_data";
+            }
             
             if (numericAttributes.contains(attribute)) {
-                double condition = Double.parseDouble(conditionStr.replace(",", "."));
+                String temp = conditionStr.replace(" ", "").trim();
+                double condition = Double.parseDouble(temp.replace(",", "."));
+                
                 sqlSELECT = "SELECT * FROM \"" + pickedLayer + "\" " +
                 "WHERE CAST(\"" + attribute + "\" AS double precision) " +
                 sign + " " + condition;
+
             } else {
                 if (sign.equals("=") || sign.equals("!=")) {
                 sqlSELECT = "SELECT * FROM \"" + pickedLayer + "\" " +
@@ -75,7 +82,58 @@ public class AttributeAnalysisService {
         }
     }
 
-    public void updateAttributeSelection() {
+    public String updateAttributeSelection(Map<String, Object> formData, String tableName) {
+        try {
+            String userId = (String) formData.get("userId");
+            String time = (String) formData.get("time");
+            String layer = (String) formData.get("attributeLayer");
+            String attribute = (String) formData.get("attributeAttribute");
+            String conditionStr = (String) formData.get("attributeCondition");
+            String sign = (String) formData.get("attributeSign");
+
+            List<String> numericAttributes = List.of(
+                "jpt_powier", "jpt_powi_1", "shape_leng", "shape_le_1", "shape_area",
+                "wspgeog", "wspxy", "liczbamies"
+            );
+
+            String sqlSELECT = "";
+
+            String pickedLayer = translateLayer(layer);
+            
+            if (pickedLayer.equals("vectorLayer")) {
+                pickedLayer = "sql_data";
+            }
+
+            String tableNameLower = tableName.toLowerCase();
+            if (numericAttributes.contains(attribute)) {
+                String temp = conditionStr.replace(" ", "").trim();
+                double condition = Double.parseDouble(temp.replace(",", "."));
+
+                sqlSELECT = "SELECT * FROM \"" + tableNameLower + "\" " +
+                "WHERE CAST(\"" + attribute + "\" AS double precision) " +
+                sign + " " + condition;
+            } else {
+                if (sign.equals("=") || sign.equals("!=")) {
+                    sqlSELECT = "SELECT * FROM \"" + tableNameLower + "\" " +
+                    "WHERE \"" + attribute + "\" " +
+                    sign + " " + "\'" + conditionStr + "\'";
+                } else {
+                    return "Error: Invalid sign for non-numeric attribute. Only '=' and '!=' are allowed.";
+                }
+            }
+            String tempTableName = ("\"tmp_" + userId + "_tempp_table_" + time + "\"").toLowerCase();
+            String sql = "BEGIN; CREATE TEMP TABLE " + tempTableName +
+            " ON COMMIT DROP AS " + sqlSELECT + "; DROP TABLE IF EXISTS \"" + tableNameLower + "\"; " +
+            "CREATE TABLE \"" + tableNameLower + "\" AS SELECT * FROM pg_temp." + tempTableName + 
+            "; COMMIT;";
+            jdbcTemplate.execute(sql);
+
+            return "Success updating ATTRIBUTE SELECTION table for user: " + userId + " at time: " + time;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error updating ATTRIBUTE SELECTION table: " + e.getMessage());
+        }
+
         // Implement the logic for updating attribute selection
     }
     
@@ -96,5 +154,17 @@ public class AttributeAnalysisService {
         }
         return "Wrong attribute layer name" + layer;
     }
+
+    public String deleteTableFromSelection(String oldUserId, String oldTime) {
+        String tableName = "user_" + oldUserId + "_temp_table_" + oldTime;
+        String sql = "DROP TABLE IF EXISTS " + tableName;
+        jdbcTemplate.execute(sql);
+        
+        // Delete the corresponding layer from GeoServer
+        
+        return tableName;
+    }
     // Implement the service methods for attribute analysis here
 }
+
+

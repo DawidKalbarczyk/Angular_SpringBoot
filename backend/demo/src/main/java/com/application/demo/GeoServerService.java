@@ -108,6 +108,7 @@ public class GeoServerService {
 
     public boolean createTempWorkspace(String userId) {
         if (isCreated(userId, "workspacetemp")) {
+          enableWorkspaceServices("user_" + userId + "_temp");
           logger.info("Temporary workspace already exists for user: {}", userId);
           return false;
       }
@@ -136,8 +137,18 @@ public class GeoServerService {
     for (String service : new String[] {"wms", "wfs", "wmts", "wcs"}) {
       String url = geoserverUrl + "/rest/services/" + service
           + "/workspaces/" + workspaceName + "/settings";
-      String body = "{\"" + service + "\":{\"name\":\""
-        + service.toUpperCase() + "\",\"enabled\":true}}";
+      String body = service.equals("wfs")
+        ? """
+          {
+            "wfs": {
+              "name": "WFS",
+              "enabled": true,
+              "maxFeatures": 1000000
+            }
+          }
+          """
+        : "{\"" + service + "\":{\"name\":\""
+            + service.toUpperCase() + "\",\"enabled\":true}}";
       try {
         restTemplate.put(url, new HttpEntity<>(body, headers));
         logger.info("Enabled {} for workspace {}", service.toUpperCase(), workspaceName);

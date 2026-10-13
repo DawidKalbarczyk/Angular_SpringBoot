@@ -47,6 +47,8 @@ export class MapComponent implements AfterViewInit {
   public vectorResults = inject(LayerVisibility).vectorResults;
   private AMService = inject(AMService);
 
+  private showLabel!: boolean;
+
 
   constructor() {
     effect(() => {
@@ -89,7 +91,8 @@ export class MapComponent implements AfterViewInit {
       }
     });
     effect(() => {
-
+      this.AMService.mapResolution();
+      this.vectorLayer?.changed();
     })
   }
 
@@ -551,7 +554,7 @@ private toggleSelection(featureData: any, isMultiSelect: boolean): void {
       return undefined; 
     }
 
-    const showLabel = resolution < 500; 
+    const showLabel = resolution < this.AMService.mapResolution(); 
     const population = Number(feature.get('liczbamies')) || 0;
     const {radius, fontSize} = this.getSizeByPopulatiuon(population);
 

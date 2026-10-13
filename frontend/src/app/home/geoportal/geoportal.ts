@@ -15,6 +15,7 @@ import { SearchClose } from './geoportal-headbar/search-close/search-close';
 import { PopUp } from './pop-up/pop-up';
 import { PopUpService } from '../../services/pop-up-service/pop-up-service';
 import { GeoportalCorner } from '../../global-components/geoportal-corner/geoportal-corner';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -50,8 +51,8 @@ export class Geoportal implements OnDestroy, OnInit {
     await auth.authStateReady();
     const userId = this.objectSelection.userId || auth.currentUser?.uid;
     if (userId) {
-      this.GeoserverService.createTempWorkspace(userId).subscribe();
-      this.GeoserverService.createTempDatastore(userId).subscribe();
+      await firstValueFrom(this.GeoserverService.createTempWorkspace(userId));
+      await firstValueFrom(this.GeoserverService.createTempDatastore(userId));
     }
   }
 
