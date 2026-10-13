@@ -1,4 +1,4 @@
-<div [class.author-dark]="isDarkMode()">
+<div [class.author-dark]="isDarkMode() && url.includes('geoportal') === false">
     <p>{{'AUTHOR.AUTHOR-TEXT' | translate}}</p>
     <p>{{'AUTHOR.AUTHOR-NAME' | translate}}</p>
 </div>

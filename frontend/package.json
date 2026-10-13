@@ -20,6 +20,8 @@
     "@angular/platform-browser": "^22.0.0",
     "@angular/router": "^22.0.0",
     "firebase": "^12.18.0",
+    "geojson2shape": "^0.2.4",
+    "ogr2ogr": "^7.0.1",
     "ol": "^10.10.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
@@ -32,5 +34,13 @@
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
     "vitest": "^4.0.8"
+  },
+  "allowScripts": {
+    "@firebase/util@1.15.3": true,
+    "@parcel/watcher@2.6.0": true,
+    "esbuild@0.28.1": true,
+    "lmdb@3.5.6": true,
+    "msgpackr-extract@3.0.4": true,
+    "protobufjs@7.6.6": true
   }
 }

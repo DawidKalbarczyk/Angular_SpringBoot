@@ -21,6 +21,43 @@
   },
   "GEOPORTAL": {
     "ANALYSIS": "Analizy",
+    "ANALYSIS-CONTENT": {
+      "TITLE": "Narzędzie analiz",
+      "TEXT": "Wybierz typ analizy",
+      "ATTRIBUTE": "Analiza atrybutowa",
+      "ATTRIBUTE-CONTENT": {
+        "TITLE": "Analiza atrybutowa"
+      },
+      "SPATIAL": "Analiza przestrzenna",
+      "SPATIAL-CONTENT": {
+        "TITLE": "Analiza przestrzenna"
+      },
+      "SELECTION": "Zaznaczanie obiektów",
+      "SELECTION-CONTENT": {
+        "TITLE": "Zaznaczanie obiektów",
+        "TEXT1": "Kliknij na mapę, aby zaznaczyć obiekt",
+        "TEXT2": "Warstwa do zaznaczenia: ",
+        "SELECT": "Wybierz warstwę",
+        "SELECT-COLUMN": "Wybierz atrybut",
+        "SELECT-TITLES": {
+          "PAN": "Państwo",
+          "WOJ": "Województwo",
+          "POW": "Powiat",
+          "GMI": "Gmina",
+          "JEW": "Miasto",
+          "LOCALITY": "Miejscowość"
+        },
+        "WARNING-CONTENT": {
+          "TITLE": "Wybrane obiekty zostaną utracone<br>Czy chcesz kontynuować?",
+          "BUTT1": "Tak",
+          "BUTT2": "Nie"
+        },
+        "POPULATION": "Liczba mieszkańców: ",
+        "PICKED": "Zaznaczono: ",
+        "BUTT1": "Wyczyść wybrane",
+        "BUTT2": "Zapisz wybrane"
+      }
+    },
     "MEASURE": "Mierzenie",
     "SAVE": "Zapis analizy",
     "BROWSER": "Wyszukiwarka",
@@ -35,6 +72,18 @@
         "LAY3": "Budynki (duża skala)"
     },
     "INFO": "Info",
+    "INFO-DETAILS": {
+      "TITLE": "Informacje dotyczące warstw",
+      "LAYER": "Warstwa: ",
+      "ID": "ID w warstwie: ",
+      "LOCALITY": "Miejscowość: ",
+      "POPULATION": "Liczba mieszkańców: ",
+      "DISTRICT": "Powiat: ",
+      "COMMUNE": "Gmina: ",
+      "CITY": "Miasto: ",
+      "VOIVODESHIP": "Województwo: ",
+      "COUNTRY": "Kraj: "
+    },
     "LAYERS": "Warstwy",
     "INFO-CONTENT": {
         "LAY1": "Miejscowości",
@@ -43,6 +92,50 @@
         "LAY4": "Granice powiatów",
         "LAY5": "Granice województw",
         "LAY6": "Granice państwa"
+    }
+  },
+
+
+  "HISTORY": {
+    "ADD-MORE": "Dodaj więcej obiektów",
+    "NO-DATA": "Brak zapisanych obiektów",
+    "LOADING": "Ładowanie zapisanych obiektów...",
+    "MAIN": {
+      "TITLE": "Zapisane dane",
+      "TILE-TITLE-SELECTION": "Wybrane obiekty: ",
+      "TILE-TITLE-ANALYSIS": "Analiza atrybutowa: ",
+      "TILE-TITLE-SPATIAL": "Analiza przestrzenna: "
+    },
+    "INNER": {
+      "LEFT-SECTION": {
+        "CREATION-DATE": "Data utworzenia: ",
+        "CREATED": "stworzona ",
+        "NR-OBJ": "Liczba obiektów w warstwie: ",
+        "ALL-LOCALITIES": "Liczba miejscowości w całej warstwie: ",
+        "ALL-POPULATION": "Liczba mieszkańców w całej warstwie: ",
+        "OBJ-NAMES": "Nazwy obiektów w warstwie: ",
+        "LAYERFROM": "z warstwy - ",
+        "LAYER-TYPES": {
+          "POLYGON": "Warstwa poligonowa",
+          "POINT": "Warstwa punktowa"
+        },
+        "SELECTION-TYPE": {
+          "MANUAL-SELECTION": "ręcznie przez użytkownika",
+          "ATTRIBUTE-ANALYSIS": "na podstawie analizy atrybutowej",
+          "SPATIAL-ANALYSIS": "na podstawie analizy przestrzennej"
+        },
+        "LAYER-TITLE": {
+          "SELECTED-OBJ-BY-HAND": "Ręcznie wybrane",
+          "SELECTED-OBJ-BY-ATTRIBUTE-ANALYSIS": "Analiza atrybutowa",
+          "SELECTED-OBJ-BY-SPATIAL-ANALYSIS": "Analiza przestrzenna"
+        },
+        "ERROR": "Nieznany typ"
+        },
+        
+      "RIGHT-SECTION": {
+        "MAP-TITLE": "Interaktywny podgląd mapy",
+        "EXPORT-BUTTON": "Eksportuj dane"
+      }
     }
   },
   "LOGIN-PAGE": {
@@ -75,6 +168,7 @@
     "ERROR-INV-CRED": "Nieprawidłowe dane logowania."
   },
   "USER-SETTINGS": {
+    "REDIRECT": "Nie jesteś zalogowany. Przekierowuję...",
     "OPTION1": "Zmień nazwę użytkownika",
     "OPTION1-DETAILS": {
       "TITLE": "Zmiana nazwy użytkownika",
@@ -129,7 +223,7 @@
       "DET2-PLACEHOLDER": "Aktualne hasło...",
       "BTN": "Zatwierdź"
     },
-    "OPTION5": "ZAPAMIETAJ WYBRANY MOTYW DO ZMIANY",
+    "OPTION5": "Usuń wszystkie zapisane warstwy i obiekty",
     "OPTION6": "Usuń zdjęcie profilowe",
     "OPTION7": "Usuń na stałe swoje konto",
     "USER-INFO": {

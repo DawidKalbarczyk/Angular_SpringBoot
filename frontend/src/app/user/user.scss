@@ -9,23 +9,6 @@
     }
 } 
 .dark-mode {
-    .redirect-container {
-        background-color: $secondary-color-dark !important;
-
-        mat-spinner {
-            margin-top: 5rem;
-            @include mat.progress-spinner-overrides((
-                active-indicator-color: $background-color-dark ,
-            )); 
-        }
-
-        p {
-            color: $text-color-dark !important;
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
-    }
-
     .user-ui {
         background-color: $secondary-color-dark !important;
 
@@ -137,30 +120,7 @@
         15rem 
         5rem
         15rem;
-
-    .redirect-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: $secondary-color-light;
-        width: 100%;
-        border-radius: 2.5rem;
-        transition: background-color 0.5s ease;
-
-        mat-spinner {
-            margin-top: 5rem;
-            @include mat.progress-spinner-overrides((
-                active-indicator-color: $background-color-light,
-            ));
-        }
-
-        p {
-            font-size: 2.5rem;
-            font-weight: bold;
-            transition: color 0.5s ease;
-        }
-    }
+        
     .user-ui {
         display: grid;
         grid-template-columns: 2fr 1fr;

@@ -21,6 +21,26 @@ export const routes: Routes = [
     {
         path: 'history',
         loadComponent: () => import('./home/history/history').then(m => m.History),
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./home/history/history-main/history-main').then(m => m.HistoryMain)
+            },
+            {
+                path: 'saved/:userId/:time',
+                loadComponent: () => import('./home/history/history-inner/history-inner').then(m => m.HistoryInner),
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () => import('./home/history/history-inner/saved/saved').then(m => m.Saved)
+                    },
+                    {
+                        path: 'geoportal-temp',
+                        loadComponent: () => import('./home/history/history-inner/geoportal-temp/geoportal-temp').then(m => m.GeoportalTemp)
+                    }
+                ]
+            }
+        ]
     },
     {
         path: 'search',

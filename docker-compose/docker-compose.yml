@@ -38,8 +38,12 @@ services:
     environment:
       - *env-geoserver-password
       - *env-geoserver-user
-      - *env-geoserver-whitelist
-      - JAVA_OPTS=-Dorg.bouncycastle.native.cpu_variant=java
+      - REQUEST_TIMEOUT=180
+      - SINGLE_USER=300
+      - GETMAP=300
+      - THROTTLE_REQUEST_PER_IP=1000
+      - USER_WMS_REQUEST=1000/s
+      - PARALLEL_REQUEST=300
     ports:
       - "${GEOSERVER_PORT}:8080"
     volumes:
@@ -81,14 +85,6 @@ services:
     restart: always
     ports:
       - "${NGINX_PORT}:80"
-
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    command: tunnel --url http://nginx:80
-    container_name: Angular-SpringBootApp-${ENV_NAME}-cloudflared
-    restart: always
-    depends_on:
-      - nginx
 
 volumes:
   geoserver-data:

@@ -14,7 +14,7 @@
         @if (infoFeatures.isInfoReady()) {
             <div class="marker-header">
                 <div class="marker-title-con">
-                    <p class="marker-title">Informacje dotyczące warstw</p>
+                    <p class="marker-title">{{'GEOPORTAL.INFO-DETAILS.TITLE' | translate}}</p>
                 </div>
                 <div class="marker-close" (click)="showMarker.set(false)">
                     <img src="/images/icons/close.png" alt="Close"/>
@@ -24,13 +24,13 @@
             @for (item of sortedLayerData(); track item.layer; let i = $index) {
                 <div class="marker-index">{{ (i+1) }}</div>
                 <div class="marker-content">
-                    <p><span class="p-bold">Warstwa:</span> {{ getLayerLabel(item.layer)}}</p>
-                    <p><span class="p-bold">Id w warstwie:</span> {{ item.layer?.split('.')[1] || item.properties?.idprng }}</p>
-                    <p><span class="p-bold">{{ getObjectLabel(item.layer) }}:</span> {{ item.properties?.jpt_nazwa_ || item.properties?.nazwa }}</p>
+                    <p><span class="p-bold">{{'GEOPORTAL.INFO-DETAILS.LAYER' | translate}}</span> {{ getLayerLabel(item.layer)}}</p>
+                    <p><span class="p-bold">{{'GEOPORTAL.INFO-DETAILS.ID' | translate}}</span> {{ item.layer?.split('.')[1] || item.properties?.idprng }}</p>
+                    <p><span class="p-bold">{{ getObjectLabel(item.layer) | translate}}:</span> {{ item.properties?.jpt_nazwa_ || item.properties?.nazwa }}</p>
                     @if (item.properties?.liczbamies) {
-                        <p><span class="p-bold">Liczba mieszkańców:</span> {{ item.properties.liczbamies }}</p>
-                        <p><span class="p-bold">Powiat:</span> {{ item.properties?.powiat }}</p>
-                        <p><span class="p-bold">Gmina:</span> {{ item.properties?.gmina }}</p>
+                        <p><span class="p-bold">{{'GEOPORTAL.INFO-DETAILS.POPULATION' | translate}}</span> {{ item.properties.liczbamies }}</p>
+                        <p><span class="p-bold">{{'GEOPORTAL.INFO-DETAILS.DISTRICT' | translate}}</span> {{ item.properties?.powiat }}</p>
+                        <p><span class="p-bold">{{'GEOPORTAL.INFO-DETAILS.COMMUNE' | translate}}</span> {{ item.properties?.gmina }}</p>
                     }
                 </div>
                 @if (i < sortedLayerData().length - 1) {

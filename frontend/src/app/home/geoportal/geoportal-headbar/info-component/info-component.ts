@@ -3,6 +3,8 @@ import { InfoToggle } from '../../../../services/info-toggle/info-toggle';
 import { InfoFeatures } from '../../../../services/info-features/info-features';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { LayerVisibility } from '../../../../services/layer-visibility/layer-visibility';
+import { TranslatePipe } from '../../../../pipes/translate.pipe';
+
 type LayerKey = 
     | 'vectorLayer'
     | 'boundscities'
@@ -16,7 +18,7 @@ type LayerKey =
 
 @Component({
   selector: 'app-info-component',
-  imports: [MatProgressSpinnerModule],
+  imports: [MatProgressSpinnerModule, TranslatePipe],
   templateUrl: './info-component.html',
   styleUrl: './info-component.scss',
 })
@@ -107,7 +109,24 @@ export class InfoComponent {
   getObjectLabel(layer: string): string {
     const layerName = layer.split('.')[0] as LayerKey;
     if (layerName in this.objectType()) {
-      return this.objectType()[layerName];
+      switch (this.objectType()[layerName]) {
+        case 'Miejscowość':
+          return 'GEOPORTAL.INFO-DETAILS.LOCALITY';
+        case 'Miasto':
+          return 'GEOPORTAL.INFO-DETAILS.CITY';
+        case 'Gmina':
+          return 'GEOPORTAL.INFO-DETAILS.COMMUNE';
+        case 'Powiat':
+          return 'GEOPORTAL.INFO-DETAILS.DISTRICT';
+        case 'Województwo':
+          return 'GEOPORTAL.INFO-DETAILS.VOIVODESHIP';
+        case 'Państwo':
+          return 'GEOPORTAL.INFO-DETAILS.COUNTRY';
+        case 'Budynek':
+          return 'GEOPORTAL.INFO-DETAILS.BUILDING';
+        default:
+          return '';
+      }
     } else {
       return '';
     }

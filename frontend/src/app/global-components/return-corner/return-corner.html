@@ -1,10 +1,14 @@
-<div class="container" [class.mode-dark]="isDarkMode() && url !== '/geoportal'">
-    @if(url !== '/') {
-        <div (click)="goBack()">
+<div class="container" [class.mode-dark]="isDarkMode() && url() !== '/geoportal'"
+[class.mode-dark-history]="isDarkMode() && (url().startsWith('/history') && url().includes('geoportal-temp') === false)"
+[class.container-history]="url() ==='/history' && (isDarkMode() === false)"
+[class.container-geoportal-temp]="url().includes('geoportal-temp')"
+>
+    @if(url() !== '/') {
+        <div class="go-back" (click)="goBack()">
             <img class="return-button" src="./images/icons/return.png" alt="Return" draggable="false"/>
         </div>
     }
-    @if(url !== '/geoportal') {
+    @if(url() !== '/geoportal' && url().includes('geoportal-temp') === false) {
         <div (click)="switchColors()">
             @if(isDarkMode()){
                 <img class="night-mode-button" src="./images/icons/sun.png" alt="Sun" draggable="false"/>
@@ -13,10 +17,13 @@
             }
         </div>
         <div (click)="languageService.toggleLanguage()">
-            <img class="language-button" src="./images/icons/language.png" [alt]="'Language' | translate" draggable="false"/>
+            <img class="language-button" src="./images/icons/language.png" alt="Language" draggable="false"/>
         </div>
         <div>
             <img class="help-button" src="./images/icons/question.png" alt="Help" draggable="false"/>
+        </div>
+        <div class="feedback-button-con">
+            <img class="feedback-button" src="./images/icons/feedback.png" alt="Feedback" draggable="false"/>
         </div>
     }
     

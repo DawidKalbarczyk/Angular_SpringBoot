@@ -21,8 +21,45 @@
   },
   "GEOPORTAL": {
     "ANALYSIS": "Analysis",
+    "ANALYSIS-CONTENT": {
+      "TITLE": "Analysis tool",
+      "TEXT": "Choose analysis type",
+      "ATTRIBUTE": "Attribute analysis",
+      "ATTRIBUTE-CONTENT": {
+        "TITLE": "Attribute analysis"
+      },
+      "SPATIAL": "Spatial analysis",
+      "SPATIAL-CONTENT": {
+        "TITLE": "Spatial analysis"
+      },
+      "SELECTION": "Object selection",
+      "SELECTION-CONTENT": {
+        "TITLE": "Object selection",
+        "TEXT1": "Click on the map to select an object",
+        "TEXT2": "Layer to select from: ",
+        "SELECT": "Choose layer",
+        "SELECT-COLUMN": "Choose attribute",
+        "SELECT-TITLES": {
+          "PAN": "Country",
+          "WOJ": "Voivodeship",
+          "POW": "District",
+          "GMI": "Commune",
+          "JEW": "City",
+          "LOCALITY": "Locality"
+        },
+        "WARNING-CONTENT": {
+          "TITLE": "Selected object will be lost<br>Do you wish to continue?",
+          "BUTT1": "Yes",
+          "BUTT2": "No"
+        },
+        "POPULATION": "Population: ",
+        "PICKED": "Picked: ",
+        "BUTT1": "Clear selected",
+        "BUTT2": "Save selected"
+      }
+    },
     "MEASURE": "Measure",
-    "SAVE": "Save analisys",
+    "SAVE": "Save analysis",
     "BROWSER": "Browser",
     "BROWSER-CONTENT": {
         "TEXT": "Search...",
@@ -35,16 +72,83 @@
         "LAY3": "Buildings (large scale)"
     },
     "INFO": "Info",
+    "INFO-DETAILS": {
+      "TITLE": "Information about layers",
+      "LAYER": "Layer: ",
+      "ID": "ID in layer: ",
+      "LOCALITY": "Locality: ",
+      "POPULATION": "Population: ",
+      "DISTRICT": "District: ",
+      "COMMUNE": "Commune: ",
+      "CITY": "City: ",
+      "VOIVODESHIP": "Voivodeship: ",
+      "COUNTRY": "Country: "
+    },
     "LAYERS": "Layers",
     "INFO-CONTENT": {
         "LAY1": "Localities",
         "LAY2": "Cities boundaries",
-        "LAY3": "Municipalities boundaries",
-        "LAY4": "Counties boundaries",
+        "LAY3": "Communes boundaries",
+        "LAY4": "Districts boundaries",
         "LAY5": "Voivodeships boundaries",
         "LAY6": "Country boundaries"
     }
   },
+  "HISTORY": {
+    "ADD-MORE": "Add more data",
+    "NO-DATA": "You don't have any saved data yet",
+    "LOADING": "Loading saved data...",
+    "MAIN": {
+      "TITLE": "Saved data",
+      "TILE-TITLE-SELECTION": "Selected: ",
+      "TILE-TITLE-ANALYSIS": "Attribute analysis: ",
+      "TILE-TITLE-SPATIAL": "Spatial analysis: "
+    },
+    "INNER": {
+      "LEFT-SECTION": {
+        "CREATION-DATE": "Date of creation: ",
+        "CREATED": "created with",
+        "NR-OBJ": "Number of objects in the layer: ",
+        "ALL-LOCALITIES": "Localities in the whole layer: ",
+        "ALL-POPULATION": "Population in the whole layer: ",
+        "OBJ-NAMES": "Names of objects in the layer: ",
+        "LAYERFROM": "from layer - ",
+        "LAYER-TYPES": {
+          "POLYGON": "Polygon layer",
+          "POINT": "Point layer"
+        },
+        "SELECTION-TYPE": {
+          "MANUAL-SELECTION": "user choice",
+          "ATTRIBUTE-ANALYSIS": "attribute analysis",
+          "SPATIAL-ANALYSIS": "spatial analysis"
+        },
+        "LAYER-TITLE": {
+          "SELECTED-OBJ-BY-HAND": "Hand Selected",
+          "SELECTED-OBJ-BY-ATTRIBUTE-ANALYSIS": "Attribute Analysis",
+          "SELECTED-OBJ-BY-SPATIAL-ANALYSIS": "Spatial Analysis"
+        },
+        "ERROR": "Non known type"
+      },
+      "RIGHT-SECTION": {
+        "MAP-TITLE": "Interactive map preview",
+        "EXPORT-BUTTON": "Export data"
+      }
+    }
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   "LOGIN-PAGE": {
     "TITLE": "Sign Up",
     "TITLE2": "Sign In",
@@ -75,6 +179,7 @@
     "ERROR-INV-CRED": "Invalid credentials."
   },
   "USER-SETTINGS": {
+    "REDIRECT": "You are not logged in. Redirecting...",
     "OPTION1": "Change username",
     "OPTION1-DETAILS": {
       "TITLE": "Change username",
@@ -129,7 +234,7 @@
       "DET2-PLACEHOLDER": "Current password...",
       "BTN": "Submit"
     },
-    "OPTION5": "ZMEIN",
+    "OPTION5": "Delete all saved layers and objects",
     "OPTION6": "Delete profile picture",
     "OPTION7": "Delete account permanently",
     "USER-INFO": {
