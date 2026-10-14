@@ -17,10 +17,18 @@
             <p class="pop-up-title">
                 Wybrane obiekty zostaną usunięte<br>Kontynuować?
             </p>
-            <div class="pop-up-butt-con">
-                <button class="pop-up-yes-butt" (click)="resetPopUp(true)">Tak</button>
-                <button class="pop-up-no-butt" (click)="resetPopUp(false)">Nie</button>    
-            </div>
+            @if (popUpService.attributeSelectionPopUpOn()) {
+                <div class="pop-up-butt-con">
+                    <button class="pop-up-yes-butt" (click)="attributeSelectionHandler(true)">Tak</button>
+                    <button class="pop-up-no-butt" (click)="attributeSelectionHandler(false)">Nie</button>    
+                </div>
+            } @else {
+                <div class="pop-up-butt-con">
+                    <button class="pop-up-yes-butt" (click)="resetPopUp(true)">Tak</button>
+                    <button class="pop-up-no-butt" (click)="resetPopUp(false)">Nie</button>    
+                </div>
+            }
+            
             
         </div>
     } @else if (typeOfPopUp() === 'save') {

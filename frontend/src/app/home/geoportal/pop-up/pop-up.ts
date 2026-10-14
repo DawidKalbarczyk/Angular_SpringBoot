@@ -13,10 +13,11 @@ import { RouterLink } from '@angular/router';
   styleUrl: './pop-up.scss',
 })
 export class PopUp {
-  private popUpService = inject(PopUpService);
+  public popUpService = inject(PopUpService);
   public objectSelection = inject(ObjSelection);
   userLayerName = '';
   public resetPopUp = (val: boolean) => this.popUpService.resetPopUp(val);
+  public attributeSelectionHandler = (val: true | false | null) => this.popUpService.attributeSelectionDeleteHandler.set(val);
 
   public typeOfPopUp = this.popUpService.typeOfPopUp;  // signal, nie wywołanie
 

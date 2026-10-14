@@ -27,5 +27,7 @@ export class PopUpService {
         agree ? this.objectSelection.clearAllSelectedVariables() : null;
     }
 
+    public attributeSelectionPopUpOn = signal<boolean>(false);
+    public attributeSelectionDeleteHandler = signal<true | false| null>(null);
     
 }
