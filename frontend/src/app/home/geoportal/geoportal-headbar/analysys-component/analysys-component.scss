@@ -73,12 +73,63 @@
                     font-size: 1.35rem;
                 }
             }
-            .content-section{
-                min-height: 7.5rem;
+
+            .column-help-onhover-con {
+                position: absolute;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                bottom: 0;
+                left: calc(100% + 1rem);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease, pointer-events 0.3s ease;
+                box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+                width: max-content;
+                max-width: 25rem;
+                background-color: transparent;
+                z-index: 9999;
+
+                .column-help-content {
+                    padding: 1rem;
+                    background-color: $secondary-color-light;
+                    border-radius: 0.5rem;
+                    border: 1px solid rgba(0,0,0,0.2);
+                    box-sizing: border-box;
+                    width: 100%;
+
+                    p {
+                        overflow-wrap: anywhere;
+                        word-break: normal;
+                        width: 100%;
+                        padding: 1rem;
+                        background-color: white;
+                        box-sizing: border-box;
+                        border-radius: 0.5rem;
+                        border: 1px solid rgba(0,0,0,0.2);
+                        box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+
+                        span {
+                            font-weight: 600;
+                        }
+                    }
+                }
+
+                &.column-help-on {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+            }
+
+            .content-section{
+                min-height: 7.5rem;
+                display: flex;
+                position: relative;
+                justify-content: center;
+                align-items: center;
                 flex-direction: column;
+
+                
                 
                 .info, .attribute-form {
                     margin: 1rem 0rem;
@@ -150,7 +201,9 @@
                         display: inline-block;
                     }
                     .attribute-column-select {
-                        display: inline-block;
+                        display: flex;
+                        appearance: base-select;
+                        position: relative;
                         width: 90%;
                         background-color: white;
                         padding: 0.6rem 1rem;
@@ -159,16 +212,23 @@
                         border-radius: 0.5rem;
                         border: 1px solid rgba(0,0,0,0.15);
                         box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-                        grid-template-columns: 1fr 1fr 1fr;
                         justify-content: center;
                         align-items: center;
                         transition: all 0.3s ease;
+
+                        &::picker(select) {
+                            appearance: base-select;
+                            max-height: 15rem;
+                            overflow-y: auto;
+                        }
 
                         &:focus {
                             outline: none;
                             border: 1px solid $buttons-color;
                             box-shadow: 0 0 0 2px rgba(44, 44, 44, 0.2);
                         }
+
+                        
                     }
 
                     .attribute-condition-con {
@@ -371,6 +431,10 @@
                     
                 }
 
+
+                .show-attribute-table {
+                    margin-top: 1rem;
+                }
                 .show-attribute-table-butt, .save-attribute-table-butt {
                     display: inline-block;
                     width: 90%;

@@ -441,5 +441,29 @@ export class AnalysysComponent {
       }
     }
 
+
+
+    /* =============================================================================
+                          5. HELP HANDLER
+ ============================================================================= */
+    public optionsValue = signal<string>("");
+    public showHelp = signal<boolean>(false);
+    public timeoutId = signal<any>(null);
+    public handleMouseEnter(attributeName: string): void {
+      this.optionsValue.set(attributeName);
+      if (this.optionsValue()) {
+        this.timeoutId.set(setTimeout(() => {
+          this.showHelp.set(true);
+        }, 500));
+      }
+      
+    }
+    public handleMouseLeave(): void {
+      this.showHelp.set(false);
+      this.optionsValue.set("");
+      this.timeoutId() ? clearTimeout(this.timeoutId()) : null;
+    }
+
+
   }
   
