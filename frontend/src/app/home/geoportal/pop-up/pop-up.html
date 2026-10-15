@@ -62,5 +62,22 @@
             </div>
             
         </div>
+    } @else if (typeOfPopUp() === 'info') {
+        <div class="pop-up-content">
+            <p class="pop-up-title">
+                Informacje dotyczące atrybutów warstwy
+            </p>
+            <div class="pop-up-static-help">
+                <div class="help-content">
+                    <!-- TODO: Add if statement to check if attribute IS IN the layer-->
+                    <!-- TODO: Make ? button disabled before selecting layer-->
+                    @for (item of popUpService.attributeDescriptions() | keyvalue: null ; track item.key) {
+                        <p><span>&#9900; {{item.key}}:</span> {{'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.ATTRIBUTE-DESCRIPTIONS.' + item.key | translate}}</p>
+                    }
+                </div>
+                <button (click)="resetPopUp(false)">Close</button>
+            </div>
+            
+        </div>
     }
 </div>

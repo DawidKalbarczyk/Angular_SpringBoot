@@ -75,7 +75,11 @@
         "SUBMIT-BUTT": "Analizuj",
         "UPDATE-BUTT": "Aktualizuj",
         "TABLE-BUTT": "Pokaż tabelę atrybutów",
-        "SAVE-BUTT": "Zapisz analizę atrybutową"
+        "SAVE-BUTT": "Zapisz analizę atrybutową",
+        "POP-UP": {
+          "TITLE": "Informacje dotyczące atrybutów warstwy",
+          "BUTT": "Zamknij"
+        }
       },
       "SPATIAL": "Analiza przestrzenna",
       "SPATIAL-CONTENT": {

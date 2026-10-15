@@ -23,8 +23,8 @@
                 } @else if (objectSelection.analysysPicked() === true && objectSelection.analysisNrPicked() === 'attribute') {
                     <div class="info">
                         <form #attributeForm="ngForm" (submit)="attributeForm.valid ? attributeFormSubmit(submitType()) : null" class="attribute-form" >
-                            <label class="hand-info">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.TEXT' | translate}}</label>
-                            <label>{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.CHOOSE-LAYER' | translate}}</label>
+                            <label class="hand-info">{{'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.TEXT' | translate}}</label>
+                            <label>{{'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.CHOOSE-LAYER' | translate}}</label>
                             <select #layerModel="ngModel" class="attribute-select" [ngModel]="attributeSelectedLayer() || objectSelection.selectedSelectOptionLayer()" name="attributeLayer" required
                             (ngModelChange)="handleLayerChange($event, layerModel)"
                             [style.background-color]="attributeSelectedLayer() === 'Attribute Selection' ? '#ebd834' : 'white'">
@@ -41,18 +41,22 @@
 
                             </select>
                             
-                            <label class="attribute-label-where">{{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.CHOOSE-ATTRIBUTE' | translate}}</label>
+                            <label class="attribute-label-where">{{'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.CHOOSE-ATTRIBUTE' | translate}}</label>
                             <!-- Nadam tu zapytanie WFS ale tylko i wyłącznei do sprawdzenia kolumn bez ich wartości. -->
-                            <select class="attribute-column-select" [ngModel]="attributeAttribute()" (ngModelChange)="attributeAttribute.set($event)" name="attributeAttribute" required>
-                                <option value="" disabled selected>-- {{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-COLUMN' | translate}} --</option>
-                                @for (attribute of responseData()?.featureType?.attributes.attribute; track attribute) {
-                                    <option value="{{attribute?.name}}" 
-                                    (mouseleave)="handleMouseLeave()"
-                                    (mouseenter)="handleMouseEnter(attribute?.name)">{{attribute?.name}}</option>
-                                }
-
-                                
-                            </select>
+                            <div class="attribute-column-select-con">
+                                <select class="attribute-column-select" [ngModel]="attributeAttribute()" (ngModelChange)="attributeAttribute.set($event)" name="attributeAttribute" required>
+                                    <option value="" disabled selected>-- {{'GEOPORTAL.ANALYSIS-CONTENT.SELECTION-CONTENT.SELECT-COLUMN' | translate}} --</option>
+                                    @for (attribute of responseData()?.featureType?.attributes.attribute; track attribute) {
+                                        <option value="{{attribute?.name}}" 
+                                        (mouseleave)="handleMouseLeave()"
+                                        (mouseenter)="handleMouseEnter(attribute?.name)">{{attribute?.name}}</option>
+                                    }
+                                </select>
+                                <button class="help-butt" (click)="showStaticHelp()">
+                                    <img src="/images/icons/question.png" alt="Help" draggable="false"/>
+                                </button>
+                            </div>
+                            
                             <div class="attribute-condition-con">
                                 <select [(ngModel)]="attributeSign" name="attributeSign" required>
                                     <option value="=" selected>&#61;</option>

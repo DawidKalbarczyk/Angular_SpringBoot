@@ -4,11 +4,13 @@ import { ObjSelection } from '../../../services/obj-selection/obj-selection';
 import { FormsModule } from '@angular/forms';
 import { AMService } from '../../../services/a-m-service/a-m-service';
 import { RouterLink } from '@angular/router';
+import { KeyValuePipe } from '@angular/common';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 
 @Component({
   selector: 'app-pop-up',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, KeyValuePipe, TranslatePipe],
   templateUrl: './pop-up.html',
   styleUrl: './pop-up.scss',
 })

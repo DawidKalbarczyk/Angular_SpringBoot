@@ -30,4 +30,16 @@ export class PopUpService {
     public attributeSelectionPopUpOn = signal<boolean>(false);
     public attributeSelectionDeleteHandler = signal<true | false| null>(null);
     
+    
+    public attributeDescriptions = signal<Record<string, string>>({});
+    public async getDescriptionsJSON(): Promise<void> {
+        const response = await fetch('/i18n/pl.json');
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch language JSON');
+        }
+
+        const data = await response.json();
+        this.attributeDescriptions.set(data['GEOPORTAL']['ANALYSIS-CONTENT']['ATTRIBUTE-CONTENT']['ATTRIBUTE-DESCRIPTIONS']);
+    }
 }

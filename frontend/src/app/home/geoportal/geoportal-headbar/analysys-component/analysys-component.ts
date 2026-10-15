@@ -444,7 +444,7 @@ export class AnalysysComponent {
 
 
     /* =============================================================================
-                          5. HELP HANDLER
+                          5. HELP DYNAMIC HANDLER
  ============================================================================= */
     public optionsValue = signal<string>("");
     public showHelp = signal<boolean>(false);
@@ -464,6 +464,13 @@ export class AnalysysComponent {
       this.timeoutId() ? clearTimeout(this.timeoutId()) : null;
     }
 
+    /* =============================================================================
+                          6. HELP STATIC HANDLER
+ ============================================================================= */
+    public showStaticHelp(): void {
+      this.popUpService.typeOfPopUp.set('info');
+      this.popUpService.getDescriptionsJSON();
+    }
 
   }
   

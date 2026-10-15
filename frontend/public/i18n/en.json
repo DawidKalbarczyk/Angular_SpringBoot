@@ -75,7 +75,11 @@
         "SUBMIT-BUTT": "Analyze",
         "UPDATE-BUTT": "Update",
         "TABLE-BUTT": "Show attribute table",
-        "SAVE-BUTT": "Save attribute analysis"
+        "SAVE-BUTT": "Save attribute analysis",
+        "POP-UP": {
+          "TITLE": "Information about layer attributes",
+          "BUTT": "Close"
+        }
       },
       "SPATIAL": "Spatial analysis",
       "SPATIAL-CONTENT": {
