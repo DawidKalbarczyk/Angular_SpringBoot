@@ -72,7 +72,11 @@
                     <!-- TODO: Add if statement to check if attribute IS IN the layer-->
                     <!-- TODO: Make ? button disabled before selecting layer-->
                     @for (item of popUpService.attributeDescriptions() | keyvalue: null ; track item.key) {
-                        <p><span>&#9900; {{item.key}}:</span> {{'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.ATTRIBUTE-DESCRIPTIONS.' + item.key | translate}}</p>
+                        @for (check of responseData()?.featureType?.attributes?.attribute; track check.name) {
+                            @if (check.name === item.key) {
+                                <p><span>&#9900; {{item.key}}:</span> {{'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.ATTRIBUTE-DESCRIPTIONS.' + item.key | translate}}</p>
+                            }
+                        }
                     }
                 </div>
                 <button (click)="resetPopUp(false)">Close</button>

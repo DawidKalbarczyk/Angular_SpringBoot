@@ -214,6 +214,20 @@
                         justify-content: center;
                         align-items: center;
                         height: 2.5rem;
+                        
+                        .help-butt-deactivated {
+                            filter: brightness(0.9) !important;
+                            cursor: not-allowed !important;
+
+                            &:hover {
+                                filter: brightness(0.9) !important;
+                            }
+
+                            > img {
+                                cursor: not-allowed !important;
+                            }
+                        }
+
                         .help-butt {
                             display: flex;
                             justify-content: center;
@@ -323,6 +337,15 @@
                         width: 90%;
                         margin-top: 1rem;
 
+                        
+                        .attribute-submit-update-butt-deactivated {
+                            filter: brightness(0.9) !important;
+                            cursor: not-allowed !important;
+
+                            &:hover {
+                                filter: brightness(0.9) !important;
+                            }
+                        }
                         .attribute-submit-new-butt, .attribute-submit-update-butt {
                             display: inline-block;
                             width: 100%;

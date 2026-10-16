@@ -435,11 +435,20 @@ export class AnalysysComponent {
         this.PopUpService.attributeSelectionPopUpOn.set(true);
         this.PopUpService.typeOfPopUp.set('delete');
       } else {
+        this.PopUpService.setAttributeLayerIntoPopUp(event);
         this.attributeLayer = event;
         this.objectSelection.onLayerSelectChange(event);
         this.getLayerInfo(this.objectSelection.selectedSelectOptionLayer());
       }
     }
+
+
+    public isUpdateButtonEnabled = computed(() => {
+      return this.attributeSelectedLayer() === 'Attribute Selection' &&
+             this.attributeLayer === this.oldAttributeLayer &&
+             (this.attributeAttribute() !== '' || this.attributeCondition !== '');
+    });
+
 
 
 
@@ -470,6 +479,14 @@ export class AnalysysComponent {
     public showStaticHelp(): void {
       this.popUpService.typeOfPopUp.set('info');
       this.popUpService.getDescriptionsJSON();
+    }
+    public isHelpButtonEnabled = signal<boolean>(false);
+    private setHelpButtonEnabled(): void {
+      if (this.attributeLayer) {
+        this.isHelpButtonEnabled.set(true);
+      } else {
+        this.isHelpButtonEnabled.set(false);
+      }
     }
 
   }

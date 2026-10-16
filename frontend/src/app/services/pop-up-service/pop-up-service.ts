@@ -42,4 +42,10 @@ export class PopUpService {
         const data = await response.json();
         this.attributeDescriptions.set(data['GEOPORTAL']['ANALYSIS-CONTENT']['ATTRIBUTE-CONTENT']['ATTRIBUTE-DESCRIPTIONS']);
     }
+
+
+    public attributeLayer = signal<string>('');
+    public setAttributeLayerIntoPopUp(attributeL: string): void {
+        this.attributeLayer.set(attributeL);
+    }
 }

@@ -52,7 +52,8 @@
                                         (mouseenter)="handleMouseEnter(attribute?.name)">{{attribute?.name}}</option>
                                     }
                                 </select>
-                                <button class="help-butt" (click)="showStaticHelp()">
+                                <button class="help-butt" (click)="showStaticHelp()" [disabled]="!isHelpButtonEnabled()" 
+                                [class.help-butt-deactivated]="!isHelpButtonEnabled()">
                                     <img src="/images/icons/question.png" alt="Help" draggable="false"/>
                                 </button>
                             </div>
@@ -72,7 +73,8 @@
                                 <button type="submit" class="attribute-submit-new-butt" (click)="submitType.set('new')">
                                     {{'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.SUBMIT-BUTT' | translate}}
                                 </button>
-                                <button type="submit" class="attribute-submit-update-butt" (click)="submitType.set('update')">
+                                <button type="submit" class="attribute-submit-update-butt" (click)="submitType.set('update')" 
+                                [disabled]="!isUpdateButtonEnabled()" [class.attribute-submit-update-butt-deactivated]="!isUpdateButtonEnabled()">
                                     {{'GEOPORTAL.ANALYSIS-CONTENT.ATTRIBUTE-CONTENT.UPDATE-BUTT' | translate}}
                                 </button>
                             </div>
