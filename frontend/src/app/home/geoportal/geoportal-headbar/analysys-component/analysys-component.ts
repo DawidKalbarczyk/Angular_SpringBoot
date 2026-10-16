@@ -439,6 +439,7 @@ export class AnalysysComponent {
         this.attributeLayer = event;
         this.objectSelection.onLayerSelectChange(event);
         this.getLayerInfo(this.objectSelection.selectedSelectOptionLayer());
+        this.setHelpButtonEnabled();
       }
     }
 
